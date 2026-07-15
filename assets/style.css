@@ -175,6 +175,19 @@ code:not(pre code) { background: var(--card); border: 1px solid var(--border); p
 /* 실제 이미지로 교체 시: <img class="shot-img" src="..."> */
 .shot-img { display: block; max-width: 100%; border: 1px solid var(--border); border-radius: var(--radius-sm); margin: 14px 0; box-shadow: var(--shadow); }
 
+/* ---------- 명언(영감 한 조각) ---------- */
+.quote {
+  border: 1px solid var(--border); border-left: 4px solid var(--gold);
+  background: linear-gradient(135deg, #fffaf0, #fff); border-radius: var(--radius-sm);
+  padding: 14px 18px; margin: 20px 0;
+}
+.quote .q { font-weight: 700; font-size: 1.02rem; letter-spacing: -0.01em; }
+.quote .by { display: block; margin-top: 6px; font-size: 0.86rem; color: var(--text-soft); }
+
+/* ---------- 미니 과제 ---------- */
+.callout.mini { border-left-color: var(--teal); background: var(--teal-soft); }
+.callout.mini .h { color: var(--teal); }
+
 /* ---------- 체크리스트 ---------- */
 .checklist { list-style: none; padding: 0; margin: 14px 0; }
 .checklist li { padding-left: 30px; position: relative; margin: 8px 0; }
