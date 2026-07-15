@@ -184,6 +184,9 @@ code:not(pre code) { background: var(--card); border: 1px solid var(--border); p
 .linkgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; margin: 18px 0; }
 .linkcard { display: block; text-decoration: none; color: inherit; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 16px; background: #fff; transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s; }
 .linkcard:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+.linkcard.locked { opacity: 0.5; cursor: default; pointer-events: none; }
+.linkcard.locked:hover { transform: none; box-shadow: none; border-color: var(--border); }
+.linkcard.locked .d { color: var(--muted); font-weight: 700; }
 .linkcard .n { font-size: 0.72rem; font-weight: 800; color: var(--accent); }
 .linkcard .tt { font-weight: 800; margin: 4px 0 2px; }
 .linkcard .d { font-size: 0.85rem; color: var(--text-soft); }
