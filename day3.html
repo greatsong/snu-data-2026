@@ -315,21 +315,26 @@ if prompt := st.chat_input("무엇이든 물어보세요"):
   </ul>
 
   <div class="callout mini">
-    <div class="h">🎡 오늘의 숙제 — 공공데이터포털 API 써보기 (도전 · 선택)</div>
+    <div class="h">🎡 오늘의 숙제 — 공공데이터 API를 바이브 코딩으로 (도전 · 선택)</div>
     <ul>
-      <li>공공데이터포털 <a href="https://www.data.go.kr" target="_blank" rel="noopener">data.go.kr</a> 가입 → 관심 데이터 검색(대기오염·버스·관광지 등) → <b>활용신청</b> → <b>서비스키</b> 발급</li>
-      <li>그 API <b>안내문(요청변수 표·샘플 응답)을 프롬프트에 그대로 붙여</b> 스트림릿 앱으로 → 진짜 <b>API의 유용성</b> 체감 (발급 키는 오늘 배운 <code>secrets</code>에!)</li>
-      <li>자세한 절차는 <b>교재 부록</b> 참고 (화면 구성은 바뀔 수 있음)</li>
+      <li>수업에서 배운 <b>키 발급 → secrets → 스트림릿</b>을 진짜 공공데이터에 적용해 보기</li>
+      <li>핵심 요령 = API <b>문서(요청변수·샘플 응답)를 복사해 프롬프트에 그대로 붙이기</b> — 이해 못 해도 AI가 읽고 코드로 옮겨줌</li>
     </ul>
   </div>
-  <div class="codewrap prompt"><span class="label">🗣 교재 예제 프롬프트</span><pre>아래는 공공데이터포털 '○○○ API'의 안내문이야. 이 안내문을 보고, 내 서비스키로 데이터를 받아서
-스트림릿 표로 보여 주는 코드를 만들어 줘.
+  <ol class="steps">
+    <li><span class="st">가입 + 마음에 드는 API 고르기</span><br>서울 열린데이터광장 <a href="https://data.seoul.go.kr" target="_blank" rel="noopener">data.seoul.go.kr</a> (또는 공공데이터포털 <a href="https://www.data.go.kr" target="_blank" rel="noopener">data.go.kr</a>) 가입 → 관심 데이터 검색·선택</li>
+    <li><span class="st">인증키 발급 → secrets에</span><br>[Open API] → [인증키 신청] → 발급 → 스트림릿 <b>Settings → Secrets</b>에 <code>SEOUL_KEY = "발급키"</code> (키는 코드에 X!)</li>
+    <li><span class="st">API 문서 복사 → 프롬프트에 붙이기</span><br>그 API의 <b>요청변수 표·샘플 응답</b>을 복사해 아래 프롬프트에 붙여넣고 AI에게 주문 → 바이브 코딩으로 완성</li>
+  </ol>
+  <div class="codewrap prompt"><span class="label">🗣 예제 프롬프트 (교재 · 서울 실시간 인구)</span><pre>서울 실시간 도시데이터 API로 '광화문·덕수궁'의 지금 혼잡도와 실시간 인구(유동인구)를
+받아서 스트림릿으로 보여 줘. 인증키는 st.secrets의 SEOUL_KEY에 있어.
 (요청 주소·요청 변수 표·샘플 응답을 여기에 붙여넣기)</pre></div>
   <div class="callout tip">
     <div class="h">💡 검증 & 자주 막히는 곳</div>
     <ul>
-      <li>표에 진짜 값이 차면 성공 · 빈 표면 인증키·요청변수 하나가 어긋난 것</li>
-      <li>인증키는 <b>인코딩/디코딩 두 종류</b> · XML만 오면 요청에 <code>_type=json</code> 추가</li>
+      <li>화면에 진짜 숫자·표가 차면 성공 · 빈 화면이면 인증키·요청변수 하나가 어긋난 것</li>
+      <li>인증키 <b>인코딩/디코딩 두 종류</b> · XML만 오면 요청에 <code>_type=json</code> 추가</li>
+      <li>더 자세히는 <b>교재 6장·부록</b> 참고</li>
     </ul>
   </div>
   <div class="pager">
