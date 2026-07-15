@@ -315,27 +315,33 @@ if prompt := st.chat_input("무엇이든 물어보세요"):
   </ul>
 
   <div class="callout mini">
-    <div class="h">🎡 오늘의 숙제 — 공공데이터 API를 바이브 코딩으로 (도전 · 선택)</div>
+    <div class="h">🎡 오늘의 숙제 — 실시간 박스오피스 영화 데이터 분석 (도전 · 선택)</div>
     <ul>
-      <li>수업에서 배운 <b>키 발급 → secrets → 스트림릿</b>을 진짜 공공데이터에 적용해 보기</li>
-      <li>핵심 요령 = API <b>문서(요청변수·샘플 응답)를 복사해 프롬프트에 그대로 붙이기</b> — 이해 못 해도 AI가 읽고 코드로 옮겨줌</li>
+      <li>수업에서 배운 <b>키 발급 → secrets → 스트림릿</b>을 진짜 공공데이터에 적용</li>
+      <li>주제 = <b>지금 극장가</b> · KOBIS로 <b>어제 박스오피스</b>를 받아 순위·관객수 분석·시각화</li>
+      <li>핵심 요령 = API <b>문서(요청변수·샘플 응답)를 복사해 프롬프트에 그대로 붙이기</b></li>
     </ul>
   </div>
   <ol class="steps">
-    <li><span class="st">가입 + 마음에 드는 API 고르기</span><br>서울 열린데이터광장 <a href="https://data.seoul.go.kr" target="_blank" rel="noopener">data.seoul.go.kr</a> (또는 공공데이터포털 <a href="https://www.data.go.kr" target="_blank" rel="noopener">data.go.kr</a>) 가입 → 관심 데이터 검색·선택</li>
-    <li><span class="st">인증키 발급 → secrets에</span><br>[Open API] → [인증키 신청] → 발급 → 스트림릿 <b>Settings → Secrets</b>에 <code>SEOUL_KEY = "발급키"</code> (키는 코드에 X!)</li>
-    <li><span class="st">API 문서 복사 → 프롬프트에 붙이기</span><br>그 API의 <b>요청변수 표·샘플 응답</b>을 복사해 아래 프롬프트에 붙여넣고 AI에게 주문 → 바이브 코딩으로 완성</li>
+    <li><span class="st">KOBIS 가입 + 키 발급</span><br>영화진흥위원회 오픈API <a href="https://www.kobis.or.kr/kobisopenapi" target="_blank" rel="noopener">kobis.or.kr/kobisopenapi</a> 가입 → [키 발급/관리] → 발급 (무료·즉시, 유튜브보다 쉬움)</li>
+    <li><span class="st">키 → secrets에</span><br>스트림릿 <b>Settings → Secrets</b>에 <code>KOBIS_KEY = "발급키"</code> (키는 코드에 X!)</li>
+    <li><span class="st">아래 프롬프트로 바이브 코딩</span><br>API 문서(요청변수·샘플 응답)를 함께 붙이면 정확도↑ → 완성·배포</li>
   </ol>
-  <div class="codewrap prompt"><span class="label">🗣 예제 프롬프트 (교재 · 서울 실시간 인구)</span><pre>서울 실시간 도시데이터 API로 '광화문·덕수궁'의 지금 혼잡도와 실시간 인구(유동인구)를
-받아서 스트림릿으로 보여 줘. 인증키는 st.secrets의 SEOUL_KEY에 있어.
-- 요청 주소: http://openapi.seoul.go.kr:8088/{SEOUL_KEY}/json/citydata_ppltn/1/5/광화문·덕수궁
-- 다른 장소도 입력해 바꿀 수 있게 입력창을 넣어 줘.</pre></div>
+  <div class="codewrap prompt"><span class="label">🗣 예제 프롬프트 (KOBIS · 항상 최신 날짜)</span><pre>KOBIS 일별 박스오피스 API로 '가장 최근(어제)' 박스오피스 TOP 10을 받아
+스트림릿으로 분석해 줘. 인증키는 st.secrets의 KOBIS_KEY에 있어.
+- 요청 주소: http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key={KOBIS_KEY}&targetDt={날짜}
+- 날짜(targetDt)는 고정하지 말고 '어제'를 자동 계산해서 써 (오늘 건 아직 집계 전).
+- 순위·영화명·관객수·누적관객·스크린수를 표로, 관객수 상위 5편은 막대그래프로.
+- 숫자가 문자열로 오니 숫자로 바꿔서 정렬·그래프.</pre></div>
+  <ul>
+    <li>다른 창구도 같은 방식 · 예: 서울 실시간 인구(유동인구) <a href="https://data.seoul.go.kr" target="_blank" rel="noopener">data.seoul.go.kr</a> · 공공데이터포털 <a href="https://www.data.go.kr" target="_blank" rel="noopener">data.go.kr</a></li>
+  </ul>
   <div class="callout tip">
     <div class="h">💡 검증 & 자주 막히는 곳</div>
     <ul>
-      <li>화면에 진짜 숫자·표가 차면 성공 · 빈 화면이면 인증키·요청변수 하나가 어긋난 것</li>
-      <li>인증키 <b>인코딩/디코딩 두 종류</b> · XML만 오면 요청에 <code>_type=json</code> 추가</li>
-      <li>더 자세히는 <b>교재 6장·부록</b> 참고</li>
+      <li>표·그래프에 진짜 숫자가 차면 성공 · 빈 화면이면 인증키·날짜 형식(<code>YYYYMMDD</code>) 확인</li>
+      <li>KOBIS 숫자는 <b>문자열</b>('820653')로 옴 → 숫자 변환 필수 · <b>오늘 날짜는 데이터 없음</b>(어제 사용)</li>
+      <li>더 자세히는 <b>교재 6장</b> 참고</li>
     </ul>
   </div>
   <div class="pager">
