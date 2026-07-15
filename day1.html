@@ -58,6 +58,46 @@
     </ul>
   </div>
 
+  <h2>🎨 바이브 코딩 — 시작 전에</h2>
+  <ul>
+    <li><b>바이브 코딩</b> = 사람이 <b>자연어로 시키고</b> AI가 코드를 씀 · 사람은 판단·검증·반복</li>
+    <li>이름 붙인 사람 = <b>안드레이 카파시</b>(前 테슬라 AI·OpenAI) · <b>2025년 2월</b> 트윗</li>
+  </ul>
+  <div class="callout tip">
+    <div class="h">🔗 더 보기</div>
+    <ul>
+      <li>카파시 원문 트윗 → <a href="https://x.com/karpathy/status/1886192184808149383" target="_blank" rel="noopener">x.com/karpathy</a></li>
+      <li>개념 정리(위키백과) → <a href="https://en.wikipedia.org/wiki/Vibe_coding" target="_blank" rel="noopener">Vibe coding</a></li>
+    </ul>
+  </div>
+
+  <h3>프롬프트 기본 포맷 (대표 예시 하나)</h3>
+  <ul>
+    <li>좋은 주문 = <b>맥락 + 제약</b>을 담아 <b>명확한 과제</b> 전달</li>
+  </ul>
+  <div class="codewrap prompt"><span class="label">프롬프트 포맷</span><pre>[역할] 너는 ~을 잘하는 도우미야.
+[맥락] 지금 상황·데이터는 ~야.
+[작업] ~를 만들어줘.
+[제약] 조건: 파일 하나 / 한국어 / 외부 설치 없이 …
+[출력] 완성된 전체 코드를 한 번에 줘.</pre></div>
+  <ul>
+    <li>이 포맷대로 쓴 예시 ↓</li>
+  </ul>
+  <div class="codewrap prompt"><span class="label">예시 프롬프트</span><pre>[역할] 너는 초보자용 웹페이지를 잘 만드는 도우미야.
+[맥락] 나는 코딩을 처음 배우고, 결과를 GitHub Pages에 올릴 거야.
+[작업] 'D-day 계산기' 웹페이지를 만들어줘.
+[제약] 파일 하나(index.html)로 끝나고, 외부 설치 없이 브라우저에서 바로 열려야 해.
+  날짜를 고르면 오늘까지 며칠 남았는지 크게 보여줘. 한국어, 따뜻한 노란 톤.
+[출력] 완성된 index.html 전체 코드를 한 번에 줘.</pre></div>
+  <div class="callout warn">
+    <div class="h">⚠️ 포맷보다 중요한 것</div>
+    <ul>
+      <li>이 포맷은 <b>틀(체크리스트)</b>일 뿐 · 순서·라벨을 꼭 지킬 필요 없음</li>
+      <li>핵심 = <b>맥락(무엇을·누구를 위해)</b> + <b>제약(조건)</b>을 빠짐없이 담아 <b>명확한 과제</b>로 전달</li>
+      <li>모호하면 → 엉뚱한 결과 · 구체적이면 → 원하는 결과</li>
+    </ul>
+  </div>
+
   <h2>1. 내 첫 웹페이지 = MBTI 테스트를 인터넷에</h2>
   <ul>
     <li><b>MBTI 테스트</b> 페이지 → AI 제작 → GitHub Pages로 배포</li>
