@@ -253,7 +253,7 @@ plotly</pre></div>
   <div class="codewrap prompt"><span class="label">① 샘플 프롬프트</span><pre>스트림릿(streamlit) '서울 기온 예측기' 앱 하나(main.py)를 만들어줘. 조건:
 
 - 데이터는 이 주소에서 불러와(연도 year, 평균기온 temp 열이 있음):
-  https://raw.githubusercontent.com/greatsong/modeudata-with-ai-examples/main/data/seoul.csv
+  https://raw.githubusercontent.com/greatsong/modudata/main/data/seoul.csv
 - scikit-learn의 LinearRegression으로 '연도 → 평균기온' 관계를 학습(fit)해줘.
 - 화면 위에 R²(결정계수) 값을 카드로 보여주고, 이 값이 뭔지 한 줄로 설명해줘.
 - 슬라이더로 1900~2100년 사이 연도를 고르면 예측 기온을 크게 보여줘.
@@ -271,7 +271,7 @@ from sklearn.linear_model import LinearRegression
 st.title("🌡️ 서울 기온 예측기")
 
 # ① 수집 — CSV 불러오기
-url = "https://raw.githubusercontent.com/greatsong/modeudata-with-ai-examples/main/data/seoul.csv"
+url = "https://raw.githubusercontent.com/greatsong/modudata/main/data/seoul.csv"
 df = pd.read_csv(url)
 
 # ② 전처리 — 입력 X(연도)와 정답 y(기온) 나누기
