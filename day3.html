@@ -315,11 +315,21 @@ if prompt := st.chat_input("무엇이든 물어보세요"):
   </ul>
 
   <div class="callout mini">
-    <div class="h">🎡 오늘의 미니 과제 (가볍게 · 선택)</div>
+    <div class="h">🎡 오늘의 숙제 — 공공데이터포털 API 써보기 (도전 · 선택)</div>
     <ul>
-      <li>오늘 배운 <b>API 불러오기</b>를 응용 → <b>키 없는 재미 API</b>로 미니 페이지 하나</li>
-      <li>예: 랜덤 고양이 사진(<a href="https://cataas.com" target="_blank" rel="noopener">cataas.com</a>) / 랜덤 명언 / 오늘의 환율</li>
-      <li>"새로고침하면 바뀌는" 살아있는 데이터 느낌 살리기</li>
+      <li>공공데이터포털 <a href="https://www.data.go.kr" target="_blank" rel="noopener">data.go.kr</a> 가입 → 관심 데이터 검색(대기오염·버스·관광지 등) → <b>활용신청</b> → <b>서비스키</b> 발급</li>
+      <li>그 API <b>안내문(요청변수 표·샘플 응답)을 프롬프트에 그대로 붙여</b> 스트림릿 앱으로 → 진짜 <b>API의 유용성</b> 체감 (발급 키는 오늘 배운 <code>secrets</code>에!)</li>
+      <li>자세한 절차는 <b>교재 부록</b> 참고 (화면 구성은 바뀔 수 있음)</li>
+    </ul>
+  </div>
+  <div class="codewrap prompt"><span class="label">🗣 교재 예제 프롬프트</span><pre>아래는 공공데이터포털 '○○○ API'의 안내문이야. 이 안내문을 보고, 내 서비스키로 데이터를 받아서
+스트림릿 표로 보여 주는 코드를 만들어 줘.
+(요청 주소·요청 변수 표·샘플 응답을 여기에 붙여넣기)</pre></div>
+  <div class="callout tip">
+    <div class="h">💡 검증 & 자주 막히는 곳</div>
+    <ul>
+      <li>표에 진짜 값이 차면 성공 · 빈 표면 인증키·요청변수 하나가 어긋난 것</li>
+      <li>인증키는 <b>인코딩/디코딩 두 종류</b> · XML만 오면 요청에 <code>_type=json</code> 추가</li>
     </ul>
   </div>
   <div class="pager">
