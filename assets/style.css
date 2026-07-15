@@ -160,21 +160,6 @@ hr { border: none; border-top: 1px solid var(--border); margin: 36px 0; }
 .copy-btn.done { background: var(--green); border-color: var(--green); }
 code:not(pre code) { background: var(--card); border: 1px solid var(--border); padding: 1px 6px; border-radius: 5px; font-family: var(--mono); font-size: 0.86em; color: #7a5a1e; }
 
-/* ---------- 스크린샷 자리 (촬영 후 <img>로 교체) ---------- */
-.shot {
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  gap: 6px; text-align: center;
-  border: 2px dashed var(--border-strong, #d9c68f); border-radius: var(--radius-sm);
-  background: repeating-linear-gradient(45deg, #fffdf7, #fffdf7 10px, #fff8e8 10px, #fff8e8 20px);
-  color: var(--muted); padding: 26px 18px; margin: 14px 0; min-height: 96px;
-}
-.shot .cam { font-size: 1.5rem; }
-.shot .cap { font-weight: 800; color: var(--text-soft); font-size: 0.9rem; }
-.shot .hint { font-size: 0.8rem; }
-.shot .code { font-family: var(--mono); font-size: 0.72rem; background: var(--card); border: 1px solid var(--border); padding: 1px 7px; border-radius: 5px; color: #7a5a1e; }
-/* 실제 이미지로 교체 시: <img class="shot-img" src="..."> */
-.shot-img { display: block; max-width: 100%; border: 1px solid var(--border); border-radius: var(--radius-sm); margin: 14px 0; box-shadow: var(--shadow); }
-
 /* ---------- 명언(영감 한 조각) ---------- */
 .quote {
   border: 1px solid var(--border); border-left: 4px solid var(--gold);

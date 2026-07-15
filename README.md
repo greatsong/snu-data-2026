@@ -6,7 +6,7 @@
 ## 구성
 
 - **학생용** (공개): `index.html`(목차) · `prep.html`(계정 준비) · `day1~5.html` · `homework.html`(선택 숙제)
-- **강사용** (`teacher/`): 멘트·예상질문·예상오류·이론심화·시간표 + `capture-guide.html`(스크린샷 촬영 가이드)
+- **강사용** (`teacher/`): 멘트·예상질문·예상오류·이론심화·시간표
 
 ## 각 실습의 리듬
 
@@ -18,7 +18,3 @@
 cd web && python3 -m http.server 4040
 # http://127.0.0.1:4040
 ```
-
-## 스크린샷
-
-설정 단계의 빗금 박스(`.shot`)는 촬영 자리입니다. `teacher/capture-guide.html` 참고.

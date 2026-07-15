@@ -213,6 +213,29 @@ if channel_id:
     <li>발급처 → Google AI 스튜디오 (<a href="https://aistudio.google.com" target="_blank" rel="noopener">aistudio.google.com</a>) → <b>Get API key</b></li>
     <li>모델 → <code>gemini-2.5-flash</code> (빠름·무료 한도 넉넉) · 다른 회사 AI도 방식 동일</li>
   </ul>
+  <div class="callout tip">
+    <div class="h">🗝️ 챗지피티·클로드 열쇠도 방법은 비슷 (핵심만)</div>
+    <table class="daymap">
+      <thead><tr><th>AI</th><th>발급처</th><th>경로</th><th>비용</th></tr></thead>
+      <tbody>
+        <tr><td><b>ChatGPT</b>(OpenAI)</td><td><a href="https://platform.openai.com" target="_blank" rel="noopener">platform.openai.com</a></td><td>로그인 → <b>API keys</b> → <b>Create new secret key</b></td><td>카드 등록 + 크레딧 충전(선불)</td></tr>
+        <tr><td><b>Claude</b>(Anthropic)</td><td><a href="https://platform.claude.com" target="_blank" rel="noopener">platform.claude.com</a></td><td>로그인 → <b>API Keys</b> → <b>Create Key</b></td><td>크레딧 충전(선불, 소액 가능)</td></tr>
+      </tbody>
+    </table>
+    <ul>
+      <li>키는 <b>발급 순간 한 번만</b> 보여줌 → 바로 복사해 <code>secrets.toml</code>에</li>
+      <li>챗지피티·클로드 <b>웹사이트 구독과 API 크레딧은 별개</b> — 구독 중이어도 API는 따로 충전</li>
+      <li>채팅앱 프롬프트에서 "구글 Gemini API" 부분만 <b>"OpenAI API"</b> 또는 <b>"Claude API(Anthropic)"</b>로 바꿔 말하면 AI가 코드를 알아서 바꿔 줌</li>
+    </ul>
+  </div>
+  <div class="callout warn">
+    <div class="h">💸 과금 폭탄 주의 — 두 가지만 지키면 안전</div>
+    <ul>
+      <li><b>① 키 유출 = 남이 내 카드로 씀</b> — GitHub에 올라간 키는 봇이 <b>몇 분 안에</b> 주워감. 그래서 secrets 습관이 중요. 유출 의심 시 <b>즉시 그 키 삭제 후 재발급</b></li>
+      <li><b>② 좋은 모델 = 비싼 모델</b> — 최고급 모델은 저렴한 모델의 수십 배 요금. 연습·실습엔 <b>빠르고 저렴한 모델</b>로 충분 (Gemini <b>flash</b>(무료 한도) · GPT <b>mini 계열</b> · Claude <b>Haiku</b>)</li>
+      <li>유료 결제 시 콘솔에서 <b>월 사용 한도(예산)</b>를 꼭 설정 — 실수해도 한도에서 멈춤</li>
+    </ul>
+  </div>
   <div class="callout warn">
     <div class="h">🔒 이 키도 똑같이 secrets에</div>
     <ul>
