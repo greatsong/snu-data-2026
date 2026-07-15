@@ -108,9 +108,6 @@
     <li><span class="st">YouTube Data API v3 사용 설정</span><br><b>API 및 서비스 → 라이브러리</b> → <code>YouTube Data API v3</code> 검색 → <b>사용 설정(Enable)</b></li>
     <li><span class="st">API 키 발급</span><br><b>API 및 서비스 → 사용자 인증정보</b> → <b>사용자 인증정보 만들기 → API 키</b> → 키 복사</li>
   </ol>
-  <div class="shot"><span class="cam">📸</span><span class="cap">[스크린샷] 구글 클라우드 콘솔 · 새 프로젝트</span><span class="hint">프로젝트 이름 입력란과 만들기 버튼이 보이게</span><span class="code">shot: day3-01-gcp-project</span></div>
-  <div class="shot"><span class="cam">📸</span><span class="cap">[스크린샷] YouTube Data API v3 사용 설정</span><span class="hint">라이브러리에서 검색된 YouTube Data API v3와 사용 설정 버튼이 보이게</span><span class="code">shot: day3-02-enable-api</span></div>
-  <div class="shot"><span class="cam">📸</span><span class="cap">[스크린샷] API 키 만들기</span><span class="hint">사용자 인증정보 만들기 메뉴와 새로 생성된 API 키가 보이게</span><span class="code">shot: day3-03-create-key</span></div>
   <div class="callout warn">
     <div class="h">🔒 열쇠, 코드에 그냥 쓰면 안 됨</div>
     <ul>
@@ -126,7 +123,6 @@
     <li>키는 이 파일에만 · 코드에서는 <code>st.secrets</code>로 꺼내기</li>
   </ul>
   <div class="codewrap code"><span class="label">.streamlit/secrets.toml</span><pre>YOUTUBE_API_KEY = "여기에_발급받은_키를_붙여넣기"</pre></div>
-  <div class="shot"><span class="cam">📸</span><span class="cap">[스크린샷] Streamlit 앱 Settings · Secrets 입력</span><span class="hint">Settings의 Secrets 입력창에 YOUTUBE_API_KEY 줄이 채워진 모습이 보이게</span><span class="code">shot: day3-04-secrets</span></div>
   <div class="callout warn">
     <div class="h">🧯 그리고 .gitignore 에 꼭 추가</div>
     <ul>
@@ -210,10 +206,9 @@ if channel_id:
   <h3>AI 열쇠 받기</h3>
   <ul>
     <li>예시 → 구글 <b>Gemini</b></li>
-    <li>발급처 → Google AI 스튜디오 (aistudio.google.com) → <b>Get API key</b></li>
+    <li>발급처 → Google AI 스튜디오 (<a href="https://aistudio.google.com" target="_blank" rel="noopener">aistudio.google.com</a>) → <b>Get API key</b></li>
     <li>모델 → <code>gemini-2.5-flash</code> (빠름·무료 한도 넉넉) · 다른 회사 AI도 방식 동일</li>
   </ul>
-  <div class="shot"><span class="cam">📸</span><span class="cap">[스크린샷] AI 스튜디오 · API 키 발급</span><span class="hint">Google AI 스튜디오의 Get API key 버튼과 새로 발급된 키가 보이게</span><span class="code">shot: day3-05-llm-key</span></div>
   <div class="callout warn">
     <div class="h">🔒 이 키도 똑같이 secrets에</div>
     <ul>
