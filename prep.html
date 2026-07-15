@@ -11,7 +11,7 @@
   <a class="brand" href="index.html"><span class="chick">🐣</span> 데이터 분석 <span class="a">병아리반</span></a>
   <span class="spacer"></span>
   <a class="home" href="index.html">← 목차</a>
-  <span class="badge">학생용</span>
+  <span class="badge">수강생용</span>
 </div></div>
 
 <div class="wrap">
@@ -19,79 +19,82 @@
   <span class="eyebrow">준비 · 0교시</span>
   <h1>강의 전에 <span class="a">계정 3종</span> 만들기</h1>
   <div class="under"></div>
-  <p class="lead">아래 3개만 미리 만들어 오면 첫날부터 바로 만들기에 들어갈 수 있어요.
-  전부 <b>무료</b>이고, 설치할 프로그램은 없습니다. 브라우저(크롬 권장)만 있으면 됩니다.</p>
+  <p class="lead">아래 3종 미리 준비 → 첫날 바로 제작 시작 · 전부 <b>무료</b> · 설치 없음 · 브라우저(크롬 권장)만 필요</p>
 
   <div class="make-banner">
-    <div class="t">✅ 오늘 만들 계정 3개</div>
+    <div class="t">✅ 만들 계정 3개</div>
     <ul>
-      <li><b>① GitHub</b> — 내가 만든 것을 세상에 올려두는 ‘창고 + 집’</li>
-      <li><b>② Streamlit Community Cloud</b> — 코드를 진짜 ‘웹앱’으로 켜 주는 곳 (GitHub로 로그인)</li>
-      <li><b>③ AI 서비스</b> — 코드를 대신 짜 줄 ‘요리사’ (Claude · ChatGPT · Gemini 중 하나)</li>
+      <li><b>① GitHub</b> — 결과물 보관·공개 (창고 + 집)</li>
+      <li><b>② Streamlit Community Cloud</b> — 코드 → 웹앱 실행 (GitHub로 로그인)</li>
+      <li><b>③ AI 서비스</b> — 코드 작성 담당 (Claude · ChatGPT · Gemini 중 1개)</li>
     </ul>
   </div>
 
   <div class="callout warn">
-    <div class="h">⚠️ 딱 하나만 부탁드려요</div>
-    <p>가입할 때 쓴 <b>이메일과 비밀번호를 꼭 메모</b>해 두세요. 특히 <b>②는 반드시 ①과 같은 GitHub 계정으로 로그인</b>합니다. 세 계정의 이메일을 같게 맞추면 훨씬 편해요.</p>
+    <div class="h">⚠️ 딱 하나만</div>
+    <ul>
+      <li>가입 <b>이메일·비밀번호 메모</b> 필수</li>
+      <li>②는 반드시 <b>①과 같은 GitHub 계정</b>으로 로그인</li>
+      <li>세 계정 이메일 통일 → 편리</li>
+    </ul>
   </div>
 
   <h2>① GitHub 계정 만들기</h2>
-  <p>GitHub(깃허브)는 내가 만든 파일을 보관하고, 그대로 인터넷 사이트로 띄워 주는 곳이에요.</p>
+  <ul><li>GitHub = 파일 보관 + 그대로 웹사이트로 공개</li></ul>
   <ol class="steps">
-    <li><span class="st">github.com 접속</span><br>주소창에 <code>github.com</code> 을 치고 들어가, 오른쪽 위 <b>Sign up</b>(가입)을 누릅니다.</li>
-    <li><span class="st">이메일 · 비밀번호 · 사용자 이름 입력</span><br><b>Username</b>(사용자 이름)은 영어로, 나중에 <b>내 사이트 주소에 그대로 들어갑니다</b>. 짧고 깔끔하게 지어 주세요. (예: <code>hong-gildong</code>)</li>
-    <li><span class="st">이메일 인증</span><br>가입한 이메일함에서 GitHub가 보낸 인증 코드를 확인해 입력합니다.</li>
-    <li><span class="st">무료 플랜 선택</span><br>요금제를 물으면 <b>Free</b>(무료)를 선택하면 됩니다. 결제 정보는 넣지 않아요.</li>
+    <li><span class="st">github.com 접속</span><br><code>github.com</code> → 우상단 <b>Sign up</b></li>
+    <li><span class="st">이메일 · 비밀번호 · Username 입력</span><br><b>Username</b> = 영어 · 내 사이트 주소에 그대로 사용 → 짧고 깔끔하게 (예: <code>hong-gildong</code>)</li>
+    <li><span class="st">이메일 인증</span><br>메일함 인증 코드 입력</li>
+    <li><span class="st">무료 플랜 선택</span><br><b>Free</b> 선택 · 결제 정보 X</li>
   </ol>
   <div class="shot"><span class="cam">📸</span><span class="cap">[스크린샷] GitHub 가입 화면</span><span class="hint">Sign up 폼 — 이메일·비밀번호·Username 입력란이 보이게</span><span class="code">shot: prep-01-github-signup</span></div>
   <div class="callout check">
     <div class="h">✔️ 여기까지 되면</div>
-    <p>로그인 후 <code>github.com/사용자이름</code> 이 내 페이지예요. 이 <b>사용자 이름</b>을 꼭 기억하세요.</p>
+    <ul><li>내 페이지 = <code>github.com/사용자이름</code></li><li><b>사용자 이름</b> 꼭 기억</li></ul>
   </div>
 
   <h2>② Streamlit Community Cloud 가입</h2>
-  <p>스트림릿은 파이썬 코드를 <b>버튼·그래프가 있는 진짜 웹앱</b>으로 바꿔 켜 주는 무료 서비스예요. 어렵지 않아요 — GitHub로 로그인만 하면 끝입니다.</p>
+  <ul><li>스트림릿 = 파이썬 코드 → 버튼·그래프 있는 웹앱 (무료)</li><li>GitHub로 로그인만 하면 끝</li></ul>
   <ol class="steps">
-    <li><span class="st">share.streamlit.io 접속</span><br>주소창에 <code>share.streamlit.io</code> 를 칩니다.</li>
-    <li><span class="st">“Continue with GitHub” 클릭</span><br>여러 로그인 버튼 중 <b>GitHub로 계속하기</b>를 누릅니다. (①에서 만든 계정)</li>
-    <li><span class="st">권한 허용(Authorize)</span><br>GitHub가 “Streamlit이 접근해도 될까요?”라고 물으면 <b>Authorize</b>(허용)를 누릅니다. 내 저장소를 앱으로 켜기 위한 연결이에요.</li>
-    <li><span class="st">가입 완료</span><br>이름·용도 등을 물으면 편하게 채우고 넘어갑니다. 대시보드 화면이 보이면 성공!</li>
+    <li><span class="st">share.streamlit.io 접속</span><br><code>share.streamlit.io</code></li>
+    <li><span class="st">"Continue with GitHub" 클릭</span><br>①에서 만든 계정으로</li>
+    <li><span class="st">권한 허용(Authorize)</span><br>접근 요청 → <b>Authorize</b> · 저장소를 앱으로 켜기 위한 연결</li>
+    <li><span class="st">가입 완료</span><br>이름·용도 입력 → 대시보드 표시 = 성공</li>
   </ol>
   <div class="shot"><span class="cam">📸</span><span class="cap">[스크린샷] Streamlit · Continue with GitHub</span><span class="hint">로그인 버튼 목록에서 'Continue with GitHub'가 보이게</span><span class="code">shot: prep-02-streamlit-login</span></div>
   <div class="shot"><span class="cam">📸</span><span class="cap">[스크린샷] GitHub 권한 허용(Authorize)</span><span class="hint">Streamlit 접근 허용 Authorize 버튼 화면</span><span class="code">shot: prep-03-authorize</span></div>
   <div class="callout tip">
-    <div class="h">💡 왜 GitHub로 로그인하나요?</div>
-    <p>스트림릿은 <b>GitHub 창고에 있는 코드</b>를 가져다 앱으로 켜 줍니다. 그래서 두 계정이 연결돼 있어야 해요. 앞으로 “만들기 → GitHub에 올리기 → 스트림릿이 켜기”가 한 흐름이 됩니다.</p>
+    <div class="h">💡 왜 GitHub로 로그인?</div>
+    <ul><li>스트림릿 = GitHub 창고의 코드를 앱으로 실행</li><li>흐름: 만들기 → GitHub 올리기 → 스트림릿 켜기</li></ul>
   </div>
 
   <h2>③ AI 서비스 준비 (하나만)</h2>
-  <p>코드를 대신 짜 줄 AI가 필요해요. <b>아래 셋 중 하나</b>면 충분합니다. 이미 쓰는 게 있으면 그걸 쓰세요.</p>
+  <ul><li>코드 작성용 AI 필요 · 아래 3종 중 1개면 충분 · 기존 사용 중이면 그대로</li></ul>
   <table class="daymap">
     <thead><tr><th>서비스</th><th>주소</th><th>메모</th></tr></thead>
     <tbody>
-      <tr><td><b>Claude</b> (권장)</td><td><code>claude.ai</code></td><td>이 강의 예시가 Claude 기준. 무료로 시작 가능</td></tr>
-      <tr><td>ChatGPT</td><td><code>chatgpt.com</code></td><td>가장 익숙하면 이걸로</td></tr>
+      <tr><td><b>Claude</b> (권장)</td><td><code>claude.ai</code></td><td>강의 예시 기준 · 무료 시작 가능</td></tr>
+      <tr><td>ChatGPT</td><td><code>chatgpt.com</code></td><td>익숙하면 이걸로</td></tr>
       <tr><td>Gemini</td><td><code>gemini.google.com</code></td><td>구글 계정이면 바로</td></tr>
     </tbody>
   </table>
   <div class="callout tip">
-    <div class="h">💡 어떤 걸 써도 괜찮아요</div>
-    <p>이 교재의 <b>프롬프트(주문서)</b>는 어떤 AI에 넣어도 되도록 썼어요. 강사 화면은 Claude로 보여드리지만, 여러분은 <b>익숙한 것 하나</b>만 준비하면 됩니다.</p>
+    <div class="h">💡 어떤 걸 써도 OK</div>
+    <ul><li>교재 프롬프트 = 어떤 AI에도 호환</li><li>강사 화면 = Claude · 수강생 = 익숙한 것 1개</li></ul>
   </div>
 
   <h2>🎒 준비 완료 체크리스트</h2>
   <ul class="checklist">
-    <li>GitHub 가입 완료 — 내 <b>사용자 이름</b>을 안다</li>
-    <li>Streamlit Community Cloud에 <b>GitHub로</b> 로그인해 봤다</li>
-    <li>AI 서비스(셋 중 하나)에 로그인해 봤다</li>
-    <li>세 계정의 <b>이메일·비밀번호를 메모</b>해 두었다</li>
-    <li>노트북과 충전기를 챙긴다 (마우스 있으면 더 편해요)</li>
+    <li>GitHub 가입 완료 — 내 <b>사용자 이름</b> 확인</li>
+    <li>Streamlit — <b>GitHub로</b> 로그인 성공</li>
+    <li>AI 서비스(1개) 로그인 성공</li>
+    <li>세 계정 <b>이메일·비밀번호 메모</b></li>
+    <li>노트북·충전기 (마우스 있으면 편리)</li>
   </ul>
 
   <div class="callout check">
     <div class="h">🎉 다 됐다면</div>
-    <p>준비 끝! 첫날 우리는 바로 <b>내 웹페이지를 인터넷에 올리는 것</b>부터 시작합니다.</p>
+    <ul><li>첫날 시작 = <b>내 웹페이지 인터넷에 올리기</b></li></ul>
   </div>
 
   <div class="pager">
@@ -101,7 +104,7 @@
 </main>
 </div>
 
-<footer class="foot">서울대학교 평생교육원 · 데이터 분석 병아리반 · 학생용 교재</footer>
+<footer class="foot">서울대학교 평생교육원 · 데이터 분석 병아리반 · 수강생용 교재</footer>
 <script src="assets/copy.js"></script>
 </body>
 </html>

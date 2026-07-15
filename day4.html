@@ -11,7 +11,7 @@
   <a class="brand" href="index.html"><span class="chick">🐣</span> 데이터 분석 <span class="a">병아리반</span></a>
   <span class="spacer"></span>
   <a class="home" href="index.html">← 목차</a>
-  <span class="badge">학생용</span>
+  <span class="badge">수강생용</span>
 </div></div>
 
 <div class="wrap">
@@ -19,64 +19,86 @@
   <span class="eyebrow">4일차</span>
   <h1>데이터를 <span class="a">쌓고 예측</span>하기: 구글시트 연동과 머신러닝</h1>
   <div class="under"></div>
-  <p class="lead">오늘의 약속 — <b>데이터를 어딘가에 쌓고</b>, 그 데이터로 <b>미래를 살짝 예측</b>해 봅니다. 여전히 코드는 AI가 짜고, 우리는 주문하고 확인해요.</p>
+  <p class="lead">오늘 = 데이터 <b>쌓기</b> + <b>미래 예측</b>. 코드는 AI가, 우리는 주문·확인.</p>
 
   <div class="make-banner">
     <div class="t">🎯 오늘 만드는 것</div>
     <ul>
-      <li><b>구글시트 연동 앱</b> — 이름·가능시간을 제출하면 시트에 차곡차곡 쌓이는 약속/투표 앱</li>
-      <li><b>2050년 기온 예측기</b> — 서울 연평균기온으로 미래를 예측하는 나만의 작은 AI</li>
+      <li><b>구글시트 연동 앱</b> — 이름·가능시간 제출 → 시트에 쌓이는 약속/투표 앱</li>
+      <li><b>2050년 기온 예측기</b> — 서울 연평균기온으로 미래를 예측하는 작은 AI</li>
     </ul>
   </div>
 
   <h2>0. 어제까지 온 길 (짧게 복습)</h2>
-  <p>3일차까지 우리는 <b>AI를 앱 안에 넣는 법</b>을 배웠어요. 딱 네 단어만 기억하면 됩니다.</p>
+  <ul>
+    <li>3일차까지 = <b>AI를 앱 안에 넣는 법</b></li>
+    <li>핵심 네 단어만 기억 ↓</li>
+  </ul>
   <table class="daymap">
     <thead><tr><th>단어</th><th>한 줄 뜻</th></tr></thead>
     <tbody>
       <tr><td><b>API</b></td><td>다른 회사의 AI·데이터를 <b>불러다 쓰는 창구</b></td></tr>
-      <tr><td><b>API 키</b></td><td>그 창구를 쓰는 <b>내 출입증</b> (남에게 보이면 안 됨)</td></tr>
-      <tr><td><b>secrets</b></td><td>키를 코드 밖 <b>비밀 금고</b>에 넣어두는 곳</td></tr>
-      <tr><td><b>채팅앱</b></td><td>사용자 질문 → AI 응답을 주고받는 앱</td></tr>
+      <tr><td><b>API 키</b></td><td>창구를 쓰는 <b>내 출입증</b> (남에게 노출 금지)</td></tr>
+      <tr><td><b>secrets</b></td><td>키를 코드 밖 <b>비밀 금고</b>에 보관</td></tr>
+      <tr><td><b>채팅앱</b></td><td>사용자 질문 → AI 응답 주고받는 앱</td></tr>
     </tbody>
   </table>
-  <p>그런데 어제 만든 채팅앱에는 한 가지 아쉬움이 있었어요. <b>대화가 저장되지 않는다는 것.</b> 오늘은 그 문제부터 풀어 봅니다.</p>
+  <ul>
+    <li>어제 채팅앱의 아쉬움 = <b>대화가 저장 안 됨</b> → 오늘 해결</li>
+  </ul>
 
   <h2>1. 왜 ‘저장’이 필요할까?</h2>
-  <p>스트림릿 앱은 화면에 값을 잠깐 들고 있어요. 이 임시 기억을 <code>session_state</code>라고 부릅니다. 그런데 이 기억에는 결정적인 약점이 있어요.</p>
+  <ul>
+    <li>스트림릿의 임시 기억 = <code>session_state</code></li>
+    <li>결정적 약점 ↓</li>
+  </ul>
   <div class="callout warn">
-    <div class="h">⚠️ 새로고침하면 사라집니다 (휘발성)</div>
-    <p><code>session_state</code>에 담은 값은 브라우저를 <b>새로고침하거나 닫으면 통째로 날아가요.</b> 마치 화이트보드에 적은 메모 같은 거예요. 잠깐은 보이지만, 지우면 끝. 다른 사람이 접속하면 그 사람에겐 아예 안 보이고요.</p>
+    <div class="h">⚠️ 새로고침하면 사라짐 (휘발성)</div>
+    <ul>
+      <li><code>session_state</code> = 새로고침·종료 시 소멸</li>
+      <li>다른 사람 접속 시 안 보임</li>
+      <li>→ 앱 <b>바깥</b> 진짜 저장소 필요</li>
+    </ul>
   </div>
-  <p>그래서 <b>여러 사람이 남긴 데이터를 계속 쌓으려면</b> 앱 <b>바깥</b>에 있는 진짜 저장소가 필요해요. 저장소에도 종류가 있는데, 지도로 보면 이렇습니다.</p>
   <table class="daymap">
     <thead><tr><th>저장소</th><th>난이도</th><th>느낌</th></tr></thead>
     <tbody>
-      <tr><td><b>구글시트</b></td><td>쉬움 🐣</td><td>우리가 아는 그 스프레드시트. 눈에 보이고 손으로도 고침 → <b>오늘 이걸로!</b></td></tr>
-      <tr><td><b>진짜 데이터베이스(DB)</b></td><td>어려움</td><td>대용량·빠른 검색용 전문 저장소 → <b>5일차에 맛보기</b></td></tr>
+      <tr><td><b>구글시트</b></td><td>쉬움 🐣</td><td>눈에 보이는 스프레드시트 → <b>오늘 이걸로!</b></td></tr>
+      <tr><td><b>진짜 DB</b></td><td>어려움</td><td>대용량·빠른 검색 → <b>5일차 맛보기</b></td></tr>
     </tbody>
   </table>
-  <p>오늘은 가장 친근한 <b>구글시트</b>를 데이터 저장소로 씁니다. 우리가 매일 보던 표가 앱의 ‘창고’가 되는 거예요.</p>
 
   <h2>2. 구글시트 연동 앱 — 데이터를 쌓아 보자</h2>
-  <p>만들 앱은 <b>약속 잡기/투표 앱</b>이에요. 사용자가 <b>이름 + 가능한 시간</b>을 제출하면, 그 내용이 구글시트에 한 줄씩 쌓입니다. 다 같이 채운 시트를 보면 언제 모이면 좋을지 한눈에 보이죠.</p>
-  <p>오늘 세팅 중 <b>이 부분이 가장 무겁습니다.</b> 하지만 클릭 순서만 그대로 따라오면 돼요. 천천히 같이 가요. 🐢</p>
+  <ul>
+    <li>만들 것 = <b>약속 잡기/투표 앱</b></li>
+    <li>이름 + 가능시간 제출 → 시트에 한 줄씩 쌓임</li>
+    <li>오늘 세팅 중 <b>가장 무거운 부분</b> · 클릭 순서만 따라오기 🐢</li>
+  </ul>
 
   <h3>2-1. 로봇 직원(서비스 계정) 고용하기</h3>
-  <p>앱이 내 구글시트에 글을 쓰려면 <b>‘출입 권한’</b>이 필요해요. 그런데 내 구글 아이디·비밀번호를 앱에 넣는 건 위험하죠. 그래서 구글은 <b>서비스 계정(service account)</b>이라는 걸 줍니다.</p>
+  <ul>
+    <li>앱이 내 시트에 쓰려면 <b>출입 권한</b> 필요</li>
+    <li>내 아이디·비번 넣기 = 위험 → <b>서비스 계정</b> 사용</li>
+  </ul>
   <div class="callout tip">
     <div class="h">💡 서비스 계정 = 로봇 직원</div>
-    <p>서비스 계정은 <b>내 앱만을 위한 로봇 직원</b>이에요. 이 로봇에게는 <code>...@....iam.gserviceaccount.com</code> 같은 <b>자기 이메일 주소</b>와, 신분증 역할을 하는 <b>JSON 키 파일</b>이 있어요. 내가 구글시트를 이 로봇의 이메일과 <b>‘공유’</b>해 주면, 로봇이 시트에 대신 읽고 씁니다. 내 개인 계정은 건드리지 않아요.</p>
+    <ul>
+      <li>내 앱 전용 로봇 직원</li>
+      <li>자기 이메일(<code>...@....iam.gserviceaccount.com</code>) + 신분증 <b>JSON 키</b> 보유</li>
+      <li>시트를 로봇 이메일과 <b>공유</b> → 로봇이 대신 읽고 씀 (내 개인 계정 무관)</li>
+    </ul>
   </div>
 
   <h3>2-2. 클릭 순서 (아주 자세히)</h3>
-  <p>구글 클라우드 콘솔(<code>console.cloud.google.com</code>)에서 진행합니다. 순서대로만 누르세요.</p>
+  <ul>
+    <li>진행 위치 = 구글 클라우드 콘솔(<code>console.cloud.google.com</code>)</li>
+  </ul>
   <ol class="steps">
-    <li><span class="st">프로젝트 만들기</span><br>콘솔 왼쪽 위 프로젝트 선택 → <b>새 프로젝트</b> → 이름(예: <code>my-sheet-app</code>) → <b>만들기</b>. 만든 프로젝트가 선택돼 있는지 확인.</li>
-    <li><span class="st">API 두 개 켜기</span><br>왼쪽 메뉴 <b>API 및 서비스 → 라이브러리</b>. 검색창에 <code>Google Sheets API</code> → 열어서 <b>사용 설정</b>. 다시 라이브러리로 가서 <code>Google Drive API</code>도 똑같이 <b>사용 설정</b>. (두 개 다 켜야 해요!)</li>
-    <li><span class="st">서비스 계정 만들기</span><br><b>API 및 서비스 → 사용자 인증 정보</b> → 위쪽 <b>사용자 인증 정보 만들기 → 서비스 계정</b>. 이름(예: <code>sheet-bot</code>)을 적고 <b>완료</b>. 목록에 로봇 이메일이 하나 생겨요.</li>
-    <li><span class="st">JSON 키 다운로드</span><br>방금 만든 서비스 계정을 클릭 → <b>키</b> 탭 → <b>키 추가 → 새 키 만들기 → JSON → 만들기</b>. 작은 <code>.json</code> 파일이 컴퓨터에 내려받아집니다. <b>이게 로봇의 신분증이에요. 아무에게도 주지 마세요.</b></li>
-    <li><span class="st">시트를 로봇과 공유</span><br>데이터를 쌓을 구글시트를 하나 만들고(예: <code>약속시트</code>), 오른쪽 위 <b>공유</b> → 서비스 계정 이메일(<code>...@....iam.gserviceaccount.com</code>)을 붙여넣고 <b>편집자</b> 권한으로 공유. <b>이 단계를 빠뜨리면 앱이 시트를 못 봐요.</b></li>
+    <li><span class="st">프로젝트 만들기</span><br>왼쪽 위 프로젝트 선택 → <b>새 프로젝트</b> → 이름(<code>my-sheet-app</code>) → <b>만들기</b> → 선택 확인</li>
+    <li><span class="st">API 두 개 켜기</span><br><b>API 및 서비스 → 라이브러리</b> → <code>Google Sheets API</code> 사용 설정 → <code>Google Drive API</code>도 사용 설정 (둘 다 필수!)</li>
+    <li><span class="st">서비스 계정 만들기</span><br><b>사용자 인증 정보 → 만들기 → 서비스 계정</b> → 이름(<code>sheet-bot</code>) → <b>완료</b> → 로봇 이메일 생성</li>
+    <li><span class="st">JSON 키 다운로드</span><br>서비스 계정 클릭 → <b>키 → 키 추가 → 새 키 → JSON → 만들기</b> → <code>.json</code> 다운로드. <b>로봇 신분증, 공유 금지</b></li>
+    <li><span class="st">시트를 로봇과 공유</span><br>시트 생성(<code>약속시트</code>) → <b>공유</b> → 서비스 계정 이메일 붙여넣기 → <b>편집자</b> 권한. <b>빠뜨리면 앱이 시트 못 봄</b></li>
   </ol>
   <div class="shot"><span class="cam">📸</span><span class="cap">[스크린샷] Google Sheets · Drive API 사용 설정</span><span class="hint">라이브러리에서 Google Sheets API와 Google Drive API의 사용 설정 버튼이 보이게</span><span class="code">shot: day4-01-enable-apis</span></div>
   <div class="shot"><span class="cam">📸</span><span class="cap">[스크린샷] 서비스 계정 만들기</span><span class="hint">서비스 계정 이름 입력란과 만들기/완료 버튼이 보이게</span><span class="code">shot: day4-02-service-account</span></div>
@@ -84,15 +106,23 @@
   <div class="shot"><span class="cam">📸</span><span class="cap">[스크린샷] 시트 공유 · 서비스 계정 이메일 추가</span><span class="hint">시트 공유 창에 서비스 계정 이메일이 편집자 권한으로 추가된 모습이 보이게</span><span class="code">shot: day4-04-share-sheet</span></div>
   <div class="callout warn">
     <div class="h">⚠️ 가장 흔한 실수 두 가지</div>
-    <p>① <b>Sheets API·Drive API를 켜지 않음</b> — 둘 다 켜야 합니다. ② <b>시트를 서비스 계정 이메일과 공유하지 않음</b> — 로봇이 문 앞에서 막혀요. 막히면 이 두 가지부터 확인!</p>
+    <ul>
+      <li>① Sheets·Drive API 둘 다 안 켬</li>
+      <li>② 시트를 서비스 계정 이메일과 공유 안 함</li>
+      <li>→ 막히면 이 둘부터 확인</li>
+    </ul>
   </div>
 
   <h3>2-3. 비밀 금고에 키 넣기 + 라이브러리</h3>
-  <p>스트림릿에서 구글시트를 쓰려면 <b><code>st-gsheets-connection</code></b>이라는 라이브러리가 필요해요. 어제처럼 <code>requirements.txt</code>에 적어 둡니다.</p>
+  <ul>
+    <li>필요 라이브러리 = <code>st-gsheets-connection</code> → <code>requirements.txt</code>에 기입</li>
+  </ul>
   <div class="codewrap code"><span class="label">requirements.txt</span><pre>streamlit
 st-gsheets-connection
 pandas</pre></div>
-  <p>이제 3일차에 배운 <b>비밀 금고</b>(<code>.streamlit/secrets.toml</code>)에 다운로드한 JSON 키의 내용을 옮겨 담아요. 아래 <b>모양</b>이면 됩니다(값은 여러분 JSON 파일에서 그대로 복사).</p>
+  <ul>
+    <li>JSON 키 내용을 <code>.streamlit/secrets.toml</code>에 옮겨 담기 (값은 JSON에서 복사)</li>
+  </ul>
   <div class="codewrap code"><span class="label">.streamlit/secrets.toml (모양)</span><pre>[connections.gsheets]
 spreadsheet = "여기에_구글시트_주소_붙여넣기"
 type = "service_account"
@@ -105,11 +135,17 @@ auth_uri = "https://accounts.google.com/o/oauth2/auth"
 token_uri = "https://oauth2.googleapis.com/token"</pre></div>
   <div class="callout warn">
     <div class="h">⚠️ 여기서 잘 막혀요</div>
-    <p><code>private_key</code>는 <b>따옴표로 감싸고</b>, 줄바꿈은 <code>\n</code> 그대로 두세요. 각 줄 <b>들여쓰기·따옴표</b>가 하나만 어긋나도 연결이 안 돼요. 클라우드에 배포할 때는 이 내용을 스트림릿 사이트의 <b>Settings → Secrets</b>에 똑같이 붙여넣습니다.</p>
+    <ul>
+      <li><code>private_key</code> = 따옴표로 감싸기, 줄바꿈 <code>\n</code> 그대로</li>
+      <li>들여쓰기·따옴표 하나만 어긋나도 연결 실패</li>
+      <li>배포 시 → 스트림릿 <b>Settings → Secrets</b>에 동일 붙여넣기</li>
+    </ul>
   </div>
 
   <h3>2-4. AI에게 앱 주문하기 (①②③)</h3>
-  <p>이제 재료가 다 준비됐어요. AI에게 앱을 주문합니다. 읽고 쓰는 핵심은 딱 두 줄이에요 — <b>읽기는 <code>conn.read()</code>, 저장은 <code>conn.update()</code>.</b></p>
+  <ul>
+    <li>핵심 두 줄 → 읽기 <code>conn.read()</code> · 저장 <code>conn.update()</code></li>
+  </ul>
   <div class="codewrap prompt"><span class="label">① 샘플 프롬프트</span><pre>스트림릿(streamlit) '약속 잡기' 앱 하나(main.py)를 만들어줘. 조건:
 
 - st-gsheets-connection 라이브러리로 구글시트를 데이터 저장소로 써.
@@ -119,7 +155,9 @@ token_uri = "https://oauth2.googleapis.com/token"</pre></div>
 - 아래에는 지금까지 제출된 전체 명단을 표로 보여줘.
 - 시트를 읽을 때는 최신 내용이 바로 보이도록 항상 새로 읽어줘(ttl=0).
 - 한국어 라벨, 따뜻한 톤, 초보자용 한국어 주석. main.py 전체 코드를 한 번에 줘.</pre></div>
-  <p>잠깐 기다리면 AI가 아래 <b>모습</b>의 코드를 줍니다. 여러분 것과 똑같지 않아도 괜찮아요.</p>
+  <ul>
+    <li>AI가 아래 <b>모습</b>의 코드 제공 (똑같지 않아도 OK)</li>
+  </ul>
   <div class="codewrap code"><span class="label">② AI가 준 코드 (예시)</span><pre>import streamlit as st
 import pandas as pd
 from streamlit_gsheets import GSheetsConnection
@@ -145,50 +183,68 @@ if st.button("제출"):
 
 st.subheader("지금까지 제출한 사람들")
 st.dataframe(conn.read(ttl=0))</pre></div>
-  <p>배포해서 켠 뒤, 이름을 넣고 제출해 보세요. <b>구글시트를 열어 보면</b> 방금 넣은 줄이 실제로 쌓여 있어요! 마음에 안 들면 대화로 고칩니다.</p>
+  <ul>
+    <li>배포 → 제출 → 구글시트 열면 실제로 줄이 쌓임</li>
+    <li>마음에 안 들면 대화로 개선 ↓</li>
+  </ul>
   <div class="codewrap improve"><span class="label">③ 프롬프트 개선 (예시)</span><pre>좋아! 이어서 고쳐줘.
 - 이름을 안 적고 제출하면 '이름을 입력해 주세요' 경고를 띄워줘.
 - 명단 맨 아래에 '가장 많이 가능한 요일'을 계산해서 크게 보여줘.
 - 표를 요일별 참석 인원 막대그래프로도 보여줘.</pre></div>
   <div class="callout check">
-    <div class="h">✔️ 방금 무슨 일이 일어났나요?</div>
-    <p>이제 여러분의 앱은 <b>기억을 갖게</b> 됐어요. 새로고침해도, 다른 사람이 접속해도 데이터가 남아 있죠. 앱과 저장소를 연결한 것 — 이게 진짜 서비스의 첫걸음이에요.</p>
+    <div class="h">✔️ 방금 무슨 일이?</div>
+    <ul>
+      <li>앱이 <b>기억</b>을 갖게 됨 (새로고침·타인 접속에도 데이터 유지)</li>
+      <li>앱 ↔ 저장소 연결 = 진짜 서비스의 첫걸음</li>
+    </ul>
   </div>
 
   <h2>3. 머신러닝 맛보기 — 직접 만드는 작은 AI</h2>
-  <p>지금까지 우리는 <b>남이 만든 AI</b>를 불러다 썼어요. 이번엔 <b>내가 데이터로 직접</b> 아주 작은 AI를 하나 학습시켜 봅니다. 그전에 지도부터 그려요.</p>
+  <ul>
+    <li>지금까지 = 남이 만든 AI 사용</li>
+    <li>이번 = 내 데이터로 작은 AI 직접 학습</li>
+  </ul>
 
   <h3>3-1. AI · 머신러닝 · 딥러닝 · LLM (포함 관계)</h3>
-  <p>이 단어들은 <b>큰 상자 안에 작은 상자</b>가 든 관계예요.</p>
   <div class="callout tip">
     <div class="h">🧭 AI ⊃ 머신러닝 ⊃ 딥러닝 ⊃ LLM</div>
-    <p><b>AI</b>(인공지능)가 가장 큰 상자. 그 안에 <b>머신러닝</b>(데이터로 스스로 규칙을 배우는 방식)이 있고, 그 안에 <b>딥러닝</b>(뇌 신경망을 흉내 낸 방식)이 있고, 그 안에 우리가 매일 쓰는 <b>LLM</b>(챗봇 같은 거대 언어모델)이 있어요. 오늘은 가장 기본인 <b>머신러닝</b>을 직접 해 봅니다.</p>
+    <ul>
+      <li><b>AI</b> = 가장 큰 상자</li>
+      <li><b>머신러닝</b> = 데이터로 스스로 규칙 학습</li>
+      <li><b>딥러닝</b> = 신경망 흉내</li>
+      <li><b>LLM</b> = 거대 언어모델(챗봇)</li>
+      <li>오늘 = 기본인 <b>머신러닝</b> 직접 실습</li>
+    </ul>
   </div>
-  <p>머신러닝은 크게 두 갈래예요.</p>
   <table class="daymap">
     <thead><tr><th>종류</th><th>정답이 있나요?</th><th>예시</th></tr></thead>
     <tbody>
-      <tr><td><b>지도학습</b></td><td>있음 (정답표로 배움)</td><td>연도→기온 예측, 사진→고양이/강아지 구분</td></tr>
+      <tr><td><b>지도학습</b></td><td>있음 (정답표로 배움)</td><td>연도→기온 예측, 사진→고양이/강아지</td></tr>
       <tr><td><b>비지도학습</b></td><td>없음 (스스로 묶음)</td><td>비슷한 손님끼리 자동 그룹핑</td></tr>
     </tbody>
   </table>
-  <p>오늘 만들 기온 예측기는 <b>‘연도→기온’이라는 정답표로 배우는 지도학습</b>이에요. (정답 없이 비슷한 것끼리 묶는 <b>군집(KMeans)</b>은 비지도학습의 대표 예 — 개념만 알아두세요.)</p>
+  <ul>
+    <li>오늘 기온 예측기 = <b>지도학습</b>(연도→기온 정답표)</li>
+    <li>군집(KMeans) = 비지도학습 대표 (개념만)</li>
+  </ul>
 
   <h3>3-2. 머신러닝 5단계</h3>
-  <p>어떤 머신러닝이든 흐름은 똑같아요. 요리 순서처럼요.</p>
   <table class="daymap">
     <thead><tr><th>단계</th><th>하는 일</th></tr></thead>
     <tbody>
-      <tr><td><b>① 수집</b></td><td>데이터를 모은다 (서울 연평균기온 표)</td></tr>
-      <tr><td><b>② 전처리</b></td><td>빠진 값·이상한 값을 다듬는다</td></tr>
-      <tr><td><b>③ 학습</b></td><td>데이터에서 규칙을 배운다 (<code>model.fit()</code>)</td></tr>
-      <tr><td><b>④ 평가</b></td><td>얼마나 잘 맞추는지 점수를 매긴다 (<code>R²</code>)</td></tr>
-      <tr><td><b>⑤ 예측</b></td><td>새 입력에 답을 내놓는다 (<code>model.predict()</code>)</td></tr>
+      <tr><td><b>① 수집</b></td><td>데이터 모으기 (서울 연평균기온 표)</td></tr>
+      <tr><td><b>② 전처리</b></td><td>빠진 값·이상값 다듬기</td></tr>
+      <tr><td><b>③ 학습</b></td><td>규칙 배우기 (<code>model.fit()</code>)</td></tr>
+      <tr><td><b>④ 평가</b></td><td>점수 매기기 (<code>R²</code>)</td></tr>
+      <tr><td><b>⑤ 예측</b></td><td>새 입력에 답 (<code>model.predict()</code>)</td></tr>
     </tbody>
   </table>
 
   <h3>3-3. 2050년 서울 기온 예측기 (①②③)</h3>
-  <p>서울의 <b>연도별 평균기온</b> 데이터로 직선 하나를 학습시켜, 슬라이더로 연도를 넣으면 예측 기온이 나오는 앱을 만듭니다. 사용할 도구는 <b>scikit-learn</b>의 <code>LinearRegression</code>(선형회귀 = 데이터에 가장 잘 맞는 직선 긋기)이에요.</p>
+  <ul>
+    <li>서울 연도별 평균기온 → 직선 학습 → 슬라이더로 예측</li>
+    <li>도구 = scikit-learn <code>LinearRegression</code>(가장 잘 맞는 직선 긋기)</li>
+  </ul>
   <div class="codewrap code"><span class="label">requirements.txt</span><pre>streamlit
 pandas
 scikit-learn
@@ -204,7 +260,9 @@ plotly</pre></div>
 - 훈련 데이터 범위(예: 최근 100년) 밖의 미래 예측에는 '참고용, 조심'
   이라는 안내 문구를 함께 띄워줘.
 - 한국어 라벨, 따뜻한 톤, 초보자용 한국어 주석. main.py 전체 코드를 한 번에 줘.</pre></div>
-  <p>핵심은 아래 코드에서 <b><code>model.fit()</code> 딱 한 줄이 ‘학습’</b>이라는 점이에요. 이 한 줄에서 AI가 만들어집니다.</p>
+  <ul>
+    <li>핵심 → <code>model.fit()</code> 딱 한 줄 = ‘학습’ (여기서 AI 탄생)</li>
+  </ul>
   <div class="codewrap code"><span class="label">② AI가 준 코드 (예시)</span><pre>import streamlit as st
 import pandas as pd
 from sklearn.linear_model import LinearRegression
@@ -236,38 +294,55 @@ if year &gt; int(df["year"].max()):
     st.warning("⚠️ 이 값은 데이터에 없는 미래예요. 참고용으로만, 조심해서 보세요!")</pre></div>
   <div class="callout warn">
     <div class="h">⚠️ 외삽(外揷) — 미래 예측엔 ‘조심’ 딱지</div>
-    <p>직선을 그대로 늘여 <b>데이터에 없는 미래(2050년)</b>를 맞히는 걸 <b>외삽</b>이라고 해요. 과거 흐름을 참고할 수는 있지만, 실제 미래는 직선대로 가지 않을 수 있어요. 그래서 미래 예측 옆에는 <b>항상 ‘조심’ 딱지</b>를 붙입니다. 숫자를 맹신하지 않기!</p>
+    <ul>
+      <li>외삽 = 직선을 늘여 데이터 없는 미래(2050) 예측</li>
+      <li>실제 미래는 직선대로 안 갈 수 있음</li>
+      <li>→ 미래 예측 옆엔 항상 <b>‘조심’ 딱지</b> · 숫자 맹신 금지</li>
+    </ul>
   </div>
-  <p>결과를 본 뒤, 대화로 더 키워 봐요.</p>
   <div class="codewrap improve"><span class="label">③ 프롬프트 개선 (예시)</span><pre>좋아! 이어서 고쳐줘.
 - 예측 기온 옆에, 지금(가장 최근 해)보다 몇 도 오르는지 함께 보여줘.
 - 그래프의 실제 점은 회색, 학습한 직선은 주황색으로.
 - 슬라이더를 2100년까지 밀면 경고 문구가 더 크게 뜨도록 해줘.</pre></div>
   <div class="callout tip">
-    <div class="h">💡 방금 여러분이 한 일</div>
-    <p>데이터를 모아 <b>스스로 규칙을 배우게(학습)</b> 하고, 그 규칙으로 <b>새 예측</b>을 뽑았어요. 규모는 작지만, 원리는 세상의 거대한 AI와 똑같아요. 여러분은 방금 <b>머신러닝</b>을 직접 해 본 거예요.</p>
+    <div class="h">💡 방금 한 일</div>
+    <ul>
+      <li>데이터 모아 스스로 규칙 학습</li>
+      <li>규칙으로 새 예측 산출</li>
+      <li>규모만 작을 뿐, 원리는 거대 AI와 동일 = <b>머신러닝 직접 실습</b></li>
+    </ul>
   </div>
 
   <h2>🌱 씨앗 — 오늘 밤, 내 프로젝트 주제를 정해요</h2>
-  <p>내일이면 각자 <b>나만의 프로젝트</b>를 마무리해요. 오늘 밤, 주제 초안을 하나 정해 오세요. 지난 4일간 만든 조각들(페이지·대시보드·채팅앱·시트앱·예측기)이 전부 재료입니다.</p>
+  <ul>
+    <li>내일 = 나만의 프로젝트 마무리</li>
+    <li>오늘 밤 주제 초안 하나 정하기</li>
+    <li>재료 = 4일간 만든 조각들(페이지·대시보드·채팅앱·시트앱·예측기)</li>
+  </ul>
   <div class="callout check">
     <div class="h">✔️ 주제 정하기 힌트</div>
-    <p>“내가 <b>매주 반복하는 귀찮은 일</b>”이나 “내가 <b>궁금한 데이터</b>”에서 출발하면 좋아요. 예) 우리 반 독서 기록 시트앱 · 동네 날씨 예측기 · 취미 추천 챗봇. 거창하지 않아도 됩니다.</p>
+    <ul>
+      <li>출발점 = 매주 반복하는 귀찮은 일 / 궁금한 데이터</li>
+      <li>예) 독서 기록 시트앱 · 동네 날씨 예측기 · 취미 추천 챗봇</li>
+      <li>거창하지 않아도 OK</li>
+    </ul>
   </div>
   <div class="callout tip">
-    <div class="h">📝 선택 숙제 (해도 좋고, 안 해도 괜찮아요)</div>
-    <p>오늘 밤 프로젝트 <b>주제 한 줄 + 만들고 싶은 화면 초안</b>을 메모로 적어 오면, 내일 오전 마무리가 훨씬 수월해요. 부담 없이, 떠오르는 만큼만!</p>
+    <div class="h">📝 선택 숙제</div>
+    <ul>
+      <li>주제 한 줄 + 만들 화면 초안 메모 → 내일 오전 수월</li>
+    </ul>
   </div>
 
   <h2>🎒 오늘의 체크 & 링크</h2>
   <ul class="checklist">
-    <li>스트림릿의 <code>session_state</code>는 새로고침하면 사라진다는 걸 안다</li>
-    <li>서비스 계정(로봇 직원)을 만들고 JSON 키를 받았다</li>
+    <li><code>session_state</code>는 새로고침하면 사라진다</li>
+    <li>서비스 계정을 만들고 JSON 키를 받았다</li>
     <li>구글시트를 서비스 계정 이메일과 공유했다</li>
-    <li>이름·시간을 제출하면 시트에 쌓이는 앱을 배포했다</li>
-    <li><code>model.fit()</code> 한 줄이 ‘학습’이라는 걸 안다</li>
-    <li>미래 예측(외삽)에는 ‘조심’ 딱지가 필요하다는 걸 안다</li>
-    <li>내일 프로젝트 주제를 마음속에 하나 정했다</li>
+    <li>이름·시간 제출 → 시트에 쌓이는 앱을 배포했다</li>
+    <li><code>model.fit()</code> 한 줄 = ‘학습’</li>
+    <li>미래 예측(외삽)엔 ‘조심’ 딱지 필요</li>
+    <li>내일 프로젝트 주제를 하나 정했다</li>
   </ul>
 
   <div class="pager">
@@ -277,7 +352,7 @@ if year &gt; int(df["year"].max()):
 </main>
 </div>
 
-<footer class="foot">서울대학교 평생교육원 · 데이터 분석 병아리반 · 학생용 교재</footer>
+<footer class="foot">서울대학교 평생교육원 · 데이터 분석 병아리반 · 수강생용 교재</footer>
 <script src="assets/copy.js"></script>
 </body>
 </html>
