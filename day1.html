@@ -24,7 +24,7 @@
   <div class="make-banner">
     <div class="t">🎯 오늘 만드는 것</div>
     <ul>
-      <li><b>MBTI 테스트 페이지</b> — AI가 만들고 GitHub Pages로 배포</li>
+      <li><b>MBTI×포켓몬 페이지</b> — MBTI 고르면 어울리는 포켓몬 · GitHub Pages 배포</li>
       <li><b>HTML 날씨 대시보드</b> — 기온 데이터를 AI가 예쁜 한 장으로</li>
       <li><b>주식 대시보드(맛보기)</b> — 스트림릿으로 켠 첫 웹앱</li>
     </ul>
@@ -71,7 +71,7 @@
     </ul>
   </div>
 
-  <h3>프롬프트 기본 포맷 (대표 예시 하나)</h3>
+  <h3>프롬프트 기본 포맷</h3>
   <ul>
     <li>좋은 주문 = <b>맥락 + 제약</b>을 담아 <b>명확한 과제</b> 전달</li>
   </ul>
@@ -80,98 +80,105 @@
 [작업] ~를 만들어줘.
 [제약] 조건: 파일 하나 / 한국어 / 외부 설치 없이 …
 [출력] 완성된 전체 코드를 한 번에 줘.</pre></div>
-  <ul>
-    <li>이 포맷대로 쓴 예시 ↓</li>
-  </ul>
-  <div class="codewrap prompt"><span class="label">예시 프롬프트</span><pre>[역할] 너는 초보자용 웹페이지를 잘 만드는 도우미야.
-[맥락] 나는 코딩을 처음 배우고, 결과를 GitHub Pages에 올릴 거야.
-[작업] 'D-day 계산기' 웹페이지를 만들어줘.
-[제약] 파일 하나(index.html)로 끝나고, 외부 설치 없이 브라우저에서 바로 열려야 해.
-  날짜를 고르면 오늘까지 며칠 남았는지 크게 보여줘. 한국어, 따뜻한 노란 톤.
-[출력] 완성된 index.html 전체 코드를 한 번에 줘.</pre></div>
   <div class="callout warn">
     <div class="h">⚠️ 포맷보다 중요한 것</div>
     <ul>
       <li>이 포맷은 <b>틀(체크리스트)</b>일 뿐 · 순서·라벨을 꼭 지킬 필요 없음</li>
       <li>핵심 = <b>맥락(무엇을·누구를 위해)</b> + <b>제약(조건)</b>을 빠짐없이 담아 <b>명확한 과제</b>로 전달</li>
       <li>모호하면 → 엉뚱한 결과 · 구체적이면 → 원하는 결과</li>
+      <li>👉 <b>바로 아래 첫 실습</b>에서 이 원리로 직접 써봅니다</li>
     </ul>
   </div>
 
-  <h2>1. 내 첫 웹페이지 = MBTI 테스트를 인터넷에</h2>
+  <h2>1. 내 첫 웹페이지 = MBTI로 내 포켓몬 찾기</h2>
   <ul>
-    <li><b>MBTI 테스트</b> 페이지 → AI 제작 → GitHub Pages로 배포</li>
+    <li>MBTI를 <b>고르면</b> 어울리는 <b>포켓몬</b>을 보여주는 페이지 → AI 제작 → GitHub Pages 배포</li>
     <li>목표 = 코드 내용 X · <b>‘만들기 → 올리기 → 켜기’ 흐름</b> 익히기</li>
   </ul>
   <ol class="steps">
     <li><span class="st">새 저장소 만들기</span><br>GitHub 오른쪽 위 <b>+ → New repository</b> · 이름 <code>my-mbti</code> · <b>Public</b> · <b>Add a README</b> 체크 · <b>Create</b></li>
     <li><span class="st">AI에게 MBTI 페이지 주문</span><br>아래 주문서 그대로 붙여넣기 → <code>index.html</code> 코드 받기</li>
   </ol>
-  <div class="codewrap prompt"><span class="label">① 샘플 프롬프트</span><pre>'MBTI 테스트' 웹페이지를 HTML 파일 하나로 만들어줘. 조건:
+  <div class="codewrap prompt"><span class="label">① 샘플 프롬프트</span><pre>'MBTI로 포켓몬 찾기' 웹페이지를 HTML 파일 하나로 만들어줘. 조건:
 - 파일 하나(index.html)로 끝나고, 외부 설치·인터넷 연결 없이 브라우저에서
   바로 열려야 해 (CSS와 자바스크립트를 파일 안에 포함).
-- 질문 6~8개에 답하면 16가지 MBTI 유형 중 하나를 알려줘.
-- 결과 화면에 유형 코드(예: ENFP), 한 줄 별명, 재미있는 설명 2~3줄,
-  잘 맞는 유형 1개를 보여줘.
+- 16가지 MBTI 유형 버튼을 보여주고, 하나를 고르면 그 유형에 어울리는
+  포켓몬 1마리를 보여줘: 포켓몬 이름, 큰 이모지, 어울리는 이유 2~3줄.
+- 잘 맞는 다른 유형(궁합) 1개도 함께 보여줘.
 - 따뜻한 크림·노란색 톤, 큰 글씨, 한국어, 초보자도 보기 쉽게.
-- '다시 하기' 버튼 포함. 완성된 index.html 전체 코드를 한 번에 줘.</pre></div>
+- '다시 고르기' 버튼 포함. 완성된 index.html 전체 코드를 한 번에 줘.</pre></div>
+  <div class="callout tip">
+    <div class="h">💡 방금 그 주문, 왜 잘 통할까? (프롬프트 팁)</div>
+    <ul>
+      <li><b>맥락</b> = "MBTI로 포켓몬 찾기" · "초보자도 보기 쉽게"</li>
+      <li><b>제약</b> = "파일 하나" · "외부 설치 없이" · "한국어" · "16유형" · "이모지"</li>
+      <li>이렇게 <b>맥락 + 제약</b>을 담으면 AI가 헷갈리지 않음 (포맷 라벨은 없어도 됨)</li>
+      <li>모호하게 "MBTI 앱 만들어줘"만 하면 → 엉뚱한 결과</li>
+    </ul>
+  </div>
 
   <ul>
     <li>AI가 <b>완성된 코드 한 덩어리</b> 반환 · 내 것과 달라도 OK · 이런 <b>모습</b>이면 성공</li>
   </ul>
   <div class="codewrap code"><span class="label">② AI가 준 코드 (예시)</span><pre>&lt;!DOCTYPE html&gt;
 &lt;html lang="ko"&gt;
-&lt;head&gt;&lt;meta charset="utf-8"&gt;&lt;title&gt;나의 MBTI는?&lt;/title&gt;
+&lt;head&gt;&lt;meta charset="utf-8"&gt;&lt;title&gt;MBTI로 포켓몬 찾기&lt;/title&gt;
 &lt;style&gt;
   body{font-family:sans-serif;background:#fffdf7;color:#3a2e1a;
        max-width:600px;margin:40px auto;padding:0 20px;line-height:1.7}
   h1{color:#e8930c}
-  .q{background:#fff6e0;border:1px solid #f0e2bc;border-radius:14px;padding:16px;margin:14px 0}
+  .types{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
   button{font:inherit;cursor:pointer;border:2px solid #f0e2bc;background:#fff;
-         border-radius:10px;padding:10px 14px;margin:6px 6px 0 0}
-  .go{background:#e8930c;color:#fff;border-color:#e8930c;font-weight:800;margin-top:16px}
+         border-radius:10px;padding:10px 0;font-weight:800}
+  button:hover{border-color:#e8930c}
   #result{display:none;background:#fff6e0;border-radius:18px;padding:24px;margin-top:20px;text-align:center}
-  #result .code{font-size:2.4rem;font-weight:900;color:#e8930c}
+  #result .emoji{font-size:3rem}
+  #result .name{font-size:1.6rem;font-weight:900;color:#e8930c}
 &lt;/style&gt;&lt;/head&gt;
 &lt;body&gt;
-  &lt;h1&gt;🐣 나의 MBTI는?&lt;/h1&gt;
-  &lt;p&gt;네 가지 질문에 답해 보세요.&lt;/p&gt;
-  &lt;div id="quiz"&gt;&lt;/div&gt;
-  &lt;button class="go" onclick="showResult()"&gt;결과 보기&lt;/button&gt;
+  &lt;h1&gt;🐣 MBTI로 내 포켓몬 찾기&lt;/h1&gt;
+  &lt;p&gt;내 MBTI를 골라 보세요.&lt;/p&gt;
+  &lt;div class="types" id="types"&gt;&lt;/div&gt;
   &lt;div id="result"&gt;&lt;/div&gt;
 &lt;script&gt;
-const Q=[
-  {q:"주말엔?",a:["사람들과 왁자지껄 (E)","집에서 혼자 조용히 (I)"]},
-  {q:"새 정보를 볼 때?",a:["사실·현실 위주 (S)","의미·가능성 위주 (N)"]},
-  {q:"결정할 때?",a:["논리·원칙 (T)","마음·관계 (F)"]},
-  {q:"계획은?",a:["미리 촘촘하게 (J)","그때그때 유연하게 (P)"]}];
-const L=[["E","I"],["S","N"],["T","F"],["J","P"]];
-const pick=[null,null,null,null];
-document.getElementById("quiz").innerHTML=Q.map((it,i)=&gt;
-  `&lt;div class="q"&gt;&lt;b&gt;${i+1}. ${it.q}&lt;/b&gt;&lt;br&gt;`+
-  it.a.map((t,j)=&gt;`&lt;button id="b${i}_${j}" onclick="choose(${i},${j})"&gt;${t}&lt;/button&gt;`).join("")+
-  `&lt;/div&gt;`).join("");
-function choose(i,j){ pick[i]=j;
-  document.getElementById("b"+i+"_0").style.background="#fff";
-  document.getElementById("b"+i+"_1").style.background="#fff";
-  document.getElementById("b"+i+"_"+j).style.background="#ffe6ad"; }
-function showResult(){
-  if(pick.includes(null)){ alert("네 질문에 모두 답해 주세요!"); return; }
-  const type=pick.map((p,i)=&gt;L[i][p]).join("");
+// [유형] : [포켓몬, 이모지, 어울리는 이유, 궁합 유형]
+const P={
+  ENFP:["피카츄","⚡","호기심 많고 활발한 분위기 메이커","INFJ"],
+  ENFJ:["푸린","🎤","사람을 이끄는 따뜻한 리더","INFP"],
+  ENTP:["파오리","🦆","재치 있는 아이디어 뱅크","INFJ"],
+  ENTJ:["갸라도스","🌊","강한 추진력의 리더","INTP"],
+  ESFP:["이상해꽃","🌻","밝고 사교적인 무드메이커","ISFJ"],
+  ESFJ:["럭키","💗","곁을 챙기는 다정한 타입","ISFP"],
+  ESTP:["리자몽","🔥","에너지 넘치는 모험가","ISTJ"],
+  ESTJ:["코뿌리","🐗","책임감 강한 실행가","ISFP"],
+  INFP:["이브이","🌸","여린 감성의 몽상가","ENFJ"],
+  INFJ:["가디안","🌙","깊이 공감하는 조언자","ENFP"],
+  INTP:["폴리곤","🧩","논리적인 탐구자","ENTJ"],
+  INTJ:["뮤츠","🔮","전략적인 목표 지향형","ENFP"],
+  ISFP:["치코리타","🌿","조용한 예술가 감성","ESFJ"],
+  ISFJ:["밀탱크","🐄","든든히 지키는 수호자","ESTP"],
+  ISTP:["팬텀","👻","손재주 좋은 문제해결사","ESFJ"],
+  ISTJ:["거북왕","🐢","믿음직한 원칙주의자","ESFP"]
+};
+document.getElementById("types").innerHTML=
+  Object.keys(P).map(t=&gt;`&lt;button onclick="show('${t}')"&gt;${t}&lt;/button&gt;`).join("");
+function show(t){
+  const [name,emoji,why,match]=P[t];
   const r=document.getElementById("result"); r.style.display="block";
-  r.innerHTML=`&lt;div class="code"&gt;${type}&lt;/div&gt;`+
-    `&lt;p&gt;당신은 &lt;b&gt;${type}&lt;/b&gt; 유형이에요!&lt;/p&gt;`+
-    `&lt;button class="go" onclick="location.reload()"&gt;다시 하기&lt;/button&gt;`; }
+  r.innerHTML=`&lt;div class="emoji"&gt;${emoji}&lt;/div&gt;&lt;div class="name"&gt;${name}&lt;/div&gt;`+
+    `&lt;p&gt;${t} → &lt;b&gt;${why}&lt;/b&gt;&lt;/p&gt;&lt;p&gt;잘 맞는 유형: &lt;b&gt;${match}&lt;/b&gt;&lt;/p&gt;`+
+    `&lt;button onclick="location.reload()"&gt;다시 고르기&lt;/button&gt;`;
+}
 &lt;/script&gt;
 &lt;/body&gt;&lt;/html&gt;</pre></div>
 
   <ul>
     <li>브라우저에서 열어 확인 · 마음에 안 들면 <b>대화로 개선</b></li>
   </ul>
-  <div class="codewrap improve"><span class="label">③ 프롬프트 개선 (예시)</span><pre>좋아! 이제 이걸 더 멋지게 고쳐줘.
-- 16개 유형마다 별명과 2~3줄 설명, 잘 맞는 유형 1개를 넣어줘.
-- 결과 화면에 유형 이모지 하나를 크게, 배경색을 유형별로 다르게.
-- 질문을 8개로 늘리고, '결과 복사하기' 버튼을 추가해줘.</pre></div>
+  <div class="codewrap improve"><span class="label">③ 프롬프트 개선 (예시)</span><pre>좋아! 이어서 고쳐줘.
+- 16유형마다 포켓몬을 다 채우고, 어울리는 이유를 더 재미있게 써줘.
+- 고른 유형에 따라 배경색을 다르게, 포켓몬 이미지도 보여줘.
+- '결과를 이미지로 저장' 버튼을 추가해줘.</pre></div>
 
   <div class="callout tip">
     <div class="h">💡 바이브 코딩의 핵심 리듬</div>
@@ -189,7 +196,7 @@ function showResult(){
     <li><span class="st">Pages 켜기</span><br><b>Settings → Pages</b> · <b>Branch</b> = <code>main</code> · <b>Save</b></li>
     <li><span class="st">내 주소 확인</span><br>1~2분 뒤 새로고침 → <code>https://사용자이름.github.io/my-mbti/</code> 🎉</li>
   </ol>
-  <img class="shot-img" src="assets/shots/day1-04-result.png" alt="배포된 MBTI 테스트 결과 화면 (ENFP 예시)">
+  <img class="shot-img" src="assets/shots/day1-04-result.png" alt="배포된 MBTI×포켓몬 결과 화면 (ENFP → 피카츄 예시)">
   <div class="callout check">
     <div class="h">✔️ 방금 무슨 일이?</div>
     <ul>
@@ -291,7 +298,7 @@ plotly</pre></div>
 
   <h2>🎒 오늘의 체크 & 링크</h2>
   <ul class="checklist">
-    <li>내 GitHub Pages 주소가 생겼다 (MBTI 테스트)</li>
+    <li>내 GitHub Pages 주소가 생겼다 (MBTI×포켓몬)</li>
     <li>HTML 날씨 대시보드를 배포했다</li>
     <li>스트림릿으로 앱을 켜 봤다 (미완성도 OK)</li>
     <li>에러가 나면 <b>통째로 복붙</b>하면 된다는 걸 안다</li>
