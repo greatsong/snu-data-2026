@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>2일차 · 데이터 읽는 눈 — 인구 심화 대시보드 · 데이터 분석 병아리반</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="topbar"><div class="inner">
+  <a class="brand" href="index.html"><span class="chick">🐣</span> 데이터 분석 <span class="a">병아리반</span></a>
+  <span class="spacer"></span>
+  <a class="home" href="index.html">← 목차</a>
+  <span class="badge">학생용</span>
+</div></div>
+
+<div class="wrap">
+<main>
+  <span class="eyebrow">2일차</span>
+  <h1>데이터를 <span class="a">읽는 눈</span>: 인구 심화 대시보드</h1>
+  <div class="under"></div>
+  <p class="lead">오늘의 약속 — 숫자를 <b>그냥 믿지 않습니다.</b> 표를 열어 보고, 평균을 의심하고, AI에게 시켜 <b>인구를 그림으로</b> 읽어냅니다.</p>
+
+  <div class="make-banner">
+    <div class="t">🎯 오늘 만드는 것</div>
+    <ul>
+      <li><b>인구 분석 대시보드</b> — 동네를 고르면 인구 피라미드 + 지표 카드가 뜨는 스트림릿 앱</li>
+      <li><b>전국 고령화 지도</b> — 시군구별 고령화율을 색으로 칠한 단계구분도</li>
+    </ul>
+  </div>
+
+  <h2>0. 어제 한 일 복습 (짧게)</h2>
+  <p>어제 우리는 코드를 짜지 않고도 <b>인터넷 주소 3개</b>를 만들었어요. 오늘도 같은 리듬입니다.</p>
+  <ul>
+    <li><b>GitHub Pages</b> — 파일 하나를 올리면 누구나 볼 수 있는 <b>내 주소</b>가 생긴다.</li>
+    <li><b>스트림릿</b> — 사용자가 <b>직접 값을 바꾸는</b> 진짜 웹앱을 켜 준다.</li>
+    <li><b>바이브 코딩 ①②③</b> — <b>① 주문(프롬프트) → ② 결과 확인 → ③ 개선 주문.</b> 오늘도 모든 만들기가 이 세 박자예요.</li>
+  </ul>
+  <div class="callout warn">
+    <div class="h">🩹 에러(빨간 글씨)가 나면?</div>
+    <p>어제와 똑같아요. 겁먹지 말고 <b>통째로 복사해서 AI에게 붙여넣고 “이 에러 고쳐줘”</b>. 코드를 짠 건 AI니까, 고치는 것도 AI 몫이에요.</p>
+  </div>
+
+  <h2>1. 데이터를 읽는 눈 — 표를 열어보는 습관</h2>
+  <p>데이터를 받으면 그래프부터 그리고 싶지만, 그 전에 <b>표를 눈으로 한 번</b> 보는 게 순서예요. 딱 두 개의 주문만 기억하면 됩니다. <b>외우지 마세요.</b></p>
+  <table class="daymap">
+    <thead><tr><th>주문</th><th>읽는 법</th><th>무엇을 보나</th></tr></thead>
+    <tbody>
+      <tr><td><code>df.head()</code></td><td>“이 표(df)의 <b>앞부분</b>을 보여 줘”</td><td>열 이름·생김새·값의 예시</td></tr>
+      <tr><td><code>df.describe()</code></td><td>“이 표의 <b>숫자 요약</b>을 내 줘”</td><td>개수·평균·퍼짐·최소·최대</td></tr>
+    </tbody>
+  </table>
+  <p><code>describe()</code>가 내주는 표에는 낯선 영어가 나와요. 뜻만 알면 됩니다.</p>
+  <table class="daymap">
+    <thead><tr><th>이름</th><th>뜻</th></tr></thead>
+    <tbody>
+      <tr><td><code>count</code></td><td>값이 몇 개 있나 (빈 칸은 안 셈)</td></tr>
+      <tr><td><code>mean</code></td><td>평균 (다 더해 개수로 나눈 값)</td></tr>
+      <tr><td><code>std</code></td><td>퍼짐 정도 — 값들이 평균에서 얼마나 흩어져 있나</td></tr>
+      <tr><td><code>min</code> / <code>max</code></td><td>가장 작은 값 / 가장 큰 값</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout warn">
+    <div class="h">🕵️ 의심하는 눈 — ‘평균의 함정’</div>
+    <p>평균은 아주 큰 값 하나에 <b>쉽게 끌려가요.</b> 예를 들어 카페 다섯 테이블 손님 나이가 <b>20, 21, 22, 23, 90</b>이면 평균은 <b>35세</b>. 그런데 실제로는 대부분 20대죠. 이럴 때 <b>가운데 값(중앙값)</b>은 <b>22세</b> — 훨씬 정직해요. 그래서 평균을 볼 때는 늘 “한쪽으로 치우친 값이 끼어 있진 않나?”를 함께 의심합니다.</p>
+  </div>
+
+  <p>이 ‘치우침’을 눈으로 보려면 그림이 필요해요. 두 가지 그림만 개념으로 알아둡시다.</p>
+  <ul>
+    <li><b>히스토그램</b> — 값을 구간별로 나눠 <b>막대 높이</b>로 “몇 개씩 몰려 있나”를 보여줘요. 산봉우리가 하나면 고르게, 봉우리가 둘이면 두 무리로 갈린 거예요.</li>
+    <li><b>상자그림(box plot)</b> — 가운데 상자로 <b>중앙값과 대다수 범위</b>를, 바깥 점으로 <b>튀는 값(이상치)</b>을 한눈에 보여줘요.</li>
+  </ul>
+  <div class="callout tip">
+    <div class="h">💡 오늘 여기선 개념만</div>
+    <p>이 그림들을 직접 그리는 코드는 몰라도 돼요. <b>“AI야, 이 데이터로 히스토그램(또는 상자그림) 그려줘”</b>라고 말할 수 있으면 충분합니다. 지금은 <b>‘무엇을 보는 그림인지’</b>만 익혀 두세요.</p>
+  </div>
+
+  <h2>2. 인구 대시보드 만들기</h2>
+  <p>이제 진짜 데이터를 다뤄 봐요. <b>행정안전부 주민등록 인구</b> 자료예요. 연령별(0세, 1세, …)로 남녀 인구가 들어 있어요. 우리는 이걸로 <b>동네를 고르면 인구 피라미드와 지표 카드가 뜨는</b> 스트림릿 앱을 만듭니다.</p>
+  <div class="callout tip">
+    <div class="h">📦 오늘 쓸 데이터</div>
+    <p>파일 이름: <code>population_2026_05.csv</code> (연령별 주민등록 인구, <b>cp949 인코딩</b>).<br>
+    데이터 주소 베이스: <code>https://raw.githubusercontent.com/greatsong/modeudata-with-ai-examples/main/data/</code><br>
+    즉 전체 주소는 <code>…/data/population_2026_05.csv</code> 예요. 이 주소를 프롬프트에 그대로 붙여넣습니다.</p>
+  </div>
+
+  <p>오늘도 <b>워크샵식 레벨업</b>으로 갑니다. 한 번에 다 만들지 않고, 한 계단씩 올려요.</p>
+  <ol class="steps">
+    <li><span class="st">LV1 · 배포 뼈대</span><br>어제처럼 <code>my-population-app</code> 이라는 Public 저장소를 만들고, <code>requirements.txt</code> 와 빈 <code>main.py</code> 로 <b>먼저 스트림릿을 켭니다</b>. “Hello” 한 줄이라도 떠야 성공.</li>
+    <li><span class="st">LV2 · 데이터 읽기</span><br>CSV를 불러와 <code>df.head()</code> 로 <b>표를 화면에 띄웁니다.</b> 생김새부터 눈으로 확인해요.</li>
+    <li><span class="st">LV3 · 그래프</span><br>동네 하나를 골라 <b>인구 피라미드</b>를 그립니다.</li>
+    <li><span class="st">LV4 · 대시보드</span><br>총인구·평균연령·고령화율 <b>지표 카드</b>를 위에 얹어 완성합니다.</li>
+  </ol>
+
+  <p>LV1~2는 어제 흐름과 같으니, 오늘은 <b>피라미드 그리기(LV3)</b>부터 주문서를 봅니다.</p>
+  <div class="codewrap prompt"><span class="label">① 샘플 프롬프트</span><pre>스트림릿(streamlit) 앱 하나(main.py)를 만들어줘. '동네별 인구 피라미드'야.
+
+- 데이터는 이 주소의 CSV를 pandas로 읽어:
+  https://raw.githubusercontent.com/greatsong/modeudata-with-ai-examples/main/data/population_2026_05.csv
+- 이 파일은 인코딩이 cp949(euc-kr)이고, 숫자에 천단위 쉼표(,)가 들어 있어.
+  그래서 pd.read_csv(url, encoding="cp949", thousands=",") 로 읽어줘.
+- 표는 행정구역(동네)별로 되어 있고, 0세부터 100세 이상까지 남자/여자 인구 열이 있어.
+- 화면 위에 st.selectbox로 동네를 하나 고르게 해줘.
+- 고른 동네의 '인구 피라미드'를 plotly 가로 막대그래프로 그려줘.
+  남자는 왼쪽(값을 음수로), 여자는 오른쪽(양수)에 두고, 세로축은 나이.
+- 한국어 라벨, 따뜻한 톤. 초보자용으로 주석을 한국어로 달아줘.
+- main.py 전체 코드를 한 번에 줘.</pre></div>
+
+  <p>잠깐 기다리면 AI가 아래처럼 <b>완성된 코드 한 덩어리</b>를 줍니다. 여러분 것과 글자 하나까지 똑같지 않아도 괜찮아요 — 이런 <b>모습</b>이면 성공이에요.</p>
+  <div class="codewrap code"><span class="label">② AI가 준 코드 (예시)</span><pre>import streamlit as st
+import pandas as pd
+import plotly.graph_objects as go
+
+st.title("🏘️ 동네별 인구 피라미드")
+
+# 1) 데이터 불러오기 (cp949 인코딩, 천단위 쉼표 처리)
+url = ("https://raw.githubusercontent.com/greatsong/"
+       "modeudata-with-ai-examples/main/data/population_2026_05.csv")
+df = pd.read_csv(url, encoding="cp949", thousands=",")
+
+# 2) 동네(행정구역) 고르기
+areas = df["행정구역"].tolist()
+area = st.selectbox("동네를 골라 보세요", areas)
+row = df[df["행정구역"] == area].iloc[0]
+
+# 3) 나이별 남/여 인구 뽑기 (열 이름에서 나이만 골라 담기)
+ages = list(range(0, 101))                 # 0세 ~ 100세 이상
+male   = [row.get(f"남_{a}세", 0) for a in ages]
+female = [row.get(f"여_{a}세", 0) for a in ages]
+
+# 4) 피라미드 그리기 — 남자는 왼쪽(음수), 여자는 오른쪽(양수)
+fig = go.Figure()
+fig.add_bar(y=ages, x=[-m for m in male], name="남자", orientation="h")
+fig.add_bar(y=ages, x=female,             name="여자", orientation="h")
+fig.update_layout(barmode="relative", title=f"{area} 인구 피라미드",
+                  xaxis_title="인구 수", yaxis_title="나이")
+
+st.plotly_chart(fig, use_container_width=True)</pre></div>
+
+  <p>결과를 켜 보고, 마음에 안 들면 <b>대화로 고칩니다.</b> 여기서도 세 박자예요:</p>
+  <div class="codewrap improve"><span class="label">③ 프롬프트 개선 (예시)</span><pre>좋아! 이제 여기에 지표 카드를 더해줘.
+- 그래프 위에 st.metric 카드 3개를 나란히: 총인구, 평균연령, 고령화율(65세 이상 비율, %).
+- 남자 막대는 파란색, 여자 막대는 분홍색으로.
+- x축(인구 수)에 음수가 그대로 보이면 이상하니, 눈금 숫자는 절댓값으로 보여줘.
+- 피라미드 아래에 '이 동네는 아이가 많은 편인가요, 어르신이 많은 편인가요?'
+  한 줄 설명을 자동으로 붙여줘.</pre></div>
+
+  <div class="callout check">
+    <div class="h">✔️ 지표 카드(st.metric)가 왜 중요한가요?</div>
+    <p>피라미드는 <b>모양</b>을 보여주고, 지표 카드는 <b>숫자 한 방</b>으로 요약해요. 총인구·평균연령·<b>고령화율</b>(65세 이상 비율) 세 개만 있어도 “이 동네가 젊은 동네인지, 나이 든 동네인지”가 바로 읽힙니다. 그림과 숫자를 <b>같이</b> 봐야 데이터가 말을 걸어와요.</p>
+  </div>
+
+  <h2>3. 지도로 넓혀 보기 — 전국 고령화 단계구분도</h2>
+  <p>한 동네를 봤으니, 이번엔 <b>전국을 한눈에</b> 봅니다. 시군구마다 <b>고령화율을 색의 진하기</b>로 칠한 지도를 <b>단계구분도(choropleth)</b>라고 해요. 색이 진할수록 고령화가 많이 진행된 곳이에요.</p>
+  <div class="callout tip">
+    <div class="h">🗺️ 지도에는 ‘경계선’ 데이터가 하나 더 필요해요</div>
+    <p>인구 숫자만으로는 지도를 그릴 수 없어요. <b>“각 시군구가 지도에서 어떤 모양인지”</b>를 담은 <b>경계 데이터(GeoJSON)</b>가 따로 필요합니다. 인구표(숫자)와 경계(모양)를 <b>지역 코드로 짝지어</b> 합치면, 그 위에 색을 칠할 수 있어요. 이 짝짓기는 AI가 해 줍니다 — 우리는 “코드로 합쳐줘”라고 부탁만 하면 돼요.</p>
+  </div>
+  <div class="codewrap prompt"><span class="label">① 샘플 프롬프트</span><pre>스트림릿 앱(main.py)에 '전국 고령화 단계구분도'를 만들어줘.
+
+- 인구 데이터는 이 CSV(cp949, thousands=","):
+  https://raw.githubusercontent.com/greatsong/modeudata-with-ai-examples/main/data/population_2026_05.csv
+- 시군구 경계는 전국 시군구 GeoJSON을 사용해줘.
+- 시군구마다 '고령화율(65세 이상 인구 비율, %)'을 계산해줘.
+- plotly의 choropleth(단계구분도)로, 고령화율이 높을수록 진한 색으로 전국 지도를 칠해줘.
+- 지역을 맞출 때는 '지역 이름'이 아니라 '행정구역 코드'로 정확히 맞춰줘.
+- 한국어 라벨, 마우스를 올리면 지역명과 고령화율이 보이게 해줘.</pre></div>
+  <p>지도가 뜨면, 색이 유난히 진한 곳을 눈으로 찾아보세요. 그리고 세 박자대로 <b>③ 개선</b>을 이어 갑니다:</p>
+  <div class="codewrap improve"><span class="label">③ 프롬프트 개선 (예시)</span><pre>좋아! 지도를 더 읽기 쉽게 고쳐줘.
+- 고령화율을 5단계 구간(색 단계)으로 나눠서 칠해줘 (예: 10%·14%·20%·28% 기준).
+- 고령화율이 가장 높은 시군구 5곳을 지도 옆에 표로 보여줘.
+- 슬라이더로 '고령화율 몇 % 이상'만 골라 강조해서 볼 수 있게 해줘.</pre></div>
+  <div class="callout warn">
+    <div class="h">⏳ 지도는 오늘 ‘맛보기’예요</div>
+    <p>지도는 경계 데이터까지 얽혀 있어 조금 까다로워요. <b>완성이 목표가 아닙니다.</b> 색칠된 전국 지도가 <b>한 번 뜨는 것</b>만 봐도 충분해요. 막히면 표시해 두었다가 마지막 날 프로젝트에서 이어가도 됩니다.</p>
+  </div>
+
+  <h2>🌱 내일을 위한 씨앗</h2>
+  <p>오늘 우리는 인구 데이터로 ‘읽는 눈’을 길렀어요. 이제 <b>내가 궁금한 주제</b>로 눈을 돌려 봅니다.</p>
+  <div class="callout tip">
+    <div class="h">✍️ 메모장에 딱 3개만 적어보기</div>
+    <p><b>“데이터로 확인해보고 싶은 내 관심 주제”</b> 후보를 3개 적어 두세요. 예: 우리 동네 카페 수, 좋아하는 가수의 음원 순위, 내가 사는 지역의 미세먼지, 프로야구 팀 성적…. 무엇이든 좋아요. 마지막 날 <b>나만의 프로젝트</b>의 씨앗이 됩니다.</p>
+  </div>
+
+  <h2>🎒 오늘의 체크 & 링크</h2>
+  <ul class="checklist">
+    <li><code>df.head()</code> 와 <code>df.describe()</code> 로 표를 먼저 본다는 걸 안다</li>
+    <li>‘평균의 함정’과 중앙값의 뜻을 말할 수 있다</li>
+    <li>동네를 고르면 인구 피라미드가 뜨는 앱을 만들었다</li>
+    <li>총인구·평균연령·고령화율 지표 카드를 붙여봤다</li>
+    <li>전국 고령화 지도를 한 번 띄워봤다 (미완성도 OK)</li>
+    <li>내 관심 주제 데이터 후보 3개를 메모했다</li>
+  </ul>
+
+  <div class="pager">
+    <a class="prev" href="day1.html"><div class="dir">← 이전</div><div class="tt">1일차 · 코드가 겁나지 않아요</div></a>
+    <a class="next" href="day3.html"><div class="dir">다음 →</div><div class="tt">3일차 · 살아있는 데이터</div></a>
+  </div>
+</main>
+</div>
+
+<footer class="foot">서울대학교 평생교육원 · 데이터 분석 병아리반 · 학생용 교재</footer>
+<script src="assets/copy.js"></script>
+</body>
+</html>

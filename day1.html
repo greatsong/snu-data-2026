@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>1일차 · 코드가 겁나지 않아요 · 데이터 분석 병아리반</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="topbar"><div class="inner">
+  <a class="brand" href="index.html"><span class="chick">🐣</span> 데이터 분석 <span class="a">병아리반</span></a>
+  <span class="spacer"></span>
+  <a class="home" href="index.html">← 목차</a>
+  <span class="badge">학생용</span>
+</div></div>
+
+<div class="wrap">
+<main>
+  <span class="eyebrow">1일차</span>
+  <h1>코드가 <span class="a">겁나지 않아요</span>: 내 페이지를 인터넷에</h1>
+  <div class="under"></div>
+  <p class="lead">오늘의 약속 — 코드를 짜지 않습니다. <b>읽고, AI에게 시키고, 내 주소(URL)를 갖고 집에 갑니다.</b></p>
+
+  <div class="make-banner">
+    <div class="t">🎯 오늘 만드는 것</div>
+    <ul>
+      <li><b>MBTI 테스트 페이지</b> — AI가 만들고 GitHub Pages로 배포</li>
+      <li><b>HTML 날씨 대시보드</b> — 기온 데이터를 AI가 예쁜 한 장으로</li>
+      <li><b>주식 대시보드(맛보기)</b> — 스트림릿으로 켠 첫 웹앱</li>
+    </ul>
+  </div>
+
+  <h2>0. 코드 읽는 눈 — 다섯 개면 읽힌다</h2>
+  <p>코드는 <b>외국어로 쓴 글</b>과 같아요. 단어를 다 몰라도 ‘생김새’만 알면 읽힙니다. 딱 다섯 개만 알아두세요. <b>외우지 마세요.</b> 나올 때마다 “아, 그거” 하면 됩니다.</p>
+  <table class="daymap">
+    <thead><tr><th>생김새</th><th>읽는 법</th><th>예시</th></tr></thead>
+    <tbody>
+      <tr><td>영어 단어</td><td>무언가를 담은 <b>이름표</b>(변수)</td><td><code>song</code>, <code>df</code></td></tr>
+      <tr><td>따옴표 글자</td><td><b>값</b> (알맹이)</td><td><code>"뉴진스"</code></td></tr>
+      <tr><td><code>=</code></td><td>‘같다’ 아님. <b>담아라(←)</b></td><td><code>age = 5</code></td></tr>
+      <tr><td><code>.</code> (점)</td><td>‘<b>~의</b>’</td><td><code>df.head</code> = df의 head</td></tr>
+      <tr><td><code>( )</code> 괄호</td><td>‘<b>실행해라</b>’ (함수)</td><td><code>print("안녕")</code></td></tr>
+    </tbody>
+  </table>
+  <p>그래서 <code>df.head()</code> 는 “df라는 표의 <b>앞부분을 보여 줘</b>”로 읽힙니다. 맨 위 <code>import</code> 는 ‘도구상자 불러오기’, <code>as</code> 는 ‘별명 붙이기’예요.</p>
+  <div class="callout warn">
+    <div class="h">🩹 에러(빨간 글씨)가 나면?</div>
+    <p>겁먹지 마세요. 에러는 ‘어디가 잘못됐는지 알려주는 쪽지’예요. <b>통째로 복사해서 AI에게 붙여넣고 “이 에러 고쳐줘”</b> 하면 끝. 코드를 짠 건 AI니까, 고치는 것도 AI 몫이에요.</p>
+  </div>
+
+  <h2>1. 내 첫 웹페이지 = MBTI 테스트를 인터넷에</h2>
+  <p>첫 배포는 재미있게 갑니다. <b>MBTI 테스트</b> 페이지를 AI에게 만들게 한 뒤, GitHub에 올려 <b>GitHub Pages</b>로 켜 봅니다. 여기서는 코드 내용보다 <b>‘만들기 → 올리기 → 켜기’ 흐름</b>을 익히는 게 목표예요.</p>
+  <ol class="steps">
+    <li><span class="st">새 저장소 만들기</span><br>GitHub 오른쪽 위 <b>+ → New repository</b>. 이름은 <code>my-mbti</code> 처럼. <b>Public</b>(공개) 선택, <b>Add a README</b> 체크 후 <b>Create</b>.</li>
+    <li><span class="st">AI에게 MBTI 페이지 주문</span><br>아래 주문서를 AI에 그대로 붙여넣어 <code>index.html</code> 코드를 받습니다.</li>
+  </ol>
+  <div class="codewrap prompt"><span class="label">① 샘플 프롬프트</span><pre>'MBTI 테스트' 웹페이지를 HTML 파일 하나로 만들어줘. 조건:
+- 파일 하나(index.html)로 끝나고, 외부 설치·인터넷 연결 없이 브라우저에서
+  바로 열려야 해 (CSS와 자바스크립트를 파일 안에 포함).
+- 질문 6~8개에 답하면 16가지 MBTI 유형 중 하나를 알려줘.
+- 결과 화면에 유형 코드(예: ENFP), 한 줄 별명, 재미있는 설명 2~3줄,
+  잘 맞는 유형 1개를 보여줘.
+- 따뜻한 크림·노란색 톤, 큰 글씨, 한국어, 초보자도 보기 쉽게.
+- '다시 하기' 버튼 포함. 완성된 index.html 전체 코드를 한 번에 줘.</pre></div>
+
+  <p>잠깐 기다리면 AI가 아래처럼 <b>완성된 코드 한 덩어리</b>를 줍니다. 여러분 것과 똑같지 않아도 괜찮아요 — 이런 <b>모습</b>이면 성공이에요.</p>
+  <div class="codewrap code"><span class="label">② AI가 준 코드 (예시)</span><pre>&lt;!DOCTYPE html&gt;
+&lt;html lang="ko"&gt;
+&lt;head&gt;&lt;meta charset="utf-8"&gt;&lt;title&gt;나의 MBTI는?&lt;/title&gt;
+&lt;style&gt;
+  body{font-family:sans-serif;background:#fffdf7;color:#3a2e1a;
+       max-width:600px;margin:40px auto;padding:0 20px;line-height:1.7}
+  h1{color:#e8930c}
+  .q{background:#fff6e0;border:1px solid #f0e2bc;border-radius:14px;padding:16px;margin:14px 0}
+  button{font:inherit;cursor:pointer;border:2px solid #f0e2bc;background:#fff;
+         border-radius:10px;padding:10px 14px;margin:6px 6px 0 0}
+  .go{background:#e8930c;color:#fff;border-color:#e8930c;font-weight:800;margin-top:16px}
+  #result{display:none;background:#fff6e0;border-radius:18px;padding:24px;margin-top:20px;text-align:center}
+  #result .code{font-size:2.4rem;font-weight:900;color:#e8930c}
+&lt;/style&gt;&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;🐣 나의 MBTI는?&lt;/h1&gt;
+  &lt;p&gt;네 가지 질문에 답해 보세요.&lt;/p&gt;
+  &lt;div id="quiz"&gt;&lt;/div&gt;
+  &lt;button class="go" onclick="showResult()"&gt;결과 보기&lt;/button&gt;
+  &lt;div id="result"&gt;&lt;/div&gt;
+&lt;script&gt;
+const Q=[
+  {q:"주말엔?",a:["사람들과 왁자지껄 (E)","집에서 혼자 조용히 (I)"]},
+  {q:"새 정보를 볼 때?",a:["사실·현실 위주 (S)","의미·가능성 위주 (N)"]},
+  {q:"결정할 때?",a:["논리·원칙 (T)","마음·관계 (F)"]},
+  {q:"계획은?",a:["미리 촘촘하게 (J)","그때그때 유연하게 (P)"]}];
+const L=[["E","I"],["S","N"],["T","F"],["J","P"]];
+const pick=[null,null,null,null];
+document.getElementById("quiz").innerHTML=Q.map((it,i)=&gt;
+  `&lt;div class="q"&gt;&lt;b&gt;${i+1}. ${it.q}&lt;/b&gt;&lt;br&gt;`+
+  it.a.map((t,j)=&gt;`&lt;button id="b${i}_${j}" onclick="choose(${i},${j})"&gt;${t}&lt;/button&gt;`).join("")+
+  `&lt;/div&gt;`).join("");
+function choose(i,j){ pick[i]=j;
+  document.getElementById("b"+i+"_0").style.background="#fff";
+  document.getElementById("b"+i+"_1").style.background="#fff";
+  document.getElementById("b"+i+"_"+j).style.background="#ffe6ad"; }
+function showResult(){
+  if(pick.includes(null)){ alert("네 질문에 모두 답해 주세요!"); return; }
+  const type=pick.map((p,i)=&gt;L[i][p]).join("");
+  const r=document.getElementById("result"); r.style.display="block";
+  r.innerHTML=`&lt;div class="code"&gt;${type}&lt;/div&gt;`+
+    `&lt;p&gt;당신은 &lt;b&gt;${type}&lt;/b&gt; 유형이에요!&lt;/p&gt;`+
+    `&lt;button class="go" onclick="location.reload()"&gt;다시 하기&lt;/button&gt;`; }
+&lt;/script&gt;
+&lt;/body&gt;&lt;/html&gt;</pre></div>
+
+  <p>결과를 브라우저에서 열어 보고, 마음에 안 들면 <b>대화로 고칩니다.</b> 예를 들면 이렇게요:</p>
+  <div class="codewrap improve"><span class="label">③ 프롬프트 개선 (예시)</span><pre>좋아! 이제 이걸 더 멋지게 고쳐줘.
+- 16개 유형마다 별명과 2~3줄 설명, 잘 맞는 유형 1개를 넣어줘.
+- 결과 화면에 유형 이모지 하나를 크게, 배경색을 유형별로 다르게.
+- 질문을 8개로 늘리고, '결과 복사하기' 버튼을 추가해줘.</pre></div>
+
+  <div class="callout tip">
+    <div class="h">💡 이게 바이브 코딩의 핵심 리듬</div>
+    <p><b>① 주문(프롬프트) → ② 결과 확인 → ③ 개선 주문.</b> 앞으로 <b>모든 만들기가 이 세 박자</b>예요. 마음에 들 때까지 ③을 반복하면 됩니다. 코드를 못 짜도, <b>어디를 어떻게 바꿔달라고 말하는 것</b>은 할 수 있으니까요.</p>
+  </div>
+
+  <ol class="steps" start="3">
+    <li><span class="st">index.html 파일 추가</span><br>저장소에서 <b>Add file → Create new file</b>. 파일 이름을 정확히 <code>index.html</code> 로 하고, 받은 코드를 붙여넣습니다.</li>
+  </ol>
+  <div class="shot"><span class="cam">📸</span><span class="cap">[스크린샷] 새 저장소 만들기</span><span class="hint">New repository 화면 — 이름 입력·Public 선택·Add a README 체크</span><span class="code">shot: day1-01-new-repo</span></div>
+  <div class="shot"><span class="cam">📸</span><span class="cap">[스크린샷] index.html 붙여넣기</span><span class="hint">Create new file 화면 — 파일명 index.html과 코드가 보이게</span><span class="code">shot: day1-02-create-file</span></div>
+  <ol class="steps" start="4">
+    <li><span class="st">저장(커밋)</span><br>맨 아래 초록색 <b>Commit changes</b> 버튼을 누릅니다. ‘커밋’은 ‘이 상태로 저장’이라는 뜻이에요.</li>
+    <li><span class="st">Pages 켜기</span><br>저장소 <b>Settings → Pages</b> 로. <b>Branch</b>를 <code>main</code> 으로 고르고 <b>Save</b>.</li>
+    <li><span class="st">내 주소 확인</span><br>1~2분 뒤 새로고침하면 <code>https://사용자이름.github.io/my-mbti/</code> 주소가 나와요. 눌러 보세요! 🎉</li>
+  </ol>
+  <div class="shot"><span class="cam">📸</span><span class="cap">[스크린샷] Settings · Pages 켜기</span><span class="hint">Pages 설정 — Branch를 main으로 고른 화면과 배포 주소</span><span class="code">shot: day1-03-pages</span></div>
+  <div class="shot"><span class="cam">📸</span><span class="cap">[스크린샷] 배포된 MBTI 페이지 결과</span><span class="hint">완성된 MBTI 테스트가 브라우저에 열린 모습</span><span class="code">shot: day1-04-result</span></div>
+  <div class="callout check">
+    <div class="h">✔️ 방금 무슨 일이 일어났나요?</div>
+    <p>여러분은 방금 <b>인터넷에 자기 사이트를 배포</b>했습니다. 이 주소는 누구에게나 보낼 수 있어요. 이미 여러분은 ‘개발자’예요.</p>
+  </div>
+
+  <h2>2. AI로 ‘HTML 날씨 대시보드’ 만들기</h2>
+  <p>이번엔 <b>기온 데이터</b>를 AI에게 주고, 예쁜 <b>한 장짜리 대시보드</b>를 통째로 만들어 달라고 합니다. 코드는 우리가 짜지 않아요.</p>
+  <ol class="steps">
+    <li><span class="st">AI에게 아래 주문서를 그대로 붙여넣기</span></li>
+  </ol>
+  <div class="codewrap prompt"><span class="label">① 샘플 프롬프트</span><pre>서울 100년치 일별 기온 데이터(날짜, 평균/최저/최고 기온)를 보여주는
+'한 장짜리 HTML 날씨 대시보드'를 만들어줘. 조건:
+
+- 파일 하나(index.html)로 끝나야 하고, 외부 설치 없이 브라우저에서 바로 열려야 해.
+- 데이터는 이 주소에서 불러와:
+  https://raw.githubusercontent.com/greatsong/modeudata-with-ai-examples/main/data/seoul.csv
+- 상단에 요약 카드(최근 30년 평균기온, 가장 더운 해, 가장 추운 해).
+- 연도별 평균기온 꺾은선 그래프 1개(그래프 라이브러리는 CDN으로).
+- 따뜻한 크림·노란색 톤, 한국어 라벨, 초보자도 읽기 쉽게.
+- 완성된 index.html 전체 코드를 한 번에 줘.</pre></div>
+  <ol class="steps" start="2">
+    <li><span class="st">받은 코드를 GitHub에 새 파일로</span><br>같은 저장소에 <code>weather.html</code> 파일을 만들어 붙여넣고 커밋합니다.</li>
+    <li><span class="st">주소로 확인</span><br><code>https://사용자이름.github.io/my-mbti/weather.html</code> 로 열어봅니다.</li>
+  </ol>
+  <p>여기서도 세 박자예요. 결과를 보고 <b>③ 개선</b>을 이어서 주문합니다:</p>
+  <div class="codewrap improve"><span class="label">③ 프롬프트 개선 (예시)</span><pre>좋아! 여기서 이어서 고쳐줘.
+- 요약 카드를 4개로 늘리고(가장 더운 해·추운 해·최근10년 평균·100년 상승폭).
+- 꺾은선 색을 주황으로, 최고기온 선도 같이 그려줘.
+- 최근 30년만 크게 보는 버튼을 하나 넣어줘.</pre></div>
+  <div class="callout tip">
+    <div class="h">💡 기억하세요</div>
+    <p><b>① 주문 → ② 결과 → ③ 개선</b>. 마음에 들 때까지 ③을 반복하는 것, 그게 바이브 코딩이에요.</p>
+  </div>
+
+  <h2>3. 왜 스트림릿을 배울까? — 첫 웹앱 켜기</h2>
+  <p>방금 만든 HTML은 멋지지만 <b>숫자가 고정</b>돼 있어요. 사용자가 “삼성전자 말고 카카오를 볼래” 하고 <b>직접 바꾸게</b> 하려면? 그때 <b>스트림릿</b>이 필요합니다. 파이썬 코드를 버튼·입력창이 있는 진짜 웹앱으로 켜 주거든요.</p>
+  <p>주식 종목을 입력하면 <b>1년 주가 그래프</b>가 뜨는 앱을 만들어 배포해 봅니다.</p>
+  <ol class="steps">
+    <li><span class="st">새 저장소 만들기</span><br><code>my-stock-app</code> 이라는 Public 저장소를 만듭니다(README 포함).</li>
+    <li><span class="st">requirements.txt 추가</span><br>이 앱이 쓸 도구 목록이에요. 파일 이름을 정확히 <code>requirements.txt</code> 로 만들고 아래를 붙여넣습니다.</li>
+  </ol>
+  <div class="codewrap code"><span class="label">requirements.txt</span><pre>streamlit
+yfinance
+plotly</pre></div>
+  <ol class="steps" start="3">
+    <li><span class="st">AI에게 앱 코드 주문</span><br>아래 주문서를 AI에 넣어 <code>main.py</code> 코드를 받습니다.</li>
+  </ol>
+  <div class="codewrap prompt"><span class="label">① 샘플 프롬프트</span><pre>스트림릿(streamlit) 앱 하나(main.py)를 만들어줘.
+
+- 사용자가 주식 종목 코드를 입력하면(예: 005930.KS 삼성전자, AAPL 애플),
+  yfinance로 최근 1년 주가를 불러와 plotly 꺾은선 그래프로 보여줘.
+- 맨 위에 제목과 간단한 설명, 입력창(st.text_input), 그리고 현재가·1년 등락률 카드(st.metric).
+- 한국어 라벨, 따뜻한 톤. 초보자용으로 주석을 한국어로 달아줘.
+- main.py 전체 코드를 한 번에 줘.</pre></div>
+  <p>배포해서 켜 본 뒤, 마음에 들면 <b>③ 개선</b>으로 키워 봅니다:</p>
+  <div class="codewrap improve"><span class="label">③ 프롬프트 개선 (예시)</span><pre>좋아! 이어서 고쳐줘.
+- 종목을 2개까지 나란히 비교할 수 있게(입력창 2개).
+- 기간을 1개월·6개월·1년·5년 버튼으로 고를 수 있게.
+- 그래프 아래에 최고가·최저가·평균가 카드를 추가해줘.</pre></div>
+  <ol class="steps" start="4">
+    <li><span class="st">main.py 파일로 저장</span><br>저장소에 <code>main.py</code> 를 만들어 받은 코드를 붙여넣고 커밋합니다.</li>
+    <li><span class="st">스트림릿에서 배포</span><br><code>share.streamlit.io</code> → <b>Create app</b> → 방금 저장소와 <code>main.py</code> 선택 → <b>Deploy</b>.</li>
+    <li><span class="st">1~2분 기다리기</span><br>앱이 켜지면 종목 코드를 바꿔 넣어 보세요. <b>사용자가 바꾸는</b> 웹앱, 이게 HTML과의 차이예요!</li>
+  </ol>
+  <div class="shot"><span class="cam">📸</span><span class="cap">[스크린샷] Streamlit 배포 화면</span><span class="hint">Create app에서 저장소·main.py를 고르고 Deploy 누르는 화면</span><span class="code">shot: day1-05-streamlit-deploy</span></div>
+  <div class="callout warn">
+    <div class="h">⏳ 시간이 부족하면</div>
+    <p>주식앱은 오늘 <b>완성이 목표가 아니에요</b>. ‘스트림릿의 맛’만 보면 충분합니다. 배포 중 막히면 표시해 두었다가 <b>2일차 시작에 이어서</b> 해도 돼요.</p>
+  </div>
+
+  <h2>🎒 오늘의 체크 & 링크</h2>
+  <ul class="checklist">
+    <li>내 GitHub Pages 주소가 생겼다 (MBTI 테스트)</li>
+    <li>HTML 날씨 대시보드를 배포했다</li>
+    <li>스트림릿으로 앱을 켜 봤다 (미완성도 OK)</li>
+    <li>에러가 나면 <b>통째로 복붙</b>하면 된다는 걸 안다</li>
+  </ul>
+  <div class="callout tip">
+    <div class="h">🌱 내일을 위한 씨앗</div>
+    <p>오늘 만든 3개 주소를 메모장에 적어 두세요. 마지막 날 <b>나만의 프로젝트</b>의 재료가 됩니다.</p>
+  </div>
+
+  <div class="pager">
+    <a class="prev" href="prep.html"><div class="dir">← 이전</div><div class="tt">준비 · 계정 3종</div></a>
+    <a class="next" href="index.html"><div class="dir">다음 →</div><div class="tt">2일차 (준비 중)</div></a>
+  </div>
+</main>
+</div>
+
+<footer class="foot">서울대학교 평생교육원 · 데이터 분석 병아리반 · 학생용 교재</footer>
+<script src="assets/copy.js"></script>
+</body>
+</html>

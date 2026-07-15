@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>스크린샷 촬영 가이드 · 강사용 · 데이터 분석 병아리반</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<div class="topbar"><div class="inner">
+  <a class="brand" href="index.html"><span class="chick">👩‍🏫</span> 병아리반 <span class="a">강사용</span></a>
+  <span class="spacer"></span>
+  <a class="home" href="index.html">← 강사 대시보드</a>
+  <span class="badge teacher">강사용</span>
+</div></div>
+
+<div class="wrap">
+<main>
+  <span class="eyebrow">강사용 · 제작 도구</span>
+  <h1>스크린샷 <span class="a">촬영 가이드</span></h1>
+  <div class="under"></div>
+  <p class="lead">학생용 교재의 설정 단계에는 <b>스크린샷 자리(빗금 박스)</b>가 들어가 있습니다.
+  아래 목록대로 캡처해 교체하면 완전 입문자용 교재가 완성됩니다. 실제 화면은 <b>강사 계정으로 로그인해야</b> 나오므로 강사가 직접 촬영합니다.</p>
+
+  <div class="callout say">
+    <div class="h">🖼️ 교체 방법 (3단계)</div>
+    <p>① 화면을 캡처해 <code>web/assets/shots/</code> 폴더에 <b>shot 코드 이름</b>으로 저장(예: <code>day1-01-new-repo.png</code>).<br>
+    ② 해당 페이지에서 <code>&lt;div class="shot"&gt;…&lt;/div&gt;</code> 블록을 찾아,<br>
+    ③ 아래 한 줄로 바꿉니다(경로는 강사용이면 <code>../assets/…</code>):</p>
+  </div>
+  <div class="codewrap code"><span class="label">교체 코드 (예: day1-01)</span><pre>&lt;img class="shot-img" src="assets/shots/day1-01-new-repo.png"
+     alt="새 저장소 만들기 화면"&gt;</pre></div>
+
+  <div class="callout tip">
+    <div class="h">💡 촬영 팁</div>
+    <p>브라우저 폭을 적당히 좁혀(≈1000px) 글씨가 크게. 개인정보(이메일·실명·키 값)는 <b>가리거나 더미</b>로. 클릭할 버튼에 빨간 사각형/화살표를 넣으면 초보자가 훨씬 쉬워요.</p>
+  </div>
+
+  <h2>📋 촬영 목록 (총 14장)</h2>
+
+  <h3>준비 · 계정 (prep.html) — 3장</h3>
+  <table class="daymap">
+    <thead><tr><th>shot 코드</th><th>무엇을</th><th>보여야 할 것</th></tr></thead>
+    <tbody>
+      <tr><td><code>prep-01-github-signup</code></td><td>GitHub 가입</td><td>Sign up 폼(이메일·비번·Username)</td></tr>
+      <tr><td><code>prep-02-streamlit-login</code></td><td>Streamlit 로그인</td><td>'Continue with GitHub' 버튼</td></tr>
+      <tr><td><code>prep-03-authorize</code></td><td>권한 허용</td><td>GitHub Authorize 화면</td></tr>
+    </tbody>
+  </table>
+
+  <h3>1일차 (day1.html) — 5장</h3>
+  <table class="daymap">
+    <thead><tr><th>shot 코드</th><th>무엇을</th><th>보여야 할 것</th></tr></thead>
+    <tbody>
+      <tr><td><code>day1-01-new-repo</code></td><td>새 저장소</td><td>New repository · 이름·Public·README 체크</td></tr>
+      <tr><td><code>day1-02-create-file</code></td><td>파일 추가</td><td>Create new file · 파일명 index.html + 코드</td></tr>
+      <tr><td><code>day1-03-pages</code></td><td>Pages 켜기</td><td>Settings→Pages · Branch main · 배포 주소</td></tr>
+      <tr><td><code>day1-04-result</code></td><td>배포 결과</td><td>완성된 MBTI 테스트가 열린 모습</td></tr>
+      <tr><td><code>day1-05-streamlit-deploy</code></td><td>스트림릿 배포</td><td>Create app · 저장소·main.py 선택 · Deploy</td></tr>
+    </tbody>
+  </table>
+
+  <h3>3일차 (day3.html) — 5장 · API 키 발급</h3>
+  <table class="daymap">
+    <thead><tr><th>shot 코드</th><th>무엇을</th><th>보여야 할 것</th></tr></thead>
+    <tbody>
+      <tr><td><code>day3-01-gcp-project</code></td><td>클라우드 콘솔</td><td>새 프로젝트 만들기 화면</td></tr>
+      <tr><td><code>day3-02-enable-api</code></td><td>API 사용 설정</td><td>YouTube Data API v3 사용 설정</td></tr>
+      <tr><td><code>day3-03-create-key</code></td><td>API 키 생성</td><td>사용자 인증정보 · API 키 만들기</td></tr>
+      <tr><td><code>day3-04-secrets</code></td><td>Secrets 입력</td><td>Streamlit 앱 Settings · Secrets</td></tr>
+      <tr><td><code>day3-05-llm-key</code></td><td>LLM 키 발급</td><td>AI 스튜디오 · API 키</td></tr>
+    </tbody>
+  </table>
+
+  <h3>4일차 (day4.html) — 4장 · 구글시트 서비스 계정</h3>
+  <table class="daymap">
+    <thead><tr><th>shot 코드</th><th>무엇을</th><th>보여야 할 것</th></tr></thead>
+    <tbody>
+      <tr><td><code>day4-01-enable-apis</code></td><td>API 사용 설정</td><td>Google Sheets · Drive API 사용 설정</td></tr>
+      <tr><td><code>day4-02-service-account</code></td><td>서비스 계정</td><td>서비스 계정 만들기 화면</td></tr>
+      <tr><td><code>day4-03-json-key</code></td><td>JSON 키</td><td>JSON 키 다운로드 화면</td></tr>
+      <tr><td><code>day4-04-share-sheet</code></td><td>시트 공유</td><td>서비스 계정 이메일로 시트 공유</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout theory">
+    <div class="h">📖 왜 스크린샷을 강사가 직접?</div>
+    <p>GitHub·Google Cloud·Streamlit 화면은 <b>로그인한 실제 계정</b>에서만 나오고, UI가 수시로 바뀝니다. 촬영 시점의 최신 화면을 강사가 찍는 것이 가장 정확해요. 2·5일차는 대부분 1일차의 GitHub 기본기를 재사용해 별도 촬영이 적습니다.</p>
+  </div>
+
+  <div class="pager">
+    <a class="prev" href="index.html"><div class="dir">← 이전</div><div class="tt">강사 대시보드</div></a>
+    <a class="next" href="day1.html"><div class="dir">다음 →</div><div class="tt">1일차 (강사용)</div></a>
+  </div>
+</main>
+</div>
+
+<footer class="foot">서울대학교 평생교육원 · 데이터 분석 병아리반 · 강사용 · 링크 비공개</footer>
+<script src="../assets/copy.js"></script>
+</body>
+</html>

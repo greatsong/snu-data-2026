@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>4일차 (강사용) · 쌓고 예측하기 · 데이터 분석 병아리반</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<div class="topbar"><div class="inner">
+  <a class="brand" href="index.html"><span class="chick">👩‍🏫</span> 병아리반 <span class="a">강사용</span></a>
+  <span class="spacer"></span>
+  <a class="home" href="../day4.html">학생용 4일차 ↗</a>
+  <span class="badge teacher">강사용</span>
+</div></div>
+
+<div class="wrap">
+<main>
+  <span class="eyebrow">4일차 · 강사용</span>
+  <h1>쌓고 예측하기 — <span class="a">강사 진행안</span></h1>
+  <div class="under"></div>
+  <p class="lead">학생용 <a href="../day4.html">4일차 페이지 ↗</a> 를 화면에 띄운 채 진행합니다.
+  여기에는 <b>시간표 · 멘트 · 예상 질문 · 예상 오류 · 이론 심화</b>를 덧댔습니다.</p>
+
+  <div class="callout say">
+    <div class="h">🎙️ 오늘의 목표 선언 (개강 멘트)</div>
+    <p>“오늘 우리 앱은 <b>기억</b>을 갖게 됩니다 — 데이터를 구글시트에 쌓아요. 그리고 오후엔 <b>직접 만드는 작은 AI</b>로 2050년 서울 기온을 예측해 봅니다. 코드는 여전히 AI가 짜요.”</p>
+  </div>
+
+  <div class="callout theory">
+    <div class="h">📖 오늘의 큰 그림 — 저장 → 학습</div>
+    <p>오전은 <b>‘휘발성 극복’</b>(session_state → 외부 저장소=구글시트), 오후는 <b>‘남의 AI 쓰기’에서 ‘내 AI 만들기’로</b>의 전환(LLM 호출 → scikit-learn 학습). 두 축이 오늘의 뼈대입니다. ①②③ 세 박자는 오늘도 유지 — 구글시트 앱과 예측기 각각 ②(샘플 코드)까지 짚어줍니다.</p>
+  </div>
+
+  <h2>⏱️ 3시간 진행 시간표</h2>
+  <table class="timetable">
+    <tr><th>시간</th><th>블록</th><th>핵심</th></tr>
+    <tr><td>0~20′</td><td>복습</td><td>API·키·secrets·채팅앱 4단어 · “대화가 안 남는다” 문제 제기</td></tr>
+    <tr><td>20~40′</td><td>1. 왜 저장이 필요한가</td><td>session_state 휘발성 · 저장소 지도(구글시트/진짜 DB)</td></tr>
+    <tr><td>40~110′</td><td>2. 구글시트 연동 앱</td><td>서비스 계정·JSON 키·시트 공유·secrets → 약속/투표 앱 (오늘 최대 난관)</td></tr>
+    <tr><td>110~120′</td><td>☕ 휴식</td><td></td></tr>
+    <tr><td>120~180′</td><td>3. 머신러닝 맛보기</td><td>AI⊃ML⊃DL⊃LLM · 5단계 · 2050 기온 예측기(LinearRegression)</td></tr>
+    <tr><td>180′~</td><td>🌱 씨앗</td><td>내일 프로젝트 주제 정하기 · 선택 숙제 안내</td></tr>
+  </table>
+  <div class="callout say">
+    <div class="h">🎙️ 무른 경계 원칙</div>
+    <p>구글시트 세팅이 밀리면 ML 블록을 <b>먼저 짧게 시연</b>으로 돌려 성취감을 확보하고, 시트 세팅은 개별 지원으로 마무리. 전원 성공이 진도 완주보다 우선입니다.</p>
+  </div>
+
+  <h2>블록별 진행 노트</h2>
+
+  <h3>복습 (0~20′)</h3>
+  <div class="callout say">
+    <div class="h">🎙️ 멘트 — 어제의 아쉬움에서 출발</div>
+    <p>“어제 만든 채팅앱, 멋졌죠? 근데 <b>새로고침하면 대화가 싹 사라져요.</b> 오늘은 그걸 고칩니다.” — 실제로 어제 앱을 새로고침해 데이터가 날아가는 걸 <b>눈앞에서 보여주면</b> 동기부여가 확실합니다.</p>
+  </div>
+
+  <h3>1. 왜 저장이 필요한가 (20~40′)</h3>
+  <div class="callout theory">
+    <div class="h">📖 이론 심화 — 휘발성과 저장소 선택</div>
+    <p><code>session_state</code>는 <b>세션(브라우저 탭) 단위의 임시 메모리</b>. 새로고침·재접속·타 사용자에겐 공유되지 않음. 영속 저장이 필요하면 앱 외부 저장소로. 오늘 구글시트를 고르는 이유: <b>눈에 보이고, 손으로도 고칠 수 있고, 설정이 DB보다 가볍다.</b> 진짜 DB(관계형/문서형)는 5일차 맛보기.</p>
+  </div>
+  <div class="callout ask">
+    <div class="h">🙋 예상 질문</div>
+    <p><b>“왜 시트를 데이터베이스로 써요?”</b> → “쉽고, 눈에 바로 보이니까요. 앱이 쓴 걸 시트에서 직접 확인할 수 있어 초보자에게 최고의 교보재예요. 대용량·빠른 검색이 필요한 <b>진짜 DB는 내일</b> 맛봅니다.”</p>
+  </div>
+
+  <h3>2. 구글시트 연동 앱 (40~110′) — 오늘의 최대 난관</h3>
+  <div class="callout say">
+    <div class="h">🎙️ 멘트 — JSON 키 세팅, 같이 천천히</div>
+    <p>“지금부터 오늘 <b>세팅 부담 1위</b> 구간이에요. 어렵지 않아요, <b>클릭 순서</b>만 저를 따라오면 됩니다. 화면을 크게 띄울 테니 <b>한 클릭씩 같이</b> 갈게요.” — 강사 화면으로 콘솔 화면을 <b>실시간 미러링</b>하며 진행.</p>
+  </div>
+  <div class="callout theory">
+    <div class="h">📖 세팅 부담을 낮추는 준비물 (강사 필수)</div>
+    <p><b>JSON 키 발급이 교재 전체에서 세팅 부담 1위.</b> 반드시 미리 준비: ① <b>완성된 시트 템플릿</b>(열 이름까지)을 공유해 복제하게, ② <b>화면 따라하기</b>(콘솔 클릭을 강사 화면으로 단계별 시연), ③ <b>실패자용 예비</b> — 이미 서비스 계정과 연결해 둔 <b>‘미리 연결된 시트’ 앱</b>을 하나 준비해, 세팅에 막힌 수강생은 그걸로 나머지 실습을 이어가게 합니다. 세팅 실패가 <b>ML 블록 참여를 막지 않도록</b> 방어하는 게 핵심.</p>
+  </div>
+  <div class="callout err">
+    <div class="h">🧯 예상 오류 (빈출)</div>
+    <p><b>권한 오류(로봇이 시트 못 봄)</b> → 시트를 <b>서비스 계정 이메일과 공유</b>했는지(편집자). 1순위 원인. · <b>API 사용설정 누락</b> → <b>Google Sheets API·Google Drive API 둘 다</b> 켰는지(Drive 빠뜨리는 경우 많음). · <b>secrets.toml 오류</b> → <code>private_key</code>의 <b>따옴표·<code>\n</code>·들여쓰기</b>가 어긋남. TOML은 들여쓰기·따옴표에 민감. · <b>갱신이 안 됨</b> → <code>conn.read(ttl=0)</code>를 안 줘서 캐시된 옛 데이터가 보임. 제출 후 표가 안 바뀌면 여기부터.</p>
+  </div>
+  <div class="callout ask">
+    <div class="h">🙋 예상 질문</div>
+    <p><b>“JSON 키를 잃어버리면요?”</b> → 콘솔에서 새 키를 다시 발급하면 됨(옛 키는 삭제 권장). · <b>“서비스 계정이 뭐예요?”</b> → “사람 계정이 아니라 <b>앱 전용 로봇 직원</b>이에요. 로봇 이메일로 시트를 공유해 주면 로봇이 대신 읽고 씁니다.”</p>
+  </div>
+
+  <h3>3. 머신러닝 맛보기 (120~180′)</h3>
+  <div class="callout say">
+    <div class="h">🎙️ 멘트 — “직접 만드는 작은 AI”</div>
+    <p>“지금까진 남이 만든 AI를 <b>불러다</b> 썼죠. 이번엔 <b>여러분이 데이터로 직접</b> 아주 작은 AI를 학습시켜요.” 목표는 완벽한 예측이 아니라 <b>‘학습이란 이런 것’이라는 체험</b>. <code>model.fit()</code> 한 줄에서 “지금 AI가 태어났어요!”로 감탄 포인트를 만듭니다.</p>
+  </div>
+  <div class="callout theory">
+    <div class="h">📖 이론 심화 — 회귀와 R²</div>
+    <p>선형회귀는 데이터에 <b>가장 잘 맞는 직선</b>(오차 제곱합 최소)을 찾는 것. <b>R²(결정계수)</b>는 0~1, 모델이 데이터의 변동을 얼마나 설명하는지의 비율 — 1에 가까울수록 설명력이 큼. 단, R²가 높다고 <b>미래 예측이 정확하단 뜻은 아님</b>(훈련 범위 안에서의 적합도일 뿐).</p>
+  </div>
+  <div class="callout theory">
+    <div class="h">📖 이론 심화 — 과적합 · 외삽 · 상관≠인과</div>
+    <p><b>과적합(overfitting)</b>: 고차 다항식으로 훈련 점을 과하게 맞추면 훈련 데이터엔 완벽하지만 새 데이터엔 엉망 → 그래서 오늘은 <b>직선(1차)</b>으로 단순하게. · <b>외삽(extrapolation)</b>: <b>훈련 범위 밖 예측은 위험</b> — 2050년은 데이터에 없으므로 직선을 늘인 ‘가정’일 뿐. 학생에게 반드시 ‘조심 딱지’로 각인. · <b>상관≠인과</b>: 연도와 기온이 함께 오른다고 “연도가 기온을 올린다”는 아님(뒤에 도시화·온실가스 등 실제 원인). 예측기는 <b>패턴 요약</b>이지 원인 규명이 아님을 강조.</p>
+  </div>
+  <div class="callout err">
+    <div class="h">🧯 예상 오류</div>
+    <p><b>ModuleNotFoundError</b> → <code>requirements.txt</code>에 <code>scikit-learn</code>(설치명, import는 <code>sklearn</code>) 확인. · <b>X 모양 오류</b> → <code>df[["year"]]</code> 대괄호 두 개(2차원)여야 함, <code>df["year"]</code>(1차원)는 에러. AI가 준 코드면 대개 정상. · <b>CSV 열 이름 불일치</b> → 예제는 <code>year</code>, <code>temp</code>. 다른 열 이름이면 프롬프트에 명시. · <b>predict 경고</b> → <code>model.predict([[year]])</code> 형태 유지.</p>
+  </div>
+  <div class="callout ask">
+    <div class="h">🙋 예상 질문</div>
+    <p><b>“예측을 믿어도 돼요?”</b> → “훈련 범위 <b>안</b>은 참고할 만해요. 하지만 2050년 같은 <b>미래는 외삽</b>이라 조심해야 해요. 직선을 늘인 가정일 뿐, 실제 미래는 다르게 갈 수 있어요.” · <b>“군집(KMeans)은 뭐예요?”</b> → “정답 없이 <b>비슷한 것끼리 자동으로 묶는</b> 비지도학습이에요. 오늘은 개념만, 필요하면 5일차 프로젝트에서.”</p>
+  </div>
+
+  <h3>🌱 씨앗 + 마무리 (180′~)</h3>
+  <div class="callout say">
+    <div class="h">🎙️ 마무리 멘트 + 씨앗</div>
+    <p>“오늘 밤 <b>내 프로젝트 주제 한 줄</b>만 정해 오세요. 지난 4일 조각이 전부 재료예요. 숙제는 <b>선택</b>이지만, 적어 오면 내일 오전이 편해요. 내일은 <b>발표 + 더 멋진 프로젝트</b>로 마무리합니다.”</p>
+  </div>
+
+  <h2>✅ 4일차 마무리 체크 (강사)</h2>
+  <ul class="checklist">
+    <li>전원 구글시트 연동 앱 1개 배포? (막힌 수강생 → ‘미리 연결된 시트’로 이어가게)</li>
+    <li>ttl=0 미설정으로 갱신 안 되는 사례 개별 점검</li>
+    <li>ML 예측기에서 <code>model.fit()</code> = 학습을 전원 체험?</li>
+    <li>외삽 ‘조심 딱지’ 개념 각인 확인</li>
+    <li>내일 프로젝트 주제 미정자 명단 → 오전 지원 메모</li>
+  </ul>
+
+  <div class="pager">
+    <a class="prev" href="day3.html"><div class="dir">← 이전</div><div class="tt">3일차 (강사용)</div></a>
+    <a class="next" href="day5.html"><div class="dir">다음 →</div><div class="tt">5일차 (강사용)</div></a>
+  </div>
+</main>
+</div>
+
+<footer class="foot">서울대학교 평생교육원 · 데이터 분석 병아리반 · 강사용 · 링크 비공개</footer>
+<script src="../assets/copy.js"></script>
+</body>
+</html>

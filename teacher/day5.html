@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>5일차 (강사용) · 발표 + 더 멋진 프로젝트로 · 데이터 분석 병아리반</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<div class="topbar"><div class="inner">
+  <a class="brand" href="index.html"><span class="chick">👩‍🏫</span> 병아리반 <span class="a">강사용</span></a>
+  <span class="spacer"></span>
+  <a class="home" href="../day5.html">학생용 5일차 ↗</a>
+  <span class="badge teacher">강사용</span>
+</div></div>
+
+<div class="wrap">
+<main>
+  <span class="eyebrow">5일차 · 강사용</span>
+  <h1>발표 + 더 멋진 프로젝트로 — <span class="a">강사 진행안</span></h1>
+  <div class="under"></div>
+  <p class="lead">학생용 <a href="../day5.html">5일차 페이지 ↗</a> 를 화면에 띄운 채 진행합니다.
+  오늘은 <b>‘가르치는 날’이 아니라 ‘보여 주고 배웅하는 날’</b>. 발표 운영과 “서랍 소개”가 전부입니다.</p>
+
+  <div class="callout say">
+    <div class="h">🎙️ 오늘의 목표 선언 (개강 멘트)</div>
+    <p>“오늘은 <b>새로 외우는 게 없어요.</b> 5일 동안 만든 걸 서로에게 보여 주고, 앞으로 더 갈 <b>지도 세 장</b>을 챙겨 갑니다. 마지막 꿀팁들은 <b>지금 다 안 해도 되는 서랍</b>이에요.”</p>
+  </div>
+
+  <div class="callout theory">
+    <div class="h">📖 오늘의 설계 원칙 — 전원 참여 발표</div>
+    <p>완전 입문 40명. 전원 무대는 시간상 불가하고, 무대 공포도 큽니다. 그래서 <b>갤러리 워크(전원 참여) + 하이라이트 무대(소수)</b> 하이브리드로 갑니다. 공용 보드가 5일 내내 쌓아 온 <b>전시장이자 무대</b>. 꿀팁 3개는 “도구를 다 익히자”가 아니라 “<b>이런 서랍이 있다</b>”를 보여 주는 안내입니다.</p>
+  </div>
+
+  <h2>⏱️ 3시간 진행 시간표</h2>
+  <table class="timetable">
+    <tr><th>시간</th><th>블록</th><th>핵심</th></tr>
+    <tr><td>0~40′</td><td>프로젝트 마무리 + 코칭</td><td>질문·데이터·발견 세 줄 다듬기 · 앱 URL 공용 보드 게시 · 순회 코칭</td></tr>
+    <tr><td>40~45′</td><td>🎤 발표 안내</td><td>갤러리 워크 방식 설명 · ‘좋아요/한줄 피드백/의심 질문’ 규칙</td></tr>
+    <tr><td>45~70′</td><td>🎤 갤러리 워크</td><td>자유롭게 돌며 체험 + 좋아요·한줄 피드백 (25분)</td></tr>
+    <tr><td>70~100′</td><td>🎤 하이라이트 무대</td><td>자원+투표로 <b>N명</b>(시간 보고 조절, 보통 6~8명) 각 2~3분</td></tr>
+    <tr><td>100~105′</td><td>🎤 강사 총평</td><td>공통 성장 포인트 + 칭찬 (5분)</td></tr>
+    <tr><td>105~115′</td><td>☕ 휴식</td><td></td></tr>
+    <tr><td>115~150′</td><td>[꿀팁1] 진짜 DB</td><td>Supabase(insert/select·RLS·키) · Neon(SQL 집계) — 개념만 (35분)</td></tr>
+    <tr><td>150~175′</td><td>[꿀팁2] 자동화 + 재미 API</td><td>GitHub Actions cron · data.go.kr · 카카오 지오코딩 등 (25분)</td></tr>
+    <tr><td>175~180′</td><td>[꿀팁3] 다음 걸음 + 마무리</td><td>데이터 찾는 곳 · 비용/키 · 수료 배웅 (15분에 걸쳐 자연스럽게)</td></tr>
+  </table>
+  <div class="callout say">
+    <div class="h">🎙️ 무른 경계 원칙</div>
+    <p>발표가 살아나면 <b>발표에 시간을 더 주세요.</b> 꿀팁 3개는 “다 못 다뤄도 되는 서랍”이라 뒷부분을 유연하게 줄일 수 있습니다. 순서 우선도: <b>발표 &gt; 꿀팁1(DB) &gt; 꿀팁2(자동화/API) &gt; 꿀팁3(안내)</b>.</p>
+  </div>
+
+  <h2>🎤 40명 발표 운영 — 상세</h2>
+  <p>발표에 쓸 수 있는 시간은 현실적으로 <b>60분 안팎</b>. 40명 전원 무대는 불가하므로 <b>하이브리드</b>로 갑니다. 5일 내내 써 온 <b>공용 보드가 무대</b>입니다.</p>
+  <table class="timetable">
+    <tr><th>단계</th><th>방식</th><th>시간</th></tr>
+    <tr><td>사전 게시</td><td>전원 앱 URL을 공용 보드에 올림(마무리 블록 안에 완료)</td><td>—</td></tr>
+    <tr><td>갤러리 워크</td><td>자유롭게 돌며 체험 + ‘좋아요·한줄 피드백’ + ‘의심하는 눈’ 질문</td><td>25분</td></tr>
+    <tr><td>하이라이트 무대</td><td>자원 + 투표(좋아요 많은 순)로 <b>N명</b>(시간 보고 조절) 각 2~3분</td><td>20~30분</td></tr>
+    <tr><td>강사 총평</td><td>공통 성장 포인트 + 칭찬</td><td>5분</td></tr>
+  </table>
+  <div class="callout say">
+    <div class="h">🎙️ 발표 운영 멘트</div>
+    <p>“오늘 발표는 <b>미술관을 걷듯</b> 합니다. 먼저 25분 동안 자유롭게 서로의 앱을 눌러 보고, <b>좋아요와 한 줄 피드백</b>을 남겨요. 그다음 좋아요 많은 분들이 앞에 나와 2~3분씩 소개합니다. 무대에 안 서도 <b>모두가 이미 발표에 참여</b>한 거예요.”</p>
+  </div>
+  <div class="callout say">
+    <div class="h">🎙️ 칭찬의 기준</div>
+    <p>“완성도가 아니라 <b>어떤 질문을 던졌고 무엇을 발견했는지</b>를 칭찬합니다.” 총평에서도 미완성 앱을 콕 집어 “이 <b>질문</b>이 정말 좋았어요”라고 짚어 주면, 못 끝낸 사람도 성공 체험으로 마무리됩니다. 하이라이트 인원 <b>N명은 시계를 보며 유연하게</b> — 남은 시간 ÷ 3분으로 즉석 계산.</p>
+  </div>
+  <div class="callout ask">
+    <div class="h">🙋 예상 질문 (발표)</div>
+    <p><b>“발표 꼭 무대에서 해야 하나요?”</b> → 아니요. 갤러리 워크로 <b>전원이 이미 발표에 참여</b>합니다. 무대는 자원자만. · <b>“제 앱은 미완성인데요”</b> → 괜찮아요. 질문·데이터·발견 세 줄만 있으면 훌륭한 발표. 미완성도 이야기가 있으면 무대에 설 수 있습니다.</p>
+  </div>
+
+  <h2>블록별 진행 노트</h2>
+
+  <h3>프로젝트 마무리 + 코칭 (0~40′)</h3>
+  <div class="callout say">
+    <div class="h">🎙️ 멘트 — 세 줄이면 발표 끝</div>
+    <p>“지금부터 앱을 크게 고치지 마세요. <b>질문 · 데이터 · 발견</b> 세 줄만 또렷하게 다듬으면 발표 준비 끝이에요. 다 되면 <b>공용 보드에 URL을 올려</b> 주세요.”</p>
+  </div>
+  <div class="callout err">
+    <div class="h">🧯 예상 오류 (마무리 단계)</div>
+    <p><b>URL이 안 열림</b> → 배포 저장소가 Public인지, Streamlit 앱이 sleep 상태(첫 접속 1~3분)인지 확인. · <b>보드에 올릴 게 없는 미완자</b> → 4일차까지 만든 것 중 <b>가장 잘 된 하나</b>를 올리게. 완성 강박을 낮춰 주세요.</p>
+  </div>
+
+  <h3>[꿀팁 1] 진짜 데이터베이스 (115~150′)</h3>
+  <div class="callout say">
+    <div class="h">🎙️ 멘트 — 서랍 열어 보이기</div>
+    <p>“구글시트로 충분했죠? 근데 <b>여러 명이 동시에</b> 쓰거나 데이터가 <b>수만 줄</b>이 되면 시트가 버거워요. 그때 여는 서랍이 <b>진짜 DB</b>예요. 오늘은 <b>구경만</b> 합니다. 지금 다 안 해도 돼요.”</p>
+  </div>
+  <div class="callout theory">
+    <div class="h">📖 이론 심화 — RLS(행 수준 보안)</div>
+    <p><b>RLS(Row Level Security)</b>는 테이블의 <b>각 행에 대한 접근 규칙</b>. Supabase는 <b>기본이 전부 차단</b>이고, 명시적으로 <b>허용 정책(policy)</b>을 만든 것만 읽기/쓰기가 됩니다. 초보가 “데이터가 안 보여요” 하면 십중팔구 RLS가 켜져 있고 정책이 없는 상태 — 고장이 아니라 <b>안전 기본값</b>. Neon은 순수 PostgreSQL이라 <b>SQL 문장</b>(<code>SELECT … GROUP BY … ORDER BY … LIMIT</code>)으로 집계합니다.</p>
+  </div>
+  <div class="callout err">
+    <div class="h">🧯 예상 오류 (DB)</div>
+    <p><b>Supabase 데이터가 안 보임(빈 결과)</b> → RLS가 막은 것. 대시보드에서 해당 테이블에 <b>읽기 허용 정책</b>을 추가(또는 실습용이면 RLS 비활성). · <b>연결 실패</b> → URL/키 오타, 또는 스트림릿 <code>st.secrets</code>에 연결 문자열 미등록. · <b>service_role 키 노출</b> → 마스터 키를 앱/깃허브에 올리면 누구나 전체 접근 가능. <b>절대 커밋 금지</b>, 반드시 Secrets에만. 실수로 올렸다면 <b>즉시 키 재발급(rotate)</b>.</p>
+  </div>
+  <div class="callout ask">
+    <div class="h">🙋 예상 질문 (DB)</div>
+    <p><b>“DB 어려워 보여요”</b> → 지금 안 배워도 됩니다. <b>필요해질 때</b>(동시 사용·대용량·집계) 배우면 돼요. 그때도 SQL은 AI에게 시키면 됩니다. · <b>“시트랑 뭐가 달라요?”</b> → 시트는 사람이 보는 표, DB는 앱이 빠르게 넣고 꺼내는 창고. 동시 접속·집계에서 차이가 큽니다.</p>
+  </div>
+
+  <h3>[꿀팁 2] 자동화 + 재미 API (150~175′)</h3>
+  <div class="callout say">
+    <div class="h">🎙️ 멘트 — 컴퓨터가 대신 모으게</div>
+    <p>“데이터를 <b>매시간 손으로</b> 모으면 지치죠. <b>GitHub Actions</b>에 시간표(cron)를 적어 두면 컴퓨터가 <b>알아서</b> 모아 줍니다. 그리고 세상엔 공짜로 재밌는 데이터를 주는 <b>API 서랍</b>이 많아요 — 지진, 소행성, 생물, 지도까지.”</p>
+  </div>
+  <div class="callout theory">
+    <div class="h">📖 이론 심화 — cron 문법</div>
+    <p><code>"5 * * * *"</code>는 다섯 칸: <b>분 시 일 월 요일</b>. <code>5 * * * *</code>=매시간 5분, <code>0 3 * * *</code>=매일 3시(UTC). GitHub Actions의 스케줄은 <b>UTC 기준</b>이라 한국시간(KST)은 <b>+9시간</b>. 또한 무료 러너 부하로 <b>정시보다 몇 분 늦게</b> 도는 것이 정상이라, 매시 0분보다 <b>5분처럼 살짝 뒤</b>를 권합니다. <code>workflow_dispatch</code>는 수동 실행 버튼을 추가하는 트리거.</p>
+  </div>
+  <div class="callout err">
+    <div class="h">🧯 예상 오류 (자동화/API)</div>
+    <p><b>cron이 한국시간인 줄 알고 9시간 어긋남</b> → UTC 기준임을 강조(KST = UTC+9). · <b>Actions가 안 도는 것 같음</b> → 무료 러너는 지연이 흔함. 급하면 <code>workflow_dispatch</code> 수동 버튼으로 즉시 테스트. · <b>data.go.kr 인증키 오류</b> → serviceKey의 <b>인코딩/디코딩</b> 두 형태 중 맞는 걸로 교체, 응답 포맷은 <code>_type=json</code>. · <b>키가 코드에 노출</b> → 반드시 <b>GitHub Secrets</b>/<code>st.secrets</code>로. 카카오는 요청 <b>헤더</b> <code>Authorization: KakaoAK</code> 형식 지키기.</p>
+  </div>
+
+  <h3>[꿀팁 3] 다음 걸음 + 마무리 (175~180′)</h3>
+  <div class="callout say">
+    <div class="h">🎙️ 마무리 멘트 — 리듬을 챙겨 보내기</div>
+    <p>“오늘 배운 건 도구가 아니라 <b>리듬</b>이에요 — <b>궁금한 질문 → 데이터 찾기 → AI에게 앱 주문 → 배포 → 의심하며 다듬기.</b> 새 도구는 필요할 때 서랍에서 꺼내면 됩니다. 5일 전 코드가 겁났던 여러분이 지금은 <b>배포하고, 질문하고, 발표</b>합니다. 이미 데이터 분석가예요.” — 박수로 배웅.</p>
+  </div>
+  <div class="callout err">
+    <div class="h">🧯 예상 오류 (마무리)</div>
+    <p><b>비용 걱정</b> → 쓴 도구 대부분 무료 한도. 유료 전환은 항상 사전 안내됨. · <b>키 관리 습관 재강조</b> → API 키·service_role 키·비밀번호는 코드에 직접 쓰지 말 것(Secrets/<code>st.secrets</code>). 마지막으로 한 번 더 각인.</p>
+  </div>
+
+  <h2>✅ 5일차 마무리 체크 (강사)</h2>
+  <ul class="checklist">
+    <li>전원 앱 URL이 공용 보드에 게시됐는가</li>
+    <li>갤러리 워크에서 좋아요·피드백이 오갔는가(전원 참여 확인)</li>
+    <li>하이라이트 N명 무대 + 강사 총평으로 성공 체험을 남겼는가</li>
+    <li>꿀팁 3개를 “필요할 때 여는 서랍”으로 안내했는가(강박 없이)</li>
+    <li>키 관리·비용 안내로 안전하게 배웅했는가</li>
+  </ul>
+
+  <div class="pager">
+    <a class="prev" href="day4.html"><div class="dir">← 이전</div><div class="tt">4일차 (강사용)</div></a>
+    <a class="next" href="index.html"><div class="dir">다음 →</div><div class="tt">강사 대시보드</div></a>
+  </div>
+</main>
+</div>
+
+<footer class="foot">서울대학교 평생교육원 · 데이터 분석 병아리반 · 강사용 · 링크 비공개</footer>
+<script src="../assets/copy.js"></script>
+</body>
+</html>
