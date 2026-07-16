@@ -3,7 +3,7 @@
 (function () {
   function apply() {
     var released = (typeof window.RELEASED_DAY === 'number') ? window.RELEASED_DAY : 1;
-    var homeworkDay = (typeof window.HOMEWORK_DAY === 'number') ? window.HOMEWORK_DAY : 4;
+    var homeworkDay = (typeof window.HOMEWORK_DAY === 'number') ? window.HOMEWORK_DAY : 1;
     var file = location.pathname.split('/').pop() || 'index.html';
 
     function dayOf(name) {
@@ -12,6 +12,10 @@
       if (name === 'homework.html') return homeworkDay;
       return 0; // index, prep 등은 항상 공개
     }
+
+    // 숙제 카드의 data-day는 HOMEWORK_DAY와 자동 동기화 (HTML 값과 어긋나도 안전)
+    var hw = document.querySelector('.linkcard[href="homework.html"]');
+    if (hw) hw.setAttribute('data-day', homeworkDay);
 
     // ① 목차 카드 잠그기
     document.querySelectorAll('.linkcard[data-day]').forEach(function (c) {

@@ -11,7 +11,7 @@
 <div class="topbar"><div class="inner">
   <a class="brand" href="index.html"><span class="chick">👩‍🏫</span> 병아리반 <span class="a">강사용</span></a>
   <span class="spacer"></span>
-  <a class="home" href="../day4.html">수강생용 4일차 ↗</a>
+  <a class="home" href="../day4.html">학생용 4일차 ↗</a>
   <span class="badge teacher">강사용</span>
 </div></div>
 
@@ -20,7 +20,7 @@
   <span class="eyebrow">4일차 · 강사용</span>
   <h1>데이터 저장과 머신러닝 — <span class="a">강사 진행안</span></h1>
   <div class="under"></div>
-  <p class="lead">수강생용 <a href="../day4.html">4일차 페이지 ↗</a> 를 화면에 띄운 채 진행합니다.
+  <p class="lead">학생용 <a href="../day4.html">4일차 페이지 ↗</a> 를 화면에 띄운 채 진행합니다.
   여기에는 <b>시간표 · 멘트 · 예상 질문 · 예상 오류 · 이론 심화</b>를 덧댔습니다.</p>
 
   <div class="callout say">
@@ -37,11 +37,11 @@
   <table class="timetable">
     <tr><th>시간</th><th>블록</th><th>핵심</th></tr>
     <tr><td>0~20′</td><td>복습</td><td>API·키·secrets·채팅앱 4단어 · “대화가 안 남는다” 문제 제기</td></tr>
-    <tr><td>20~40′</td><td>1. 왜 저장이 필요한가</td><td>session_state 휘발성 · 저장소 지도(Supabase/구글시트/DB)</td></tr>
+    <tr><td>20~40′</td><td>1. 왜 저장이 필요한가</td><td>session_state 휘발성 · 저장소 지도(Supabase/구글시트/Neon·SQL)</td></tr>
     <tr><td>40~80′</td><td>2. Supabase 연동 앱</td><td>가입(<b>카드 X</b>)·테이블·URL/키 2줄·RLS 풀기 → 약속/투표 앱. <b>구글시트는 강사 데모로 강등</b></td></tr>
     <tr><td>80~90′</td><td>☕ 휴식</td><td></td></tr>
     <tr><td>90~155′</td><td>3. 머신러닝 맛보기</td><td>AI⊃ML⊃DL⊃LLM · 5단계 · 2050 기온 예측기(LinearRegression)</td></tr>
-    <tr><td>155~180′</td><td>🌱 프로젝트 주제 + 씨앗</td><td>내일 프로젝트 주제 정하기 · 선택 숙제 안내 (구글시트 강등으로 확보한 여유분)</td></tr>
+    <tr><td>155~180′</td><td>🌱 프로젝트 주제 + 예고</td><td>내일 프로젝트 주제 정하기 · 선택 숙제 안내 (구글시트 강등으로 확보한 여유분)</td></tr>
   </table>
   <div class="callout say">
     <div class="h">🎙️ 무른 경계 원칙</div>
@@ -69,7 +69,7 @@
   <h3>2. Supabase 연동 앱 (40~80′)</h3>
   <div class="callout say">
     <div class="h">🎙️ 멘트 — 카드도 서비스계정도 없이</div>
-    <p>“진짜 데이터베이스에 저장할 거예요. <b>Supabase</b>는 카드 등록도, 복잡한 로봇 계정도 없이 <b>URL·키 두 줄</b>이면 끝나요.” 화면 미러링으로 함께: 가입 → New project → Table Editor로 <code>votes</code> 테이블(name·times) → <b>RLS 끄기</b> → Settings→API에서 URL·anon 키 복사. 옛 구글시트 방식(서비스계정·JSON·공유)은 <b>맨 끝에 화면으로만 잠깐</b> 보여주고 넘어갑니다.</p>
+    <p>“진짜 데이터베이스에 저장할 거예요. <b>Supabase</b>는 카드 등록도, 복잡한 로봇 계정도 없이 <b>URL·키 두 줄</b>이면 끝나요.” 화면 미러링으로 함께: 가입 → New project → Table Editor로 <code>votes</code> 테이블(name·times) → <b>RLS 끄기</b> → Settings→API Keys에서 <b>publishable 키</b>, Settings→Data API에서 <b>Project URL</b> 복사. 옛 구글시트 방식(서비스계정·JSON·공유)은 <b>맨 끝에 화면으로만 잠깐</b> 보여주고 넘어갑니다.</p>
   </div>
   <div class="callout theory">
     <div class="h">📖 딱 하나의 관문 — RLS</div>
@@ -77,7 +77,7 @@
   </div>
   <div class="callout err">
     <div class="h">🧯 예상 오류 (빈출)</div>
-    <p><b>데이터가 안 쌓임/안 보임</b> → 1순위 <b>RLS</b>. 테이블 잠금을 풀었는지 확인. · <b>키 혼동</b> → 앱에는 <b>anon(public) 키</b>, <b>service_role 키는 절대 앱에 넣지 말 것</b>. · <b>테이블/열 이름 불일치</b> → 프롬프트의 <code>votes</code>·<code>name</code>·<code>times</code>와 실제 테이블이 같은지. · <b>모듈 없음</b> → <code>requirements.txt</code>에 <code>supabase</code> 추가. · <b>프로젝트 잠들었을 때</b>(7일 미사용) → 대시보드에서 재개(Resume). 강의 중엔 거의 발생 안 함.</p>
+    <p><b>데이터가 안 쌓임/안 보임</b> → 1순위 <b>RLS</b>. 테이블 잠금을 풀었는지 확인. · <b>키 혼동</b> → 앱에는 <b>publishable 키(예전 anon)</b>, <b>secret 키(예전 service_role)는 절대 앱에 넣지 말 것</b>. · <b>테이블/열 이름 불일치</b> → 프롬프트의 <code>votes</code>·<code>name</code>·<code>times</code>와 실제 테이블이 같은지. · <b>모듈 없음</b> → <code>requirements.txt</code>에 <code>supabase</code> 추가. · <b>프로젝트 잠들었을 때</b>(7일 미사용) → 대시보드에서 재개(Resume). 강의 중엔 거의 발생 안 함.</p>
   </div>
   <div class="callout ask">
     <div class="h">🙋 예상 질문</div>
@@ -95,20 +95,20 @@
   </div>
   <div class="callout theory">
     <div class="h">📖 이론 심화 — 과적합 · 외삽 · 상관≠인과</div>
-    <p><b>과적합(overfitting)</b>: 고차 다항식으로 훈련 점을 과하게 맞추면 훈련 데이터엔 완벽하지만 새 데이터엔 엉망 → 그래서 오늘은 <b>직선(1차)</b>으로 단순하게. · <b>외삽(extrapolation)</b>: <b>훈련 범위 밖 예측은 위험</b> — 2050년은 데이터에 없으므로 직선을 늘인 ‘가정’일 뿐. 수강생에게 반드시 ‘조심 딱지’로 각인. · <b>상관≠인과</b>: 연도와 기온이 함께 오른다고 “연도가 기온을 올린다”는 아님(뒤에 도시화·온실가스 등 실제 원인). 예측기는 <b>패턴 요약</b>이지 원인 규명이 아님을 강조.</p>
+    <p><b>과적합(overfitting)</b>: 고차 다항식으로 훈련 점을 과하게 맞추면 훈련 데이터엔 완벽하지만 새 데이터엔 엉망 → 그래서 오늘은 <b>직선(1차)</b>으로 단순하게. · <b>외삽(extrapolation)</b>: <b>훈련 범위 밖 예측은 위험</b> — 2050년은 데이터에 없으므로 직선을 늘인 ‘가정’일 뿐. 학생에게 반드시 ‘조심 딱지’로 각인. · <b>상관≠인과</b>: 연도와 기온이 함께 오른다고 “연도가 기온을 올린다”는 아님(뒤에 도시화·온실가스 등 실제 원인). 예측기는 <b>패턴 요약</b>이지 원인 규명이 아님을 강조.</p>
   </div>
   <div class="callout err">
     <div class="h">🧯 예상 오류</div>
-    <p><b>ModuleNotFoundError</b> → <code>requirements.txt</code>에 <code>scikit-learn</code>(설치명, import는 <code>sklearn</code>) 확인. · <b>X 모양 오류</b> → <code>df[["year"]]</code> 대괄호 두 개(2차원)여야 함, <code>df["year"]</code>(1차원)는 에러. AI가 준 코드면 대개 정상. · <b>CSV 열 이름 불일치</b> → 예제는 <code>year</code>, <code>temp</code>. 다른 열 이름이면 프롬프트에 명시. · <b>predict 경고</b> → <code>model.predict([[year]])</code> 형태 유지.</p>
+    <p><b>ModuleNotFoundError</b> → <code>requirements.txt</code>에 <code>scikit-learn</code>(설치명, import는 <code>sklearn</code>) 확인. · <b>X 모양 오류</b> → <code>yearly[["연도"]]</code> 대괄호 두 개(2차원)여야 함, <code>yearly["연도"]</code>(1차원)는 에러. AI가 준 코드면 대개 정상. · <b>CSV 열 이름 불일치</b> → 실제 열은 <code>날짜·지점·평균기온·최저기온·최고기온</code>(한국어). 영어 열 이름(year·temp)을 가정한 코드면 프롬프트의 열 안내를 다시 붙여넣기. · <b>전처리 누락(가장 흔함)</b> → 1951~52년은 통째 결측이라 그대로 학습하면 NaN 에러, 1953년은 31일 관측뿐이라 연평균 0.6℃ 이상치(R²가 0.70→0.38로 추락). "진행 중인 올해와 관측일 부족한 해는 빼줘"가 프롬프트에 있는지 확인. · <b>predict 경고</b> → <code>model.predict([[year]])</code> 형태 유지.</p>
   </div>
   <div class="callout ask">
     <div class="h">🙋 예상 질문</div>
     <p><b>“예측을 믿어도 돼요?”</b> → “훈련 범위 <b>안</b>은 참고할 만해요. 하지만 2050년 같은 <b>미래는 외삽</b>이라 조심해야 해요. 직선을 늘인 가정일 뿐, 실제 미래는 다르게 갈 수 있어요.” · <b>“군집(KMeans)은 뭐예요?”</b> → “정답 없이 <b>비슷한 것끼리 자동으로 묶는</b> 비지도학습이에요. 오늘은 개념만, 필요하면 5일차 프로젝트에서.”</p>
   </div>
 
-  <h3>🌱 프로젝트 주제 + 씨앗 (155~180′)</h3>
+  <h3>🌱 프로젝트 주제 + 예고 (155~180′)</h3>
   <div class="callout say">
-    <div class="h">🎙️ 마무리 멘트 + 씨앗</div>
+    <div class="h">🎙️ 마무리 멘트 + 다음 날 예고</div>
     <p>“오늘 밤 <b>내 프로젝트 주제 한 줄</b>만 정해 오세요. 지난 4일 조각이 전부 재료예요. 숙제는 <b>선택</b>이지만, 적어 오면 내일 오전이 편해요. 내일은 <b>프로젝트 발표와 심화</b>로 마무리합니다.”</p>
   </div>
 

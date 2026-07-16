@@ -12,7 +12,7 @@
   <a class="brand" href="index.html"><span class="chick">🐥</span> 데이터 기반 바이브 코딩 <span class="a">병아리반</span></a>
   <span class="spacer"></span>
   <a class="home" href="index.html">← 목차</a>
-  <span class="badge">수강생용</span>
+  <span class="badge">학생용</span>
 </div></div>
 
 <div class="wrap">
@@ -22,7 +22,7 @@
   <div class="under"></div>
   <p class="lead">오늘 = 데이터 <b>쌓기</b> + <b>미래 예측</b>. 코드는 AI가, 우리는 주문·확인.</p>
   <div class="quote">
-    <div class="q">“데이터의 가장 큰 가치는, 전혀 예상하지 못한 것을 우리가 알아채게 만들 때다.”</div>
+    <div class="q">“그림의 가장 큰 가치는, 전혀 예상하지 못한 것을 우리가 알아채게 만들 때다.”</div>
     <span class="by">존 튜키 · “The greatest value of a picture is when it forces us to notice what we never expected to see.” (1977)</span>
   </div>
 
@@ -96,20 +96,20 @@
     <li><span class="st">가입 + 새 프로젝트</span><br>GitHub/이메일로 가입(카드 X) → <b>New project</b> → 이름 + DB 비밀번호 정하고 생성. 준비 1~2분</li>
     <li><span class="st">테이블 만들기</span><br>왼쪽 <b>Table Editor → New table</b> → 이름 <code>votes</code> → 열 추가 <code>name</code>(text)·<code>times</code>(text) → 저장 (<code>id</code>·시각은 자동)</li>
     <li><span class="st">RLS 잠금 풀기 (연습용)</span><br>새 테이블은 <b>기본 잠김(RLS)</b>이라 그냥 두면 데이터가 안 보여요 → 테이블의 <b>RLS 비활성화</b>(연습용) 또는 '모두 읽기·쓰기' 정책 추가. AI에게 "연습용이니 RLS 꺼는 법 알려줘"라고 물어도 됨</li>
-    <li><span class="st">URL·키 복사</span><br><b>Settings → API</b> → <b>Project URL</b>과 <b>anon public 키</b> 복사. 문자열 2개, 이게 전부!</li>
+    <li><span class="st">URL·키 복사</span><br><b>Settings → API Keys</b>에서 <b>publishable 키</b>(예전 이름: anon public)를, <b>Settings → Data API</b>에서 <b>Project URL</b>을 복사. 문자열 2개, 이게 전부! (화면 구성은 조금씩 바뀔 수 있어요 — 못 찾으면 AI에게 물어보기)</li>
   </ol>
   <div class="callout warn">
     <div class="h">🔑 키 두 종류만 구분</div>
     <ul>
-      <li><b>anon(public) 키</b> = 앱에 넣어도 되는 공개용(RLS가 지킴) → 오늘 이거 사용</li>
-      <li><b>service_role 키</b> = 모든 잠금 여는 마스터 → 앱·GitHub 업로드 금지(Secrets에만)</li>
+      <li><b>publishable 키</b>(예전 anon) = 앱에 넣어도 되는 공개용(RLS가 지킴) → 오늘 이거 사용 · 단, 오늘 실습 테이블은 연습용으로 RLS를 꺼 뒀으니 이 보호가 없는 상태 — 실제 서비스에선 RLS를 켠 채 정책으로 허용 범위만 열기</li>
+      <li><b>secret 키</b>(예전 service_role) = 모든 잠금 여는 마스터 → 앱·GitHub 업로드 금지(Secrets에만)</li>
     </ul>
   </div>
 
   <h3>2-2. 비밀 금고에 키 넣기 + 라이브러리</h3>
   <div class="codewrap code"><span class="label">requirements.txt</span><pre>supabase</pre></div>
   <div class="codewrap code"><span class="label">.streamlit/secrets.toml — 딱 두 줄</span><pre>SUPABASE_URL = "https://xxxx.supabase.co"
-SUPABASE_KEY = "여기에_anon_public_키_붙여넣기"</pre></div>
+SUPABASE_KEY = "여기에_publishable_키_붙여넣기"</pre></div>
   <ul>
     <li>구글시트는 JSON 10여 줄이 필요했지만 → Supabase는 <b>2줄</b>. 배포 시 스트림릿 <b>Settings → Secrets</b>에 동일 붙여넣기</li>
     <li>requirements.txt엔 <code>supabase</code> 한 줄이면 충분 — 스트림릿·판다스·넘파이는 기본 설치, 버전 숫자는 안 적음</li>
@@ -166,7 +166,7 @@ st.dataframe(pd.DataFrame(rows))</pre></div>
   <div class="callout check">
     <div class="h">✔️ 방금 무슨 일이?</div>
     <ul>
-      <li>앱이 <b>기억</b>을 갖게 됨 (새로고침·타인 접속에도 데이터 유지)</li>
+      <li>앱에 <b>기억</b>이 생김 (새로고침·타인 접속에도 데이터 유지)</li>
       <li>앱 ↔ 저장소 연결 = 진짜 서비스의 첫걸음 · 카드도 서비스계정도 없이</li>
     </ul>
   </div>
@@ -220,8 +220,8 @@ st.dataframe(pd.DataFrame(rows))</pre></div>
   <table class="daymap">
     <thead><tr><th>단계</th><th>하는 일</th></tr></thead>
     <tbody>
-      <tr><td><b>① 수집</b></td><td>데이터 모으기 (서울 연평균기온 표)</td></tr>
-      <tr><td><b>② 전처리</b></td><td>빠진 값·이상값 다듬기</td></tr>
+      <tr><td><b>① 수집</b></td><td>데이터 모으기 (서울 일별 기온, seoul.csv)</td></tr>
+      <tr><td><b>② 전처리</b></td><td>빠진 값·이상값 다듬기 (연평균으로 묶기 · 부족한 해 빼기)</td></tr>
       <tr><td><b>③ 학습</b></td><td>규칙 배우기 (<code>model.fit()</code>)</td></tr>
       <tr><td><b>④ 평가</b></td><td>점수 매기기 (<code>R²</code>)</td></tr>
       <tr><td><b>⑤ 예측</b></td><td>새 입력에 답 (<code>model.predict()</code>)</td></tr>
@@ -232,14 +232,19 @@ st.dataframe(pd.DataFrame(rows))</pre></div>
   <ul>
     <li>서울 연도별 평균기온 → 직선 학습 → 슬라이더로 예측</li>
     <li>도구 = scikit-learn <code>LinearRegression</code>(가장 잘 맞는 직선 긋기) · requirements.txt엔 <code>scikit-learn</code>·<code>plotly</code>만(기본 설치 제외 · 버전 없이)</li>
-    <li>데이터 = <b>예제 저장소 주소 그대로</b>(<code>seoul.csv</code> · 원자료는 기상청 <a href="https://data.kma.go.kr" target="_blank" rel="noopener">data.kma.go.kr</a>) — 다운로드 없이 주소로 바로 불러오기 · <b>매일 아침 자동 갱신</b>(어제 기온까지 반영, 원리는 5일차 꿀팁에서!)</li>
+    <li>데이터 = <b>예제 저장소 주소 그대로</b>(<code>seoul.csv</code> · 1907년부터의 <b>일별</b> 기온 · 원자료는 기상청 <a href="https://data.kma.go.kr" target="_blank" rel="noopener">data.kma.go.kr</a>) — 다운로드 없이 주소로 바로 불러오기 · <b>매일 아침 자동 갱신</b>(어제 기온까지, 원리는 5일차 꿀팁에서!)</li>
+    <li>일별 → <b>연도별 평균</b>으로 묶어 학습 · <b>관측일이 부족한 해</b>(첫 해·올해·1950~53 전쟁 시기)는 평균이 왜곡되니 빼기 = 방금 배운 ML 5단계의 <b>② 전처리</b> 실전 · "데이터에도 역사가 있다" 🕵️</li>
   </ul>
   <div class="codewrap code"><span class="label">requirements.txt</span><pre>scikit-learn
 plotly</pre></div>
   <div class="codewrap prompt"><span class="label">① 샘플 프롬프트</span><pre>스트림릿 '서울 기온 예측기' 앱 하나(main.py)를 만들어줘. 스트림릿 클라우드에 올릴 거야. 조건:
 
-- 데이터는 이 주소에서 불러와(연도 year, 평균기온 temp 열이 있음):
+- 데이터는 이 주소에서 불러와(1907년부터 어제까지의 일별 기온이야.
+  열은 날짜, 지점, 평균기온, 최저기온, 최고기온):
   https://raw.githubusercontent.com/greatsong/modudata/main/data/seoul.csv
+- 날짜에서 연도를 뽑아 '연도별 평균기온'으로 묶어줘.
+- 아직 진행 중인 올해와, 관측일이 부족한 해(첫 해, 전쟁 시기처럼
+  기온이 빠진 해)는 평균이 왜곡되니까 빼고 학습해줘.
 - scikit-learn의 선형회귀로 '연도 → 평균기온' 관계를 학습해줘.
 - 화면 위에 R²(결정계수) 값을 카드로 보여주고, 이 값이 뭔지 한 줄로 설명해줘.
 - 슬라이더로 1900~2100년 사이 연도를 고르면 예측 기온을 크게 보여줘.
@@ -258,13 +263,19 @@ from sklearn.linear_model import LinearRegression
 
 st.title("🌡️ 서울 기온 예측기")
 
-# ① 수집 — CSV 불러오기
+# ① 수집 — CSV 불러오기 (1907년~어제, 일별 기온 · 매일 자동 갱신)
 url = "https://raw.githubusercontent.com/greatsong/modudata/main/data/seoul.csv"
 df = pd.read_csv(url)
 
-# ② 전처리 — 입력 X(연도)와 정답 y(기온) 나누기
-X = df[["year"]]   # 대괄호 두 개: 표 모양으로
-y = df["temp"]
+# ② 전처리 — 연도별 평균으로 묶기 · 진행 중인 올해와
+#            관측일이 부족한 해(전쟁 시기 등)는 빼기
+df["연도"] = pd.to_datetime(df["날짜"]).dt.year
+yearly = df.groupby("연도")["평균기온"].agg(["mean", "count"]).reset_index()
+yearly = yearly[(yearly["연도"] &lt; df["연도"].max()) &amp; (yearly["count"] &gt;= 300)]
+yearly = yearly.rename(columns={"mean": "평균기온"})
+
+X = yearly[["연도"]]   # 대괄호 두 개: 표 모양으로
+y = yearly["평균기온"]
 
 # ③ 학습 — 이 한 줄이 '학습'! 데이터에 가장 잘 맞는 직선을 찾음
 model = LinearRegression()
@@ -274,12 +285,14 @@ model.fit(X, y)
 r2 = model.score(X, y)
 st.metric("R² (얼마나 잘 맞나)", f"{r2:.2f}")
 
+# (지면상 생략 — 실제 코드엔 plotly로 그린 '실제 점 + 학습 직선' 그래프가 함께 옵니다)
+
 # ⑤ 예측 — 슬라이더로 연도를 넣으면 기온 예측
 year = st.slider("예측할 연도", 1900, 2100, 2050)
 pred = model.predict([[year]])[0]
 st.subheader(f"{year}년 예측 평균기온: {pred:.1f}℃")
 
-if year &gt; int(df["year"].max()):
+if year &gt; int(yearly["연도"].max()):
     st.warning("⚠️ 이 값은 데이터에 없는 미래예요. 참고용으로만, 조심해서 보세요!")</pre></div>
   <div class="callout warn">
     <div class="h">⚠️ 외삽(外揷) — 미래 예측엔 ‘조심’ 딱지</div>
@@ -306,13 +319,13 @@ if year &gt; int(df["year"].max()):
   <ul>
     <li>내일 = 나만의 프로젝트 마무리</li>
     <li>오늘 밤 주제 초안 하나 정하기</li>
-    <li>재료 = 4일간 만든 조각들(페이지·대시보드·채팅앱·시트앱·예측기)</li>
+    <li>재료 = 4일간 만든 조각들(페이지·대시보드·채팅앱·약속앱(DB)·예측기)</li>
   </ul>
   <div class="callout check">
     <div class="h">✔️ 주제 정하기 힌트</div>
     <ul>
       <li>출발점 = 매주 반복하는 귀찮은 일 / 궁금한 데이터</li>
-      <li>예) 독서 기록 시트앱 · 동네 날씨 예측기 · 취미 추천 챗봇</li>
+      <li>예) 독서 기록 앱(DB 저장) · 동네 날씨 예측기 · 취미 추천 챗봇</li>
       <li>거창하지 않아도 OK</li>
     </ul>
   </div>
@@ -326,8 +339,8 @@ if year &gt; int(df["year"].max()):
   <h2>🎒 오늘의 체크 & 링크</h2>
   <ul class="checklist">
     <li><code>session_state</code>는 새로고침하면 사라진다</li>
-    <li>서비스 계정을 만들고 JSON 키를 받았다</li>
-    <li>구글시트를 서비스 계정 이메일과 공유했다</li>
+    <li>Supabase에 <code>votes</code> 테이블을 만들고 RLS를 (연습용으로) 풀었다</li>
+    <li>Project URL과 publishable 키를 비밀 금고(secrets)에 넣었다</li>
     <li>이름·시간 제출 → Supabase(DB)에 쌓이는 앱을 배포했다</li>
     <li><code>model.fit()</code> 한 줄 = ‘학습’</li>
     <li>미래 예측(외삽)엔 ‘조심’ 딱지 필요</li>
@@ -361,13 +374,13 @@ if year &gt; int(df["year"].max()):
   </details>
 
   <div class="pager">
-    <a class="prev" href="day3.html"><div class="dir">← 이전</div><div class="tt">3일차 · AI를 앱에 넣기</div></a>
+    <a class="prev" href="day3.html"><div class="dir">← 이전</div><div class="tt">3일차 · API와 AI 채팅앱</div></a>
     <a class="next" href="day5.html"><div class="dir">다음 →</div><div class="tt">5일차 · 프로젝트 발표와 심화</div></a>
   </div>
 </main>
 </div>
 
-<footer class="foot">서울대학교 평생교육원 · 데이터 기반 바이브 코딩 병아리반 · 수강생용 교재</footer>
+<footer class="foot">서울대학교 평생교육원 · 데이터 기반 바이브 코딩 병아리반 · 학생용 교재</footer>
 <script src="assets/release.js"></script>
 <script src="assets/gate.js"></script>
 <script src="assets/copy.js"></script>
