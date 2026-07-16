@@ -206,7 +206,7 @@ function show(t){
   <div class="codewrap prompt"><span class="label">① 샘플 프롬프트</span><pre>'실시간 날씨 대시보드'를 HTML 파일 하나(weather.html)로 만들어줘. 조건:
 
 - 파일 하나로 끝나고, 외부 설치 없이 브라우저에서 바로 열려야 해(GitHub Pages에 올릴 거야).
-- 데이터는 'API 키가 필요 없는' Open-Meteo API를 브라우저에서 fetch로 바로 불러와:
+- 데이터는 'API 키가 필요 없는' Open-Meteo API에서 브라우저가 직접 불러오게 해줘(별도 서버 없이):
   https://api.open-meteo.com/v1/forecast?latitude=37.57&longitude=126.98&current=temperature_2m,relative_humidity_2m,wind_speed_10m&hourly=temperature_2m&daily=temperature_2m_max,temperature_2m_min&timezone=Asia/Seoul
 - 상단 요약 카드: 현재 기온, 습도, 풍속.
 - 오늘 시간대별 기온 꺾은선 그래프 1개(그래프 라이브러리는 CDN으로).
@@ -297,6 +297,32 @@ plotly</pre></div>
       <li>프롬프트엔 <b>맥락+제약</b> 꼭: "파일 하나 / 외부 설치 없이 / 한국어 / 이미지 대신 이모지"</li>
     </ul>
   </div>
+  <h2>📚 오늘의 용어</h2>
+  <details class="glossary">
+    <summary>오늘 나온 낱말 15개 — 외울 필요 없어요, 잊으면 여기로</summary>
+    <div class="gin">
+    <table class="glossary-table">
+      <tr><th>용어</th><th>뜻</th></tr>
+      <tr><td class="term">HTML</td><td>웹페이지의 뼈대를 만드는 언어 — 브라우저가 읽는 문서 형식</td></tr>
+      <tr><td class="term">CSS</td><td>웹페이지의 옷 — 색·글씨·배치를 꾸미는 언어</td></tr>
+      <tr><td class="term">자바스크립트</td><td>웹페이지를 움직이게 하는 언어 — 버튼 반응·계산 담당</td></tr>
+      <tr><td class="term">라이브러리</td><td>남이 만들어 둔 도구 모음 — 가져다 쓰면 됨</td></tr>
+      <tr><td class="term">CDN</td><td>라이브러리를 설치 없이 인터넷 주소 한 줄로 가져다 쓰는 방식</td></tr>
+      <tr><td class="term">API</td><td>프로그램끼리 데이터를 주고받는 창구</td></tr>
+      <tr><td class="term">API 키</td><td>그 창구를 쓸 수 있는 나만의 열쇠 — 비밀번호처럼 관리</td></tr>
+      <tr><td class="term">대시보드</td><td>지표·그래프를 한 화면에 모아 보여주는 판</td></tr>
+      <tr><td class="term">GitHub Pages</td><td>깃허브가 무료로 내 웹페이지를 인터넷에 올려 주는 서비스</td></tr>
+      <tr><td class="term">스트림릿(Streamlit)</td><td>파이썬 몇 줄로 웹앱을 만들어 주는 라이브러리</td></tr>
+      <tr><td class="term">plotly</td><td>마우스에 반응하는(인터랙티브) 그래프 라이브러리</td></tr>
+      <tr><td class="term">yfinance</td><td>야후 파이낸스 주가 데이터를 받아오는 라이브러리</td></tr>
+      <tr><td class="term">종목 코드(티커)</td><td>주식 종목의 고유 번호 — 005930.KS(삼성전자), AAPL(애플)</td></tr>
+      <tr><td class="term">드롭다운</td><td>누르면 목록이 펼쳐지는 선택 상자</td></tr>
+      <tr><td class="term">주석</td><td>코드 속 설명 메모 — 실행에는 영향 없음</td></tr>
+    </table>
+    <p class="glossary-more"><a href="glossary.html">📚 전체 용어사전 보기 →</a></p>
+    </div>
+  </details>
+
   <div class="pager">
     <a class="prev" href="prep.html"><div class="dir">← 이전</div><div class="tt">준비 · 계정 3종</div></a>
     <a class="next" href="index.html"><div class="dir">다음 →</div><div class="tt">2일차 (준비 중)</div></a>

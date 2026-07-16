@@ -219,3 +219,17 @@ footer.foot { max-width: var(--maxw); margin: 0 auto; padding: 10px 20px 40px; c
   main { padding: 28px 18px; }
   h1 { font-size: 1.55rem; }
 }
+
+/* ── 용어사전 ── */
+details.glossary { border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--card); margin: 14px 0; }
+details.glossary summary { cursor: pointer; padding: 12px 16px; font-weight: 800; color: var(--text-soft); list-style: none; }
+details.glossary summary::-webkit-details-marker { display: none; }
+details.glossary summary::before { content: "▸ "; color: var(--accent); }
+details.glossary[open] summary::before { content: "▾ "; }
+details.glossary .gin { padding: 0 16px 14px; }
+table.glossary-table { width: 100%; border-collapse: collapse; font-size: 0.9rem; margin: 6px 0 0; }
+table.glossary-table th, table.glossary-table td { padding: 8px 11px; border: 1px solid var(--border); text-align: left; vertical-align: top; }
+table.glossary-table th { background: #fff3d6; color: #b45309; font-weight: 800; white-space: nowrap; }
+table.glossary-table td.term { white-space: nowrap; font-weight: 700; }
+table.glossary-table td.dayn { white-space: nowrap; font-weight: 800; color: var(--muted); font-size: 0.82rem; }
+.glossary-more { font-size: 0.9rem; margin: 8px 0 0; }
