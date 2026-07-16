@@ -78,14 +78,14 @@
 - 버튼을 누르면 https://catfact.ninja/fact 주소에 requests로 요청을 보내고,
   돌아온 JSON에서 'fact' 값(고양이 상식)을 꺼내 화면에 크게 보여줘.
 - 아래에는 https://randomuser.me/api/ 로 요청해서 랜덤 인물 한 명의
-  이름과 사는 나라를 st.write로 보여주는 버튼도 하나 넣어줘.
+  이름과 사는 나라를 화면에 보여주는 버튼도 하나 넣어줘.
 - 요청이 성공(상태코드 200)인지 확인하고, 실패하면 친절한 한국어 메시지를 보여줘.
 - 초보자용으로 주석을 한국어로 달고, main.py 전체 코드를 한 번에 줘.</pre></div>
   <ul>
     <li>누를 때마다 다른 값 → 파일이 아니라 그 순간 창구에서 받아옴 = "살아있는 데이터"</li>
   </ul>
   <div class="codewrap improve"><span class="label">③ 프롬프트 개선 (예시)</span><pre>좋아! 여기서 이어서 고쳐줘.
-- 받아온 JSON 원본도 접었다 펼 수 있게(st.expander) 보여줘. 어떻게 생겼는지 궁금해.
+- 받아온 JSON 원본도 접었다 펼 수 있게 보여줘. 어떻게 생겼는지 궁금해.
 - 고양이 상식을 한국어로 번역해서 함께 보여주면 더 좋겠어.
 - 버튼 색과 카드를 따뜻한 노란 톤으로 예쁘게 꾸며줘.</pre></div>
   <div class="callout tip">
@@ -146,8 +146,8 @@
 - 사용자가 유튜브 채널 ID(예: UC_x5XG1OV2P6uZZ5FSM9Ttw)를 입력하면,
   YouTube Data API v3의 channels 창구에 requests로 요청해서
   구독자 수, 총 조회수, 영상 수를 받아와.
-- API 키는 코드에 절대 쓰지 말고 st.secrets["YOUTUBE_API_KEY"] 로 불러와.
-- 상단에 st.metric 카드 4개로 보여줘: 구독자, 총 조회수, 영상 수,
+- API 키는 코드에 절대 쓰지 말고, 비밀 금고(secrets)의 YOUTUBE_API_KEY에서 불러와.
+- 상단에 지표 카드 4개로 보여줘: 구독자, 총 조회수, 영상 수,
   그리고 '영상당 평균 조회수'(총 조회수 ÷ 영상 수, 정수로 반올림).
 - 상태코드가 200이 아니거나 채널을 못 찾으면 친절한 한국어 안내를 보여줘.
 - 한국어 라벨, 따뜻한 톤, 초보자용 한국어 주석. main.py 전체 코드를 한 번에 줘.</pre></div>
@@ -257,11 +257,10 @@ SOLAR_API_KEY = "업스테이지_콘솔에서_받은_키"</pre></div>
 
 - Solar API(모델 solar-open2, 접속 주소 https://api.upstage.ai/v1)를
   openai 라이브러리로 사용해.
-- API 키는 코드에 쓰지 말고 st.secrets["SOLAR_API_KEY"] 로 불러와.
-- reasoning_effort는 "minimal"로 지정해 줘(답이 빨리 나오게).
-- st.chat_input 으로 사용자가 메시지를 입력하면, AI의 답을
-  st.chat_message 말풍선으로 보여줘.
-- session_state에 대화 기록을 저장해서, 이전 대화를 기억하며 이어서 답하게 해줘.
+- API 키는 코드에 쓰지 말고, 비밀 금고(secrets)의 SOLAR_API_KEY에서 불러와.
+- 답이 빨리 나오도록 추론(생각) 강도는 최소로 설정해 줘.
+- 채팅 입력창으로 메시지를 보내면, AI의 답이 말풍선으로 이어지게 해줘.
+- 대화 기록을 저장해서, 이전 대화를 기억하며 이어서 답하게 해줘.
 - 시스템 프롬프트로 '너는 따뜻하고 친절한 데이터 분석 선생님이야.
   반드시 순수 한국어로만 답해'라는 성격을 줘.
 - 초보자용 한국어 주석을 달아. main.py 전체 코드를 한 번에 줘.</pre></div>
@@ -310,7 +309,7 @@ if prompt := st.chat_input("무엇이든 물어보세요"):
   <div class="codewrap improve"><span class="label">③ 프롬프트 개선 (예시)</span><pre>좋아! 여기서 이어서 고쳐줘.
 - 사이드바에 '말투 고르기'를 넣어줘(친절한 선생님 / 시크한 전문가 / 귀여운 친구).
   고른 말투가 시스템 프롬프트에 반영되게 해줘.
-- '대화 지우기' 버튼을 넣어서 session_state를 비우게 해줘.
+- '대화 지우기' 버튼을 넣어서 대화 기록을 비울 수 있게 해줘.
 - (도전) 유튜브 영상의 댓글 목록을 붙여넣으면, 그 댓글들을 맥락으로 넣어
   '전체 반응을 3줄로 요약해줘'라고 AI에게 시킬 수 있게 해줘.</pre></div>
 
@@ -339,11 +338,11 @@ if prompt := st.chat_input("무엇이든 물어보세요"):
   </div>
   <div class="codewrap prompt"><span class="label">① 샘플 프롬프트</span><pre>스트림릿 앱에 '서울 하루 혼잡 애니메이션 지도'를 만들어줘.
 
-- 실시간 혼잡 로그(매시간 자동 수집된 CSV, 그냥 pd.read_csv):
+- 실시간 혼잡 로그(매시간 자동 수집된 CSV):
   https://raw.githubusercontent.com/greatsong/modudata/main/data/seoul_congestion_log.csv
   열: 시각·지역명·혼잡도·인구max·위도·경도 (서울 명소 23곳)
 - '시각'에서 시(hour)를 뽑아, 명소별 시간대 평균 유동인구(인구max)를 구해줘.
-- plotly로 지도에 점을 찍되 animation_frame="시" 로 시간대 슬라이더·재생 버튼.
+- plotly로 지도에 점을 찍고, 시간대별로 넘어가는 애니메이션(슬라이더·재생 버튼)으로 만들어줘.
   점 크기 = 유동인구, 색 = 혼잡도, 배경 타일 없이.
 - 재생하면 새벽엔 점이 작고 낮·저녁에 커지게.</pre></div>
   <ul>
@@ -399,7 +398,7 @@ if prompt := st.chat_input("무엇이든 물어보세요"):
     <li><span class="st">아래 프롬프트로 바이브 코딩</span><br>API 문서(요청변수·샘플 응답)를 함께 붙이면 정확도↑ → 완성·배포</li>
   </ol>
   <div class="codewrap prompt"><span class="label">🗣 예제 프롬프트 (KOBIS · 항상 최신 날짜)</span><pre>KOBIS 일별 박스오피스 API로 '가장 최근(어제)' 박스오피스 TOP 10을 받아
-스트림릿으로 분석해 줘. 인증키는 st.secrets의 KOBIS_KEY에 있어.
+스트림릿으로 분석해 줘. 인증키는 비밀 금고(secrets)의 KOBIS_KEY에 있어.
 - 요청 주소: http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key={KOBIS_KEY}&targetDt={날짜}
 - 날짜(targetDt)는 고정하지 말고 '어제'를 자동 계산해서 써 (오늘 건 아직 집계 전).
 - 순위·영화명·관객수·누적관객·스크린수를 표로, 관객수 상위 5편은 막대그래프로.

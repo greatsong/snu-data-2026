@@ -122,12 +122,12 @@ SUPABASE_KEY = "여기에_anon_public_키_붙여넣기"</pre></div>
   </ul>
   <div class="codewrap prompt"><span class="label">① 샘플 프롬프트</span><pre>스트림릿(streamlit) '약속 잡기' 앱 하나(main.py)를 만들어줘. 조건:
 
-- supabase 라이브러리로 Supabase를 데이터 저장소로 써.
-  접속은 st.secrets["SUPABASE_URL"], st.secrets["SUPABASE_KEY"] 로.
+- Supabase를 데이터 저장소로 써.
+  접속 정보는 비밀 금고(secrets)의 SUPABASE_URL, SUPABASE_KEY에서 불러와.
 - 저장 테이블 이름은 votes, 열은 name(text), times(text)야.
 - 화면에 이름 입력창과 '가능한 시간' 다중 선택, '제출' 버튼을 둬.
-- 제출을 누르면 그 사람의 이름과 가능시간을 votes 테이블에 한 줄 추가(insert).
-- 아래에는 지금까지 제출된 전체 명단을 select로 읽어 표로 보여줘.
+- 제출을 누르면 그 사람의 이름과 가능시간을 votes 테이블에 한 줄 추가해줘.
+- 아래에는 지금까지 제출된 전체 명단을 읽어 와 표로 보여줘.
 - 한국어 라벨, 따뜻한 톤, 초보자용 한국어 주석. main.py 전체 코드를 한 번에 줘.</pre></div>
   <ul>
     <li>AI가 아래 <b>모습</b>의 코드를 줌 (똑같지 않아도 OK)</li>

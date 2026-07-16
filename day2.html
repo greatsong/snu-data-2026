@@ -160,9 +160,9 @@
 - 데이터는 이 주소의 CSV를 pandas로 읽어:
   https://raw.githubusercontent.com/greatsong/modudata/main/data/population_latest.csv
 - 이 파일은 인코딩이 cp949(euc-kr)이고, 숫자에 천단위 쉼표(,)가 들어 있어.
-  그래서 pd.read_csv(url, encoding="cp949", thousands=",") 로 읽어줘.
+  둘 다 알아서 처리해서 읽어줘.
 - 표는 행정구역(동네)별로 되어 있고, 0세부터 100세 이상까지 남자/여자 인구 열이 있어.
-- 화면 위에 st.selectbox로 동네를 하나 고르게 해줘.
+- 화면 위에서 동네를 하나 고를 수 있게 해줘(드롭다운).
 - 고른 동네의 '인구 피라미드'를 plotly 가로 막대그래프로 그려줘.
   남자는 왼쪽(값을 음수로), 여자는 오른쪽(양수)에 두고, 세로축은 나이.
 - 한국어 라벨, 따뜻한 톤. 초보자용으로 주석을 한국어로 달아줘.
@@ -205,7 +205,7 @@ st.plotly_chart(fig, use_container_width=True)</pre></div>
     <li>켜 보고 · 마음에 안 들면 <b>대화로 개선</b> · 여기서도 세 박자</li>
   </ul>
   <div class="codewrap improve"><span class="label">③ 프롬프트 개선 (예시)</span><pre>좋아! 이제 여기에 지표 카드를 더해줘.
-- 그래프 위에 st.metric 카드 3개를 나란히: 총인구, 평균연령, 고령화율(65세 이상 비율, %).
+- 그래프 위에 지표 카드 3개를 나란히: 총인구, 평균연령, 고령화율(65세 이상 비율, %).
 - 남자 막대는 파란색, 여자 막대는 분홍색으로.
 - x축(인구 수)에 음수가 그대로 보이면 이상하니, 눈금 숫자는 절댓값으로 보여줘.
 - 피라미드 아래에 '이 동네는 아이가 많은 편인가요, 어르신이 많은 편인가요?'
@@ -238,15 +238,14 @@ st.plotly_chart(fig, use_container_width=True)</pre></div>
   </div>
   <div class="codewrap prompt"><span class="label">① 샘플 프롬프트</span><pre>스트림릿 앱(main.py)에 '전국 고령화 단계구분도'를 만들어줘.
 
-- 인구 데이터(gzip CSV, 그냥 pd.read_csv(url)로 읽힘):
+- 인구 데이터(압축 CSV인데 판다스로 그냥 읽혀):
   https://raw.githubusercontent.com/greatsong/modudata/main/data/population_yearly.csv.gz
   2015~2026년(매년 6월) 전국 읍·면·동, 1세 단위 인구야. '2026년'만 골라줘.
 - 시군구 경계 GeoJSON(코드 5자리):
   https://raw.githubusercontent.com/greatsong/modudata/main/data/boundaries/sigungu_kr.geojson
 - 각 동 '코드'의 앞 5자리로 묶어 시군구별 65세 이상 비율(%)을 계산해줘.
-- plotly express의 px.choropleth로, 배경 지도(타일) 없이 경계만 — 고령화율 높을수록 진하게.
-  (fig.update_geos(fitbounds="locations", visible=False) 로 타일 끄기)
-- 지역은 이름이 아니라 '코드'로 맞춰줘 — featureidkey="properties.코드", 코드는 문자열로.
+- plotly 단계구분도로, 배경 지도(타일) 없이 경계만 그리고 고령화율 높을수록 진하게 칠해줘.
+- 지역은 이름이 아니라 '코드'로 정확히 맞춰줘. 경계 파일의 '코드' 속성과 짝짓고, 코드는 문자열로 다뤄.
 - 마우스를 올리면 시군구 이름과 고령화율(%)이 보이게.</pre></div>
   <ul>
     <li>지도 뜨면 색 진한 곳 눈으로 찾기 · 세 박자대로 <b>③ 개선</b></li>
@@ -281,7 +280,7 @@ st.plotly_chart(fig, use_container_width=True)</pre></div>
 - 경계(코드 10자리):
   https://raw.githubusercontent.com/greatsong/modudata/main/data/boundaries/seoul_dong.geojson
 - 같은 population_yearly에서 서울(시도) 2026년만 골라, 동별 65세 이상 비율(%)을 계산.
-- 코드로 맞춰 칠하고(featureidkey="properties.코드", 코드 문자열), 호버에 동 이름·고령화율(%).
+- 지역 이름 말고 '코드'로 경계와 짝지어 칠하고(코드는 문자열), 마우스를 올리면 동 이름·고령화율(%)이 보이게.
 (경기도를 볼 사람은 파일명만 gyeonggi_dong.geojson 으로 바꾸면 됨)</pre></div>
   <div class="callout mini">
     <div class="h">🖼️ Padlet에 올리기</div>
