@@ -40,7 +40,7 @@
     <tr><td>50~60′</td><td>☕ 휴식</td><td></td></tr>
     <tr><td>60~115′</td><td>2. 유튜브 채널 대시보드</td><td>구글 클라우드 키 3단계 → secrets → st.metric 카드. <b>보안 강조</b></td></tr>
     <tr><td>115~125′</td><td>☕ 휴식</td><td></td></tr>
-    <tr><td>125~180′</td><td>3. 나만의 AI 채팅앱</td><td>Gemini 키 → chat_input/message/session_state → 시스템 프롬프트</td></tr>
+    <tr><td>125~180′</td><td>3. 나만의 AI 채팅앱</td><td>Solar 키 → chat_input/message/session_state → 시스템 프롬프트</td></tr>
     <tr><td>~180′</td><td>🌱 씨앗</td><td>GBIF·NASA·USGS 예고, 5일차 연결</td></tr>
   </table>
   <div class="callout say">
@@ -95,7 +95,7 @@
   <h3>3. 나만의 AI 채팅앱 (125~180′)</h3>
   <div class="callout say">
     <div class="h">🎙️ 멘트 — 데이터 API와 다른 점</div>
-    <p>“유튜브 API는 물어보면 <b>늘 같은 답</b>이었죠? 이번 AI는 <b>매번 새로 문장을 만들어</b> 냅니다. 같은 질문을 두 번 해서 답이 다른 걸 <b>직접 보여</b> 주세요.” Gemini 키는 AI 스튜디오에서, <b>다시 화면 크게 띄우고 같이 클릭</b>. secrets에 유튜브 키와 <b>나란히</b> 추가.</p>
+    <p>“유튜브 API는 물어보면 <b>늘 같은 답</b>이었죠? 이번 AI는 <b>매번 새로 문장을 만들어</b> 냅니다. 같은 질문을 두 번 해서 답이 다른 걸 <b>직접 보여</b> 주세요.” Solar 키는 업스테이지 콘솔(console.upstage.ai)에서, <b>다시 화면 크게 띄우고 같이 클릭</b>. secrets에 유튜브 키와 <b>나란히</b> 추가. "우리나라 회사(업스테이지)가 만든 AI를 무료로 부른다"는 점도 한마디 얹어 주세요.</p>
   </div>
   <div class="callout theory">
     <div class="h">📖 이론 심화 — 데이터 API vs LLM API</div>
@@ -103,11 +103,11 @@
   </div>
   <div class="callout err">
     <div class="h">🧯 예상 오류</div>
-    <p><b>키 하드코딩(다시 경고)</b> → AI 키도 반드시 <code>st.secrets</code>. 유튜브와 똑같은 습관. · <b>ModuleNotFoundError</b> → <code>requirements.txt</code> 에 AI 라이브러리(<code>google-generativeai</code> 등) 추가. · <b>모델명 오타/구버전</b> → <code>gemini-2.5-flash</code> 로 통일. · <b>대화가 기억 안 됨</b> → <code>session_state</code> 초기화 위치 문제. AI에게 “대화가 이어지게 session_state에 저장해줘”로 재요청. · <b>429</b> → 무료 한도 초과, 잠시 후.</p>
+    <p><b>키 하드코딩(다시 경고)</b> → AI 키도 반드시 <code>st.secrets</code>. 유튜브와 똑같은 습관. · <b>ModuleNotFoundError</b> → <code>requirements.txt</code> 에 AI 라이브러리(<code>openai</code>) 추가. · <b>모델명 오타/구버전</b> → <code>solar-open2</code> 로 통일(접속 주소 <code>https://api.upstage.ai/v1</code> 확인). · <b>답이 안 나오고 한참 조용</b> → <code>reasoning_effort="minimal"</code> 빠졌는지 확인(추론 모델이라 이 옵션이 없으면 수십 초 생각부터 함). · <b>대화가 기억 안 됨</b> → <code>session_state</code> 초기화 위치 문제. AI에게 “대화가 이어지게 session_state에 저장해줘”로 재요청. · <b>429</b> → 무료 한도 초과, 잠시 후.</p>
   </div>
   <div class="callout ask">
     <div class="h">🙋 예상 질문</div>
-    <p><b>“돈 나가요?”</b> → 오늘 쓰는 건 <b>무료 한도</b> 안. 유튜브·Gemini 모두 개인 실습 수준은 무료 범위. 다만 키를 남이 주워 쓰면 그 사람이 내 한도를 태울 수 있으니 <b>보안</b>이 곧 절약. · <b>“키가 남한테 보이면 어떻게 돼요?”</b> → 남이 내 신분증으로 서비스를 씀 → 한도 소진·요금·정지 위험. 그래서 <b>secrets에 보관 + 저장소는 비공개(또는 .gitignore)</b>. 이미 노출됐다면 콘솔에서 <b>키 삭제 후 재발급</b>이 정답.</p>
+    <p><b>“돈 나가요?”</b> → 오늘 쓰는 건 <b>무료 한도</b> 안. 유튜브·Solar 모두 개인 실습 수준은 무료 범위(Solar는 베타 기간 무료). 다만 키를 남이 주워 쓰면 그 사람이 내 한도를 태울 수 있으니 <b>보안</b>이 곧 절약. · <b>“키가 남한테 보이면 어떻게 돼요?”</b> → 남이 내 신분증으로 서비스를 씀 → 한도 소진·요금·정지 위험. 그래서 <b>secrets에 보관 + 저장소는 비공개(또는 .gitignore)</b>. 이미 노출됐다면 콘솔에서 <b>키 삭제 후 재발급</b>이 정답.</p>
   </div>
   <div class="callout say">
     <div class="h">🎙️ 멘트 — 과금 폭탄 예방 3가지 (교재 💸 박스)</div>
@@ -115,7 +115,7 @@
   </div>
   <div class="callout theory">
     <div class="h">📖 참고 — 챗지피티·클로드 키 (교재 🗝️ 표)</div>
-    <p>수강생 교재에 <b>ChatGPT(platform.openai.com)·Claude(platform.claude.com)</b> 발급 안내 표가 있습니다. 수업에선 Gemini만 실습하고 표는 “다른 회사도 방법은 비슷하다” 수준으로만 소개. 확인할 핵심 둘: ①두 곳 모두 <b>선불 크레딧</b>(카드 등록/충전)이 필요 — Gemini와 달리 무료 한도가 사실상 없음. ②<b>웹사이트 구독(ChatGPT Plus 등)과 API 크레딧은 별개</b> — 구독 중이어도 API는 따로 충전해야 함(가장 흔한 오해). 키가 <b>발급 순간 한 번만</b> 보인다는 것도 공통.</p>
+    <p>수강생 교재에 <b>Gemini(aistudio.google.com)·ChatGPT(platform.openai.com)·Claude(platform.claude.com)</b> 발급 안내 표가 있습니다. 수업에선 Solar만 실습하고 표는 “다른 회사도 방법은 비슷하다” 수준으로만 소개. 확인할 핵심 둘: ①Gemini는 무료 한도가 있지만 ChatGPT·Claude는 <b>선불 크레딧</b>(카드 등록/충전)이 필요 — Solar와 달리 무료 한도가 사실상 없음. ②<b>웹사이트 구독(ChatGPT Plus 등)과 API 크레딧은 별개</b> — 구독 중이어도 API는 따로 충전해야 함(가장 흔한 오해). 키가 <b>발급 순간 한 번만</b> 보인다는 것도 공통.</p>
   </div>
 
   <h3>4. 실시간 API → 애니메이션 (하이라이트 데모 · 시간 되면)</h3>

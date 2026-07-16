@@ -209,15 +209,16 @@ if channel_id:
 
   <h3>AI 열쇠 받기</h3>
   <ul>
-    <li>예시 → 구글 <b>Gemini</b></li>
-    <li>발급처 → Google AI 스튜디오 (<a href="https://aistudio.google.com" target="_blank" rel="noopener">aistudio.google.com</a>) → <b>Get API key</b></li>
-    <li>모델 → <code>gemini-2.5-flash</code> (빠름·무료 한도 넉넉) · 다른 회사 AI도 방식 동일</li>
+    <li>예시 → <b>Solar</b>(솔라) — 우리나라 AI 회사 <b>업스테이지</b>의 모델 (한국어 강함 · 무료 키)</li>
+    <li>발급처 → 업스테이지 콘솔 (<a href="https://console.upstage.ai" target="_blank" rel="noopener">console.upstage.ai</a>) → 로그인 → <b>API Keys</b> → <b>Create API key</b></li>
+    <li>모델 → <code>solar-open2</code> · <b>카드 등록 없이</b> 무료 키 · 다른 회사 AI도 방식 동일</li>
   </ul>
   <div class="callout tip">
-    <div class="h">🗝️ 챗지피티·클로드 열쇠도 방법은 비슷 (핵심만)</div>
+    <div class="h">🗝️ 제미나이·챗지피티·클로드 열쇠도 방법은 비슷 (핵심만)</div>
     <table class="daymap">
       <thead><tr><th>AI</th><th>발급처</th><th>경로</th><th>비용</th></tr></thead>
       <tbody>
+        <tr><td><b>Gemini</b>(구글)</td><td><a href="https://aistudio.google.com" target="_blank" rel="noopener">aistudio.google.com</a></td><td>로그인 → <b>Get API key</b> → 새 키 만들기</td><td>무료 한도 넉넉(카드 불필요)</td></tr>
         <tr><td><b>ChatGPT</b>(OpenAI)</td><td><a href="https://platform.openai.com" target="_blank" rel="noopener">platform.openai.com</a></td><td>로그인 → <b>API keys</b> → <b>Create new secret key</b></td><td>카드 등록 + 크레딧 충전(선불)</td></tr>
         <tr><td><b>Claude</b>(Anthropic)</td><td><a href="https://platform.claude.com" target="_blank" rel="noopener">platform.claude.com</a></td><td>로그인 → <b>API Keys</b> → <b>Create Key</b></td><td>크레딧 충전(선불, 소액 가능)</td></tr>
       </tbody>
@@ -225,14 +226,14 @@ if channel_id:
     <ul>
       <li>키는 <b>발급 순간 한 번만</b> 보여줌 → 바로 복사해 <code>secrets.toml</code>에 보관</li>
       <li>챗지피티·클로드 <b>웹사이트 구독과 API 크레딧은 별개</b> — 구독 중이어도 API는 따로 충전</li>
-      <li>채팅앱 프롬프트에서 "구글 Gemini API" 부분만 <b>"OpenAI API"</b> 또는 <b>"Claude API(Anthropic)"</b>로 바꿔 말하면 AI가 코드를 알아서 바꿔 줌</li>
+      <li>채팅앱 프롬프트에서 "Solar API" 부분만 <b>"구글 Gemini API"</b> 또는 <b>"Claude API(Anthropic)"</b>로 바꿔 말하면 AI가 코드를 알아서 바꿔 줌</li>
     </ul>
   </div>
   <div class="callout warn">
     <div class="h">💸 과금 폭탄 주의 — 두 가지만 지키면 안전</div>
     <ul>
       <li><b>① 키 유출 = 남이 내 카드로 씀</b> — GitHub에 올라간 키는 봇이 <b>몇 분 안에</b> 주워감. 그래서 secrets 습관이 중요. 유출 의심 시 <b>즉시 그 키 삭제 후 재발급</b></li>
-      <li><b>② 좋은 모델 = 비싼 모델</b> — 최고급 모델은 저렴한 모델의 수십 배 요금. 연습·실습엔 <b>빠르고 저렴한 모델</b>로 충분 (Gemini <b>flash</b>(무료 한도) · GPT <b>mini 계열</b> · Claude <b>Haiku</b>)</li>
+      <li><b>② 좋은 모델 = 비싼 모델</b> — 최고급 모델은 저렴한 모델의 수십 배 요금. 연습·실습엔 <b>무료·저렴한 모델</b>로 충분 (<b>Solar</b>(무료 베타) · Gemini <b>flash</b>(무료 한도) · GPT <b>mini 계열</b> · Claude <b>Haiku</b>)</li>
       <li>유료 결제 시 콘솔에서 <b>월 사용 한도(예산)</b>를 꼭 설정 — 실수해도 한도에서 멈춤</li>
     </ul>
   </div>
@@ -244,7 +245,7 @@ if channel_id:
     </ul>
   </div>
   <div class="codewrap code"><span class="label">.streamlit/secrets.toml (한 파일에 여러 키)</span><pre>YOUTUBE_API_KEY = "유튜브_키"
-GEMINI_API_KEY = "AI_스튜디오에서_받은_키"</pre></div>
+SOLAR_API_KEY = "업스테이지_콘솔에서_받은_키"</pre></div>
 
   <h3>대화가 이어지는 채팅앱</h3>
   <ul>
@@ -253,28 +254,29 @@ GEMINI_API_KEY = "AI_스튜디오에서_받은_키"</pre></div>
   </ul>
   <div class="codewrap prompt"><span class="label">① 샘플 프롬프트</span><pre>스트림릿(streamlit)으로 AI 채팅앱 하나(main.py)를 만들어줘.
 
-- 구글 Gemini API(모델 gemini-2.5-flash)를 사용해.
-- API 키는 코드에 쓰지 말고 st.secrets["GEMINI_API_KEY"] 로 불러와.
+- Solar API(모델 solar-open2, 접속 주소 https://api.upstage.ai/v1)를
+  openai 라이브러리로 사용해.
+- API 키는 코드에 쓰지 말고 st.secrets["SOLAR_API_KEY"] 로 불러와.
+- reasoning_effort는 "minimal"로 지정해 줘(답이 빨리 나오게).
 - st.chat_input 으로 사용자가 메시지를 입력하면, AI의 답을
   st.chat_message 말풍선으로 보여줘.
 - session_state에 대화 기록을 저장해서, 이전 대화를 기억하며 이어서 답하게 해줘.
-- 시스템 프롬프트로 '너는 따뜻하고 친절한 데이터 분석 선생님이야'라는 성격을 줘.
-- 한국어로 대화하고, 초보자용 한국어 주석을 달아. main.py 전체 코드를 한 번에 줘.</pre></div>
+- 시스템 프롬프트로 '너는 따뜻하고 친절한 데이터 분석 선생님이야.
+  반드시 순수 한국어로만 답해'라는 성격을 줘.
+- 초보자용 한국어 주석을 달아. main.py 전체 코드를 한 번에 줘.</pre></div>
 
   <ul><li>아래는 받게 될 코드의 <b>모습</b> 예시 · 라이브러리 이름·형태 조금 달라도 OK</li></ul>
   <div class="codewrap code"><span class="label">② AI가 준 코드 (예시)</span><pre>import streamlit as st
-import google.generativeai as genai
+from openai import OpenAI
 
 st.title("🤖 나만의 AI 채팅")
 
-# 🔑 AI 키도 비밀 금고에서 꺼냅니다
-genai.configure(api_key=st.secrets["GEMINI_API_KEY"])
+# 🔑 AI 키도 비밀 금고에서 꺼냅니다 (접속 주소만 Solar로)
+client = OpenAI(api_key=st.secrets["SOLAR_API_KEY"],
+                base_url="https://api.upstage.ai/v1")
 
-# 성격 부여(시스템 프롬프트) + 매번 새 답을 '생성'하는 모델
-model = genai.GenerativeModel(
-    "gemini-2.5-flash",
-    system_instruction="너는 따뜻하고 친절한 데이터 분석 선생님이야."
-)
+# 성격 부여(시스템 프롬프트)
+SYSTEM = "너는 따뜻하고 친절한 데이터 분석 선생님이야. 반드시 순수 한국어로만 답해."
 
 # 지난 대화를 기억하는 메모장
 if "messages" not in st.session_state:
@@ -291,8 +293,14 @@ if prompt := st.chat_input("무엇이든 물어보세요"):
     with st.chat_message("user"):
         st.markdown(prompt)
 
-    # AI가 '생성'한 답 받기
-    reply = model.generate_content(prompt).text
+    # AI가 '생성'한 답 받기 (대화 기록을 통째로 보내 기억하게)
+    resp = client.chat.completions.create(
+        model="solar-open2",
+        messages=[{"role": "system", "content": SYSTEM}]
+                 + st.session_state.messages,
+        reasoning_effort="minimal",  # '골똘히 생각' 모드 끄기 → 빠릿한 채팅
+    )
+    reply = resp.choices[0].message.content
     st.session_state.messages.append({"role": "assistant", "content": reply})
     with st.chat_message("assistant"):
         st.markdown(reply)</pre></div>
