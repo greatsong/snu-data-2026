@@ -111,6 +111,10 @@
     <div class="h">📖 이론 심화 — cron 문법</div>
     <p><code>"5 * * * *"</code>는 다섯 칸: <b>분 시 일 월 요일</b>. <code>5 * * * *</code>=매시간 5분, <code>0 3 * * *</code>=매일 3시(UTC). GitHub Actions의 스케줄은 <b>UTC 기준</b>이라 한국시간(KST)은 <b>+9시간</b>. 또한 무료 러너 부하로 <b>정시보다 몇 분 늦게</b> 도는 것이 정상이라, 매시 0분보다 <b>5분처럼 살짝 뒤</b>를 권합니다. <code>workflow_dispatch</code>는 수동 실행 버튼을 추가하는 트리거.</p>
   </div>
+  <div class="callout say">
+    <div class="h">🎙️ 하이라이트 시연 — 예제 저장소 Actions 탭 라이브로 열기</div>
+    <p>수강생 교재의 🛰️ 박스에 맞춰 <b><a href="https://github.com/greatsong/modudata/actions" target="_blank" rel="noopener">modudata의 Actions 탭</a>을 화면에 직접 띄우세요.</b> 초록 체크가 줄줄이 쌓인 실행 기록을 보여주며: “여러분이 5일 내내 쓴 기온·인구·지하철 데이터, 사실 이 로봇들이 매일·매시간·매월 갱신하고 있었어요. 2일차 인구가 '지난달 최신'이었던 비밀이 이겁니다.” 커밋 목록의 🤖 커밋들을 보여주면 각인 효과가 큽니다. 개념(cron) → 실물(Actions 로그) → “여러분 프로젝트에도 붙일 수 있다” 순서로 25분 중 5분 배정.</p>
+  </div>
   <div class="callout err">
     <div class="h">🧯 예상 오류 (자동화/API)</div>
     <p><b>cron이 한국시간인 줄 알고 9시간 어긋남</b> → UTC 기준임을 강조(KST = UTC+9). · <b>Actions가 안 도는 것 같음</b> → 무료 러너는 지연이 흔함. 급하면 <code>workflow_dispatch</code> 수동 버튼으로 즉시 테스트. · <b>data.go.kr 인증키 오류</b> → serviceKey의 <b>인코딩/디코딩</b> 두 형태 중 맞는 걸로 교체, 응답 포맷은 <code>_type=json</code>. · <b>키가 코드에 노출</b> → 반드시 <b>GitHub Secrets</b>/<code>st.secrets</code>로. 카카오는 요청 <b>헤더</b> <code>Authorization: KakaoAK</code> 형식 지키기.</p>
