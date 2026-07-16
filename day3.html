@@ -407,7 +407,7 @@ if prompt := st.chat_input("무엇이든 물어보세요"):
   </ol>
   <div class="codewrap prompt"><span class="label">🗣 예제 프롬프트 (KOBIS · 항상 최신 날짜)</span><pre>KOBIS 일별 박스오피스 API로 '가장 최근(어제)' 박스오피스 TOP 10을 받아
 스트림릿으로 분석해 줘. 인증키는 비밀 금고(secrets)의 KOBIS_KEY에 있어.
-- 요청 주소: http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key={KOBIS_KEY}&targetDt={날짜}
+- 요청 주소: http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key={KOBIS_KEY}&amp;targetDt={날짜}
 - 날짜(targetDt)는 고정하지 말고 '어제'를 자동 계산해서 써 (오늘 건 아직 집계 전).
 - 순위·영화명·관객수·누적관객·스크린수를 표로, 관객수 상위 5편은 막대그래프로.
 - 숫자가 문자열로 오니 숫자로 바꿔서 정렬·그래프.

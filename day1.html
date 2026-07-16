@@ -207,14 +207,14 @@ function show(t){
 
 - 파일 하나로 끝나고, 외부 설치 없이 브라우저에서 바로 열려야 해(GitHub Pages에 올릴 거야).
 - 데이터는 'API 키가 필요 없는' Open-Meteo API에서 브라우저가 직접 불러오게 해줘(별도 서버 없이):
-  https://api.open-meteo.com/v1/forecast?latitude=37.57&longitude=126.98&current=temperature_2m,relative_humidity_2m,wind_speed_10m&hourly=temperature_2m&daily=temperature_2m_max,temperature_2m_min&timezone=Asia/Seoul
+  https://api.open-meteo.com/v1/forecast?latitude=37.57&amp;longitude=126.98&amp;current=temperature_2m,relative_humidity_2m,wind_speed_10m&amp;hourly=temperature_2m&amp;daily=temperature_2m_max,temperature_2m_min&amp;timezone=Asia/Seoul
 - 상단 요약 카드: 현재 기온, 습도, 풍속.
 - 오늘 시간대별 기온 꺾은선 그래프 1개(그래프 라이브러리는 CDN으로).
 - 7일간 최고/최저 기온도 보여줘.
 - 따뜻한 크림·노란색 톤, 한국어 라벨, 초보자도 읽기 쉽게.
 - 완성된 weather.html 전체 코드를 한 번에 줘.</pre></div>
   <ol class="steps" start="2">
-    <li><span class="st">받은 코드를 GitHub에 새 파일로</span><br>같은 저장소에 <code>weather.html</code> 만들고 붙여넣기 · 커밋</li>
+    <li><span class="st">받은 코드를 GitHub에 새 파일로</span><br>같은 저장소에 <code>weather.html</code> 만들고 붙여넣기 · 커밋<br><span style="font-size:.86em;opacity:.75">Pages 설정은 <b>저장소당 한 번</b> — §1에서 이미 켜 둔 저장소라, 커밋만 하면 잠시 후(1분 안팎) 자동 배포됩니다</span></li>
     <li><span class="st">주소로 확인</span><br><code>https://사용자이름.github.io/my-mbti/weather.html</code> · 새로고침하면 값이 바뀜(실시간!)</li>
   </ol>
   <ul>
