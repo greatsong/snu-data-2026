@@ -32,7 +32,7 @@
     // ③ 아직 안 열린 일차 페이지 직접 접근 차단
     var me = dayOf(file);
     if (me > released) {
-      document.title = '🔒 아직 공개 전 · 데이터 분석 병아리반';
+      document.title = '🔒 아직 공개 전 · 데이터 기반 바이브 코딩 병아리반';
       var main = document.querySelector('main');
       if (main) {
         main.innerHTML =
