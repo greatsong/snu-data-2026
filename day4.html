@@ -28,7 +28,7 @@
   <div class="make-banner">
     <div class="t">🎯 오늘 만드는 것</div>
     <ul>
-      <li><b>구글시트 연동 앱</b> — 이름·가능시간 제출 → 시트에 쌓이는 약속/투표 앱</li>
+      <li><b>Supabase 연동 앱</b> — 이름·가능시간 제출 → DB에 쌓이는 약속/투표 앱</li>
       <li><b>2050년 기온 예측기</b> — 서울 연평균기온으로 미래를 예측하는 작은 AI</li>
     </ul>
   </div>
@@ -67,135 +67,113 @@
   <table class="daymap">
     <thead><tr><th>저장소</th><th>난이도</th><th>느낌</th></tr></thead>
     <tbody>
-      <tr><td><b>구글시트</b></td><td>쉬움 🐣</td><td>눈에 보이는 스프레드시트 → <b>오늘 이걸로!</b></td></tr>
-      <tr><td><b>진짜 DB</b></td><td>어려움</td><td>대용량·빠른 검색 → <b>5일차 맛보기</b></td></tr>
+      <tr><td><b>Supabase (DB)</b></td><td>쉬움 🐣</td><td>앱용 무료 DB · <b>카드 없이</b> 키 두 줄 → <b>오늘 이걸로!</b></td></tr>
+      <tr><td><b>구글시트</b></td><td>보통(셋업 관문)</td><td>눈에 보이는 스프레드시트 · 서비스계정 설정이 난관 → <b>강사 데모</b></td></tr>
+      <tr><td><b>SQL 집계 심화</b></td><td>어려움</td><td>대용량·빠른 집계 → <b>5일차 맛보기(Neon)</b></td></tr>
     </tbody>
   </table>
 
-  <h2>2. 구글시트 연동 앱 — 데이터를 쌓아 보자</h2>
+  <h2>2. Supabase 연동 앱 — 데이터를 쌓아 보자</h2>
   <ul>
-    <li>만들 것 = <b>약속 잡기/투표 앱</b></li>
-    <li>이름 + 가능시간 제출 → 시트에 한 줄씩 쌓임</li>
-    <li>오늘 세팅 중 <b>가장 무거운 부분</b> · 클릭 순서만 따라오기 🐢</li>
-  </ul>
-
-  <h3>2-1. 로봇 직원(서비스 계정) 고용하기</h3>
-  <ul>
-    <li>앱이 내 시트에 쓰려면 <b>출입 권한</b> 필요</li>
-    <li>내 아이디·비번 넣기 = 위험 → <b>서비스 계정</b> 사용</li>
+    <li>만들 것 = <b>약속 잡기/투표 앱</b> · 이름 + 가능시간 제출 → DB에 한 줄씩 쌓임</li>
+    <li><b>Supabase</b> = 앱을 위해 만들어진 무료 DB · <b>카드 등록 없이</b> · 키 두 줄이면 연결</li>
   </ul>
   <div class="callout tip">
-    <div class="h">💡 서비스 계정 = 로봇 직원</div>
+    <div class="h">💡 왜 구글시트 말고 Supabase?</div>
     <ul>
-      <li>내 앱 전용 로봇 직원</li>
-      <li>자기 이메일(<code>...@....iam.gserviceaccount.com</code>) + 신분증 <b>JSON 키</b> 보유</li>
-      <li>시트를 로봇 이메일과 <b>공유</b> → 로봇이 대신 읽고 씀 (내 개인 계정 무관)</li>
+      <li>구글시트는 <b>서비스계정 · JSON 키 · 시트 공유</b> 3단 셋업이 완전입문에 최대 난관</li>
+      <li>Supabase는 <b>URL · 키 문자열 2개</b> 복붙이면 끝 — '로봇 계정'·'공유' 개념 없음</li>
+      <li>구글시트 방식은 이 절 끝에서 <b>강사 데모</b>로 잠깐 구경만</li>
     </ul>
   </div>
 
-  <h3>2-2. 클릭 순서 (아주 자세히)</h3>
+  <h3>2-1. Supabase 프로젝트·테이블 만들기 (클릭)</h3>
   <ul>
-    <li>진행 위치 = 구글 클라우드 콘솔(<a href="https://console.cloud.google.com" target="_blank" rel="noopener"><code>console.cloud.google.com</code></a>)</li>
+    <li>진행 위치 = <a href="https://supabase.com" target="_blank" rel="noopener"><code>supabase.com</code></a> · <b>카드 등록 없음</b> · 무료</li>
   </ul>
   <ol class="steps">
-    <li><span class="st">프로젝트 만들기</span><br>왼쪽 위 프로젝트 선택 → <b>새 프로젝트</b> → 이름(<code>my-sheet-app</code>) → <b>만들기</b> → 선택 확인</li>
-    <li><span class="st">API 두 개 켜기</span><br><b>API 및 서비스 → 라이브러리</b> → <code>Google Sheets API</code> 사용 설정 → <code>Google Drive API</code>도 사용 설정 (둘 다 필수!)</li>
-    <li><span class="st">서비스 계정 만들기</span><br><b>사용자 인증 정보 → 만들기 → 서비스 계정</b> → 이름(<code>sheet-bot</code>) → <b>완료</b> → 로봇 이메일 생성</li>
-    <li><span class="st">JSON 키 다운로드</span><br>서비스 계정 클릭 → <b>키 → 키 추가 → 새 키 → JSON → 만들기</b> → <code>.json</code> 다운로드. <b>로봇 신분증, 공유 금지</b></li>
-    <li><span class="st">시트를 로봇과 공유</span><br>시트 생성(<code>약속시트</code>) → <b>공유</b> → 서비스 계정 이메일 붙여넣기 → <b>편집자</b> 권한. <b>빠뜨리면 앱이 시트 못 봄</b></li>
+    <li><span class="st">가입 + 새 프로젝트</span><br>GitHub/이메일로 가입(카드 X) → <b>New project</b> → 이름 + DB 비밀번호 정하고 생성. 준비 1~2분</li>
+    <li><span class="st">테이블 만들기</span><br>왼쪽 <b>Table Editor → New table</b> → 이름 <code>votes</code> → 열 추가 <code>name</code>(text)·<code>times</code>(text) → 저장 (<code>id</code>·시각은 자동)</li>
+    <li><span class="st">RLS 잠금 풀기 (연습용)</span><br>새 테이블은 <b>기본 잠김(RLS)</b>이라 그냥 두면 데이터가 안 보여요 → 테이블의 <b>RLS 비활성화</b>(연습용) 또는 '모두 읽기·쓰기' 정책 추가. AI에게 "연습용이니 RLS 꺼는 법 알려줘"라고 물어도 됨</li>
+    <li><span class="st">URL·키 복사</span><br><b>Settings → API</b> → <b>Project URL</b>과 <b>anon public 키</b> 복사. 문자열 2개, 이게 전부!</li>
   </ol>
   <div class="callout warn">
-    <div class="h">⚠️ 가장 흔한 실수 두 가지</div>
+    <div class="h">🔑 키 두 종류만 구분</div>
     <ul>
-      <li>① Sheets·Drive API 둘 다 안 켬</li>
-      <li>② 시트를 서비스 계정 이메일과 공유 안 함</li>
-      <li>→ 막히면 이 둘부터 확인</li>
+      <li><b>anon(public) 키</b> = 앱에 넣어도 되는 공개용(RLS가 지킴) → 오늘 이거 사용</li>
+      <li><b>service_role 키</b> = 모든 잠금 여는 마스터 → 앱·GitHub 업로드 금지(Secrets에만)</li>
     </ul>
   </div>
 
-  <h3>2-3. 비밀 금고에 키 넣기 + 라이브러리</h3>
-  <ul>
-    <li>필요 라이브러리 = <code>st-gsheets-connection</code> → <code>requirements.txt</code>에 기입</li>
-  </ul>
+  <h3>2-2. 비밀 금고에 키 넣기 + 라이브러리</h3>
   <div class="codewrap code"><span class="label">requirements.txt</span><pre>streamlit
-st-gsheets-connection
+supabase
 pandas</pre></div>
+  <div class="codewrap code"><span class="label">.streamlit/secrets.toml — 딱 두 줄</span><pre>SUPABASE_URL = "https://xxxx.supabase.co"
+SUPABASE_KEY = "여기에_anon_public_키_붙여넣기"</pre></div>
   <ul>
-    <li>JSON 키 내용을 <code>.streamlit/secrets.toml</code>에 옮겨 담기 (값은 JSON에서 복사)</li>
+    <li>구글시트는 JSON 10여 줄이 필요했지만 → Supabase는 <b>2줄</b>. 배포 시 스트림릿 <b>Settings → Secrets</b>에 동일 붙여넣기</li>
   </ul>
-  <div class="codewrap code"><span class="label">.streamlit/secrets.toml (모양)</span><pre>[connections.gsheets]
-spreadsheet = "여기에_구글시트_주소_붙여넣기"
-type = "service_account"
-project_id = "내-프로젝트-id"
-private_key_id = "…"
-private_key = "-----BEGIN PRIVATE KEY-----\n…\n-----END PRIVATE KEY-----\n"
-client_email = "sheet-bot@…iam.gserviceaccount.com"
-client_id = "…"
-auth_uri = "https://accounts.google.com/o/oauth2/auth"
-token_uri = "https://oauth2.googleapis.com/token"</pre></div>
-  <div class="callout warn">
-    <div class="h">⚠️ 여기서 잘 막혀요</div>
-    <ul>
-      <li><code>private_key</code> = 따옴표로 감싸기, 줄바꿈 <code>\n</code> 그대로</li>
-      <li>들여쓰기·따옴표 하나만 어긋나도 연결 실패</li>
-      <li>배포 시 → 스트림릿 <b>Settings → Secrets</b>에 동일 붙여넣기</li>
-    </ul>
-  </div>
 
-  <h3>2-4. AI에게 앱 주문하기 (①②③)</h3>
+  <h3>2-3. AI에게 앱 주문하기 (①②③)</h3>
   <ul>
-    <li>핵심 두 줄 → 읽기 <code>conn.read()</code> · 저장 <code>conn.update()</code></li>
+    <li>핵심 두 줄 → 저장 <code>.insert()</code> · 읽기 <code>.select()</code></li>
   </ul>
   <div class="codewrap prompt"><span class="label">① 샘플 프롬프트</span><pre>스트림릿(streamlit) '약속 잡기' 앱 하나(main.py)를 만들어줘. 조건:
 
-- st-gsheets-connection 라이브러리로 구글시트를 데이터 저장소로 써.
-- 화면에 이름 입력창과 '가능한 시간' 선택(여러 개 체크 가능),
-  그리고 '제출' 버튼을 둬.
-- 제출을 누르면 그 사람의 이름과 가능한 시간을 구글시트에 한 줄 추가해줘.
-- 아래에는 지금까지 제출된 전체 명단을 표로 보여줘.
-- 시트를 읽을 때는 최신 내용이 바로 보이도록 항상 새로 읽어줘(ttl=0).
+- supabase 라이브러리로 Supabase를 데이터 저장소로 써.
+  접속은 st.secrets["SUPABASE_URL"], st.secrets["SUPABASE_KEY"] 로.
+- 저장 테이블 이름은 votes, 열은 name(text), times(text)야.
+- 화면에 이름 입력창과 '가능한 시간' 다중 선택, '제출' 버튼을 둬.
+- 제출을 누르면 그 사람의 이름과 가능시간을 votes 테이블에 한 줄 추가(insert).
+- 아래에는 지금까지 제출된 전체 명단을 select로 읽어 표로 보여줘.
 - 한국어 라벨, 따뜻한 톤, 초보자용 한국어 주석. main.py 전체 코드를 한 번에 줘.</pre></div>
   <ul>
     <li>AI가 아래 <b>모습</b>의 코드를 줌 (똑같지 않아도 OK)</li>
   </ul>
   <div class="codewrap code"><span class="label">② AI가 준 코드 (예시)</span><pre>import streamlit as st
 import pandas as pd
-from streamlit_gsheets import GSheetsConnection
+from supabase import create_client
 
 st.title("🗓️ 우리 언제 모일까?")
 
-# 구글시트 연결 (secrets.toml의 [connections.gsheets] 사용)
-conn = st.connection("gsheets", type=GSheetsConnection)
-
-# 지금까지 쌓인 데이터 읽기 — ttl=0 이면 항상 최신본을 새로 읽음
-df = conn.read(ttl=0)
+# Supabase 연결 — secrets의 URL·키 두 줄이면 끝
+sb = create_client(st.secrets["SUPABASE_URL"], st.secrets["SUPABASE_KEY"])
 
 # 입력 화면
 name = st.text_input("이름")
 times = st.multiselect("가능한 시간", ["월", "화", "수", "목", "금"])
 
 if st.button("제출"):
-    # 새 한 줄을 만들어 기존 표 아래에 이어 붙이기
-    new_row = pd.DataFrame([{"이름": name, "가능시간": ", ".join(times)}])
-    updated = pd.concat([df, new_row], ignore_index=True)
-    conn.update(data=updated)   # 구글시트에 저장!
+    # votes 테이블에 새 한 줄 저장!
+    sb.table("votes").insert({"name": name, "times": ", ".join(times)}).execute()
     st.success("제출했어요! 아래 명단에 추가됐어요.")
 
+# 지금까지 쌓인 데이터를 읽어 표로
+rows = sb.table("votes").select("*").execute().data
 st.subheader("지금까지 제출한 사람들")
-st.dataframe(conn.read(ttl=0))</pre></div>
+st.dataframe(pd.DataFrame(rows))</pre></div>
   <ul>
-    <li>배포 → 제출 → 구글시트 열면 실제로 줄이 쌓임</li>
+    <li>배포 → 제출 → Supabase의 Table Editor 열면 실제로 줄이 쌓임</li>
     <li>마음에 안 들면 대화로 개선 ↓</li>
   </ul>
   <div class="codewrap improve"><span class="label">③ 프롬프트 개선 (예시)</span><pre>좋아! 이어서 고쳐줘.
 - 이름을 안 적고 제출하면 '이름을 입력해 주세요' 경고를 띄워줘.
-- 명단 맨 아래에 '가장 많이 가능한 요일'을 계산해서 크게 보여줘.
-- 표를 요일별 참석 인원 막대그래프로도 보여줘.</pre></div>
+- 명단에서 '가장 많이 가능한 요일'을 계산해서 크게 보여줘.
+- 요일별 참석 인원을 막대그래프로도 보여줘.</pre></div>
   <div class="callout check">
     <div class="h">✔️ 방금 무슨 일이?</div>
     <ul>
       <li>앱이 <b>기억</b>을 갖게 됨 (새로고침·타인 접속에도 데이터 유지)</li>
-      <li>앱 ↔ 저장소 연결 = 진짜 서비스의 첫걸음</li>
+      <li>앱 ↔ 저장소 연결 = 진짜 서비스의 첫걸음 · 카드도 서비스계정도 없이</li>
+    </ul>
+  </div>
+  <div class="callout mini">
+    <div class="h">🎥 (강사 데모) 구글시트로도 저장할 수 있어요</div>
+    <ul>
+      <li>구글시트 = 눈에 보이는 스프레드시트라 매력적. 단 <b>서비스계정·JSON 키·시트 공유</b> 설정이 필요</li>
+      <li>완전입문엔 관문이 높아 <b>오늘은 강사 화면으로만</b> — 원리는 Supabase와 같음(앱 ↔ 저장소 연결)</li>
+      <li>나중에 직접 해보고 싶으면 강사에게 구글시트 방식 자료 요청</li>
     </ul>
   </div>
 
@@ -348,7 +326,7 @@ if year &gt; int(df["year"].max()):
     <li><code>session_state</code>는 새로고침하면 사라진다</li>
     <li>서비스 계정을 만들고 JSON 키를 받았다</li>
     <li>구글시트를 서비스 계정 이메일과 공유했다</li>
-    <li>이름·시간 제출 → 시트에 쌓이는 앱을 배포했다</li>
+    <li>이름·시간 제출 → Supabase(DB)에 쌓이는 앱을 배포했다</li>
     <li><code>model.fit()</code> 한 줄 = ‘학습’</li>
     <li>미래 예측(외삽)엔 ‘조심’ 딱지 필요</li>
     <li>내일 프로젝트 주제를 하나 정했다</li>
