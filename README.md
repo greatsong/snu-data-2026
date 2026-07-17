@@ -5,7 +5,7 @@
 
 ## 구성
 
-- **학생용** (공개): `index.html`(목차) · `prep.html`(계정 준비) · `day1~5.html` · `homework.html`(선택 숙제)
+- **수강생용** (공개): `index.html`(목차) · `prep.html`(계정 준비) · `day1~5.html` · `homework.html`(선택 숙제)
 - **강사용** (`teacher/`): 멘트·예상질문·예상오류·이론심화·시간표
 
 ## 각 실습의 리듬
