@@ -3,6 +3,28 @@
 (function () {
   function apply() {
     var released = (typeof window.RELEASED_DAY === 'number') ? window.RELEASED_DAY : 1;
+
+    // ── 강사 미리보기 모드 ──────────────────────────
+    // 켜기: 아무 수강생용 페이지나 ?preview=teacher 붙여 접속 (이 브라우저에 기억됨)
+    // 끄기: ?preview=off — 수강생과 같은 화면으로 복귀 (수업 화면 공유 전 권장)
+    try {
+      var q = new URLSearchParams(location.search).get('preview');
+      if (q === 'teacher') localStorage.setItem('previewAll', '1');
+      if (q === 'off') localStorage.removeItem('previewAll');
+    } catch (e) {}
+    var preview = false;
+    try { preview = localStorage.getItem('previewAll') === '1'; } catch (e) {}
+    if (preview) {
+      released = 99; // 전 일차 열람
+      var bar = document.querySelector('.topbar .inner');
+      if (bar) {
+        var pb = document.createElement('span');
+        pb.className = 'badge';
+        pb.textContent = '👁 미리보기';
+        pb.style.opacity = '.65';
+        bar.appendChild(pb);
+      }
+    }
     var homeworkDay = (typeof window.HOMEWORK_DAY === 'number') ? window.HOMEWORK_DAY : 1;
     var file = location.pathname.split('/').pop() || 'index.html';
 
