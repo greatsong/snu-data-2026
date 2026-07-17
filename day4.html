@@ -70,7 +70,7 @@
     <tbody>
       <tr><td><b>Supabase (DB)</b></td><td>쉬움 🐣</td><td>앱용 무료 DB · <b>카드 없이</b> 키 두 줄 → <b>오늘 이걸로!</b></td></tr>
       <tr><td><b>구글시트</b></td><td>보통(셋업 관문)</td><td>눈에 보이는 스프레드시트 · 서비스계정 설정이 난관 → <b>강사 데모</b></td></tr>
-      <tr><td><b>SQL 집계 심화</b></td><td>어려움</td><td>대용량·빠른 집계 → <b>5일차 맛보기(Neon)</b></td></tr>
+      <tr><td><b>SQL 집계 심화</b></td><td>어려움</td><td>대용량·빠른 집계 → <b>심화 자료 맛보기(Neon)</b></td></tr>
     </tbody>
   </table>
 
@@ -232,7 +232,7 @@ st.dataframe(pd.DataFrame(rows))</pre></div>
   <ul>
     <li>서울 연도별 평균기온 → 직선 학습 → 슬라이더로 예측</li>
     <li>도구 = scikit-learn <code>LinearRegression</code>(가장 잘 맞는 직선 긋기) · requirements.txt엔 <code>scikit-learn</code>·<code>plotly</code>만(기본 설치 제외 · 버전 없이)</li>
-    <li>데이터 = <b>예제 저장소 주소 그대로</b>(<code>seoul.csv</code> · 1907년부터의 <b>일별</b> 기온 · 원자료는 기상청 <a href="https://data.kma.go.kr" target="_blank" rel="noopener">data.kma.go.kr</a>) — 다운로드 없이 주소로 바로 불러오기 · <b>매일 아침 자동 갱신</b>(어제 기온까지 · 원리는 <a href="extra.html">심화 서랍</a>의 자동화에서!)</li>
+    <li>데이터 = <b>예제 저장소 주소 그대로</b>(<code>seoul.csv</code> · 1907년부터의 <b>일별</b> 기온 · 원자료는 기상청 <a href="https://data.kma.go.kr" target="_blank" rel="noopener">data.kma.go.kr</a>) — 다운로드 없이 주소로 바로 불러오기 · <b>매일 아침 자동 갱신</b>(어제 기온까지 · 원리는 <a href="extra.html">심화 자료</a>의 자동화에서!)</li>
     <li>일별 → <b>연도별 평균</b>으로 묶어 학습 · <b>관측일이 부족한 해</b>(첫 해·올해·1950~53 전쟁 시기)는 평균이 왜곡되니 빼기 = 방금 배운 ML 5단계의 <b>② 전처리</b> 실전 · "데이터에도 역사가 있다" 🕵️</li>
   </ul>
   <div class="codewrap code"><span class="label">requirements.txt</span><pre>scikit-learn
