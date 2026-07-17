@@ -10,6 +10,7 @@
       var m = name.match(/^day([1-5])\.html$/);
       if (m) return +m[1];
       if (name === 'homework.html') return homeworkDay;
+      if (name === 'extra.html') return 5; // 심화 서랍 = 5일차와 함께 공개
       return 0; // index, prep 등은 항상 공개
     }
 

@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>심화 서랍 · 진짜 DB · 자동화 · 다음 걸음 · 데이터 기반 바이브 코딩 병아리반</title>
+<link rel="stylesheet" href="assets/style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐥</text></svg>">
+</head>
+<body>
+<div class="topbar"><div class="inner">
+  <a class="brand" href="index.html"><span class="chick">🐥</span> 데이터 기반 바이브 코딩 <span class="a">병아리반</span></a>
+  <span class="spacer"></span>
+  <a class="home" href="index.html">← 목차</a>
+  <span class="badge">학생용</span>
+</div></div>
+
+<div class="wrap">
+<main>
+  <span class="eyebrow">심화 · 선택</span>
+  <h1>심화 서랍 — <span class="a">더 가고 싶을 때</span></h1>
+  <div class="under"></div>
+  <p class="lead">수업에서 다 다루지 않는 <b>다음 걸음 3가지</b>를 모아 둔 서랍입니다.
+  지금 다 읽지 않아도 됩니다. <b>필요해질 때</b>(데이터가 커질 때, 매일 손으로 모으기 지칠 때, 새 재료가 궁금할 때) 하나씩 꺼내 쓰세요.</p>
+
+  <div class="callout tip">
+    <div class="h">💡 서랍 여는 순서 (추천)</div>
+    <ul>
+      <li>프로젝트를 계속 키우다가 <b>막히는 순간</b>이 오면 그때 해당 서랍부터</li>
+      <li>① 진짜 DB — 여러 사람이 쓰거나 데이터가 커질 때</li>
+      <li>② 자동화 + API — 매일 손으로 모으기 지칠 때, 새 데이터가 궁금할 때</li>
+      <li>③ 다음 걸음 — 새 프로젝트 재료를 찾을 때</li>
+    </ul>
+  </div>
+
+  <h2>1. 진짜 데이터베이스 — 4일차 Supabase, 한 겹 더</h2>
+  <ul>
+    <li>4일차에 = <b>Supabase(DB)</b>에 약속/투표 데이터를 직접 쌓아 봄</li>
+    <li>여기서는 = 그 잠금장치(RLS)의 <b>이유</b> 복습 + SQL 집계(Neon) 구경</li>
+  </ul>
+
+  <div class="callout warn">
+    <div class="h">🤔 언제 구글시트 대신 DB?</div>
+    <ul>
+      <li>① 여러 사람 <b>동시</b> 저장</li>
+      <li>② 데이터 <b>아주 많을 때</b>(수만 줄~)</li>
+      <li>③ <b>집계·계산</b>을 빠르게 (예: 요일별 평균)</li>
+      <li>가벼운 혼자 기록 = 구글시트(4일차 강사 데모)로도 충분 · 앱 저장의 기본은 <b>4일차처럼 DB</b></li>
+    </ul>
+  </div>
+
+  <h3>Supabase — 4일차에 만든 그 DB, 원리 복습</h3>
+  <ul>
+    <li>웹에서 표(테이블) 생성 → <code>supabase-py</code>로 넣기(<code>.insert()</code>)·꺼내기(<code>.select()</code>) — 4일차 앱이 한 일이 정확히 이 두 줄</li>
+  </ul>
+  <div class="codewrap code"><span class="label">② 개념 예시 (파이썬)</span><pre>from supabase import create_client
+
+# 프로젝트 주소와 키는 Supabase 대시보드에서 복사
+supabase = create_client(URL, KEY)
+
+# 데이터 한 줄 넣기
+supabase.table("visits").insert({"city": "서울", "temp": 31.2}).execute()
+
+# 데이터 꺼내기 (서울 것만)
+rows = supabase.table("visits").select("*").eq("city", "서울").execute()</pre></div>
+  <div class="callout tip">
+    <div class="h">💡 RLS — DB의 잠금장치</div>
+    <ul>
+      <li>RLS(Row Level Security) = <b>기본 전부 차단</b></li>
+      <li>허용 규칙(정책) 켠 것만 보임</li>
+      <li>“데이터 안 보여요” = 고장 아님, 안전하게 잠긴 것</li>
+    </ul>
+  </div>
+  <div class="callout warn">
+    <div class="h">🔑 키 두 종류 — 절대 헷갈리지 말 것</div>
+    <ul>
+      <li><b>publishable 키</b>(예전 anon) = 앱에 넣어도 되는 공개용 (RLS가 보호)</li>
+      <li><b>secret 키</b>(예전 service_role) = 모든 잠금 여는 마스터 → 웹앱·GitHub 업로드 금지</li>
+      <li>비밀 금고(Secrets)에만 보관</li>
+    </ul>
+  </div>
+
+  <h3>Neon — SQL을 직접 쓰는 PostgreSQL</h3>
+  <ul>
+    <li>PostgreSQL을 무료로 켜 주는 서비스</li>
+    <li>스트림릿 → <code>st.connection(type="sql")</code> 한 줄 연결 + SQL 직접 작성</li>
+  </ul>
+  <div class="codewrap code"><span class="label">② 개념 예시 (스트림릿 + SQL)</span><pre>import streamlit as st
+
+conn = st.connection("neon", type="sql")   # Neon 연결
+
+# 도시별로 방문 수를 세어 많은 순으로 상위 5개
+df = conn.query("""
+    SELECT city, COUNT(*) AS n
+    FROM visits
+    GROUP BY city
+    ORDER BY n DESC
+    LIMIT 5
+""")
+st.bar_chart(df, x="city", y="n")</pre></div>
+  <div class="callout tip">
+    <div class="h">💡 SQL 단어 네 개면 집계 끝</div>
+    <ul>
+      <li><code>COUNT</code>(세기) · <code>GROUP BY</code>(묶기) · <code>ORDER BY</code>(정렬) · <code>LIMIT</code>(개수)</li>
+      <li>“도시별로 묶어 세고, 많은 순으로 5개만”</li>
+      <li>이 SQL도 <b>AI에게 시켜서</b> 받으면 됨</li>
+    </ul>
+  </div>
+
+  <h2>2. 자동화 + 흥미로운 API</h2>
+  <ul>
+    <li>사람이 매일 손으로 = 지침 → 컴퓨터가 정해진 시간마다 = 자동화</li>
+    <li>세상엔 공짜 흥미로운 API 많음</li>
+  </ul>
+
+  <h3>GitHub Actions — 매시간 알아서 데이터 쌓기</h3>
+  <ul>
+    <li>GitHub이 정해진 시간마다 내 코드 <b>대신 실행</b></li>
+    <li><code>.github/workflows/</code>에 <code>*.yml</code> 하나 두면 됨</li>
+  </ul>
+  <div class="codewrap code"><span class="label">② 개념 예시 (.github/workflows/collect.yml)</span><pre>name: 데이터 수집
+on:
+  schedule:
+    - cron: "5 * * * *"      # 매시간 5분에 실행 (UTC 기준!)
+  workflow_dispatch:          # 이 줄이 있으면 '수동 실행' 버튼도 생김
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python collect.py
+        env:
+          API_KEY: ${{ secrets.API_KEY }}   # 비밀키는 Secrets에서</pre></div>
+  <div class="callout warn">
+    <div class="h">⏰ cron 시간은 UTC (한국시간 아님)</div>
+    <ul>
+      <li><code>cron: "5 * * * *"</code> = 매시간 5분에</li>
+      <li>기준 = UTC · 한국시간 = +9시간</li>
+      <li>한국 낮 12시 → UTC 새벽 3시(<code>0 3 * * *</code>)</li>
+    </ul>
+  </div>
+  <div class="callout tip">
+    <div class="h">💡 비밀키는 GitHub Secrets에</div>
+    <ul>
+      <li>API 키 = 코드 직접 작성 금지 → <b>Settings → Secrets and variables → Actions</b></li>
+      <li>꺼내 쓰기 = <code>${{ secrets.API_KEY }}</code></li>
+      <li><code>workflow_dispatch</code> → Actions 탭 수동 버튼으로 즉시 시험</li>
+    </ul>
+  </div>
+  <div class="callout check">
+    <div class="h">🛰️ 실물 구경 — 이 수업의 데이터가 바로 이 방식으로 살아있습니다</div>
+    <ul>
+      <li>수업에서 쓴 예제 저장소(<a href="https://github.com/greatsong/modudata" target="_blank" rel="noopener">github.com/greatsong/modudata</a>)의 <b><a href="https://github.com/greatsong/modudata/actions" target="_blank" rel="noopener">Actions 탭</a></b>을 열어 봅니다</li>
+      <li>수업에서 배운 <b>기온</b>(4일차)·<b>인구</b>(2일차)를 포함해 <b>박스오피스</b> 매일 · <b>혼잡도</b> 매시간 · <b>지하철</b> 매월 — 로봇이 알아서 갱신 중 🤖</li>
+      <li>4일차 기온 데이터(<code>seoul.csv</code>)가 늘 <b>어제 기온까지</b> 담고 있던 비밀 = 지금 배운 cron 그 자체</li>
+      <li>위 개념 예시는 뼈대만 — 실물 <code>.yml</code>엔 <b>라이브러리 설치</b>와 <b>결과 저장(커밋)</b> 단계가 더 붙습니다 · Actions 탭에서 직접 확인</li>
+    </ul>
+  </div>
+
+  <h3>흥미로운 API 서랍</h3>
+  <ul>
+    <li>“언젠가 만들 수 있구나” 열어 두는 서랍 · 지금 다 안 해도 됨</li>
+  </ul>
+  <table class="daymap">
+    <thead><tr><th>API</th><th>무엇을 주나 / 기억할 점</th></tr></thead>
+    <tbody>
+      <tr><td><b>공공데이터포털<br>(<a href="https://www.data.go.kr" target="_blank" rel="noopener">data.go.kr</a>)</b></td><td>버스·미세먼지·관광 등. <b>serviceKey</b> 필요(인코딩/디코딩 두 형태). 주소 끝 <code>_type=json</code> 붙이면 다루기 쉬움</td></tr>
+      <tr><td><b>카카오 지도<br>(지오코딩)</b></td><td>주소 → 좌표로 지도에 점. <b>REST API 키</b>를 헤더에 <code>Authorization: KakaoAK 내키</code></td></tr>
+      <tr><td><b>GBIF</b></td><td>전 세계 생물 관찰 기록. “우리 동네 관찰된 새는?”</td></tr>
+      <tr><td><b>NASA NeoWs</b></td><td>지구 근처 소행성 정보. “오늘 가까이 온 소행성” · api.nasa.gov에서 무료 키 발급(DEMO_KEY는 시간당 30회 제한)</td></tr>
+      <tr><td><b>USGS</b></td><td>전 세계 지진 실시간. 규모·위치·시각을 지도에</td></tr>
+    </tbody>
+  </table>
+  <div class="callout tip">
+    <div class="h">💡 API도 결국 세 박자</div>
+    <ul>
+      <li>“이 API로 이런 화면 만들어 줘, 키는 여기” → AI에 주문</li>
+      <li>우리는 어떤 API 있는지 <b>서랍만 알면</b> 됨</li>
+      <li>나머지 = ① 주문 → ② 확인 → ③ 개선</li>
+    </ul>
+  </div>
+
+  <h2>3. 다음 걸음</h2>
+  <ul>
+    <li>강의는 끝, 시작은 지금 · 혼자 계속 갈 <b>지도</b> ↓</li>
+  </ul>
+
+  <h3>데이터는 어디서 찾나요?</h3>
+  <table class="daymap">
+    <thead><tr><th>곳</th><th>있는 것</th></tr></thead>
+    <tbody>
+      <tr><td><b>서울 열린데이터광장</b><br>(<a href="https://data.seoul.go.kr" target="_blank" rel="noopener">data.seoul.go.kr</a>)</td><td>서울시 데이터 — 지하철 승하차, 공공자전거, 대기질 등</td></tr>
+      <tr><td><b>공공데이터포털</b><br>(<a href="https://www.data.go.kr" target="_blank" rel="noopener">data.go.kr</a>)</td><td>전국 공공기관 데이터의 큰 창고</td></tr>
+      <tr><td><b>학교알리미 · NEIS</b></td><td>학교 정보, 급식 식단 등 생활 밀착 데이터</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout warn">
+    <div class="h">💳 비용과 키 관리</div>
+    <ul>
+      <li>이 강의 도구 = 대부분 무료 한도로 충분</li>
+      <li>유료 전환 전 항상 안내 나옴</li>
+      <li>API 키·비밀번호 = 코드에 직접 쓰지 않기 → Secrets·<code>st.secrets</code></li>
+    </ul>
+  </div>
+
+  <div class="callout check">
+    <div class="h">🌱 더 배우고 싶다면</div>
+    <ul>
+      <li>반복 리듬 = 궁금한 질문 → 데이터 찾기 → AI에 앱 주문 → 배포 → 의심하며 다듬기</li>
+      <li>새 도구(DB·자동화·흥미로운 API) = 필요할 때 서랍에서 하나씩</li>
+      <li>배운 건 도구가 아니라 <b>이 리듬</b></li>
+    </ul>
+  </div>
+
+  <div class="pager">
+    <a class="prev" href="day5.html"><div class="dir">← 이전</div><div class="tt">5일차 · 프로젝트 발표</div></a>
+    <a class="next" href="homework.html"><div class="dir">다음 →</div><div class="tt">선택 숙제 · 나만의 프로젝트</div></a>
+  </div>
+</main>
+</div>
+
+<footer class="foot">서울대학교 평생교육원 · 데이터 기반 바이브 코딩 병아리반 · 학생용 교재</footer>
+<script src="assets/release.js"></script>
+<script src="assets/gate.js"></script>
+<script src="assets/copy.js"></script>
+</body>
+</html>

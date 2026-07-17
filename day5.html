@@ -30,7 +30,7 @@
     <ul>
       <li><b>프로젝트 마무리</b> — 발표용으로 다듬고 패들렛에 게시</li>
       <li><b>갤러리 워크 발표</b> — 패들렛에서 서로 둘러보며 좋아요·질문</li>
-      <li><b>꿀팁 3개</b> — 진짜 DB · 자동화 + 흥미로운 API · 다음 걸음</li>
+      <li><b>심화 서랍 확인</b> — 더 가고 싶은 사람을 위한 다음 걸음 (별도 페이지)</li>
     </ul>
   </div>
 
@@ -40,7 +40,7 @@
     <li><b>2일</b> 데이터 분석·시각화(pandas·Plotly) · 지도 · 비판적 사고</li>
     <li><b>3일</b> API·키·secrets · 나만의 AI 채팅앱</li>
     <li><b>4일</b> Supabase(DB) 저장 · 머신러닝(예측·외삽 주의)</li>
-    <li>오늘 = 조각을 모아 <b>내 프로젝트 발표</b> + 더 멋진 프로젝트 꿀팁</li>
+    <li>오늘 = 조각을 모아 <b>내 프로젝트 발표</b></li>
   </ul>
 
   <h2>1. 프로젝트 마무리 — 발표할 수 있게</h2>
@@ -57,9 +57,17 @@
     </tbody>
   </table>
   <ol class="steps">
-    <li><span class="st">앱 URL을 패들렛에 게시</span><br>패들렛(작품 게시판)에 앱 주소 + 이름 + 한 줄 제목. 이 보드 = 오늘의 발표 자리</li>
+    <li><span class="st">패들렛에 게시물 하나 올리기</span><br>작품 게시판(패들렛)에 <b>제목 = 내 질문 한 줄</b>, 본문에 <b>앱 주소 · 발견 한 줄 · 이름</b>을 적어 올립니다. 오늘 발표는 이 게시판에서 합니다 — 아래 샘플처럼 올리면 됩니다.</li>
     <li><span class="st">발표 1장 요약 만들기</span><br>질문·데이터·발견 세 줄 = 발표 대본. 화면엔 내 앱, 세 줄만 말하면 충분</li>
   </ol>
+  <div class="callout check">
+    <div class="h">✔️ 게시물 샘플 — 이렇게 올리면 됩니다</div>
+  </div>
+  <div class="linkgrid">
+    <div class="linkcard"><div class="n">샘플 1 · 인구</div><div class="tt">“우리 동네, 젊어지고 있을까?”</div><div class="d">앱: my-town-card.streamlit.app<br>발견: “신도시 동만 평균연령이 8살 어리다” — 김○○</div></div>
+    <div class="linkcard"><div class="n">샘플 2 · 기온</div><div class="tt">“2050년 서울 여름은 몇 도?”</div><div class="d">앱: seoul-temp-2050.streamlit.app<br>발견: “직선만 그어도 100년에 +2℃” — 이○○</div></div>
+    <div class="linkcard"><div class="n">샘플 3 · 유튜브</div><div class="tt">“내 최애 채널, 언제 올릴 때 터질까?”</div><div class="d">앱: my-channel-lab.streamlit.app<br>발견: “목요일 업로드가 조회수 1.6배” — 박○○</div></div>
+  </div>
   <div class="callout tip">
     <div class="h">💡 완성도보다 이야기</div>
     <ul>
@@ -96,193 +104,14 @@
       <li>서로 질문 던지기 → 내 프로젝트 보는 눈</li>
     </ul>
   </div>
-  <div class="callout mini">
-    <div class="h">🎡 지역 지도 팀 · 함께 놀기 (선택)</div>
-    <ul>
-      <li><b>전국 모자이크</b> — 각자 만든 지역 지도를 패들렛에 올리면 <b>반 전체가 모여 전국이 채워짐</b></li>
-      <li><b>쌍둥이 동네 찾기</b> — 내 동네와 인구 모양이 닮은 동네 한 곳을 댓글로 지목 → “나랑 닮은 동네가 여기 있었네”</li>
-      <li>소회의실은 <b>지역조</b>(서울조·경기조·지방조)로 — 같은 경계 쓰는 사람끼리 오류를 함께 해결</li>
-    </ul>
-  </div>
 
-  <h2>3. [꿀팁 1] 진짜 데이터베이스 — 어제 쓴 Supabase, 한 겹 더</h2>
+  <h2>3. 더 가고 싶다면 — 심화 서랍</h2>
   <ul>
-    <li>어제 = <b>Supabase(DB)</b>에 약속/투표 데이터를 직접 쌓아 봄</li>
-    <li>오늘 = 그 잠금장치(RLS)의 <b>이유</b> 복습 + SQL 집계(Neon) 구경</li>
+    <li>진짜 DB · 자동화 · 흥미로운 API · 다음 걸음은 <b>별도 페이지</b>에 모아 뒀습니다</li>
+    <li>오늘 다 안 봐도 됩니다 · 강사 안내에 따라, 또는 집에서 천천히</li>
   </ul>
-
-  <div class="callout warn">
-    <div class="h">🤔 언제 구글시트 대신 DB?</div>
-    <ul>
-      <li>① 여러 사람 <b>동시</b> 저장</li>
-      <li>② 데이터 <b>아주 많을 때</b>(수만 줄~)</li>
-      <li>③ <b>집계·계산</b>을 빠르게 (예: 요일별 평균)</li>
-      <li>가벼운 혼자 기록 = 구글시트(어제 강사 데모)로도 충분 · 앱 저장의 기본은 <b>어제처럼 DB</b></li>
-    </ul>
-  </div>
-
-  <h3>Supabase — 어제 만든 그 DB, 원리 복습</h3>
-  <ul>
-    <li>웹에서 표(테이블) 생성 → <code>supabase-py</code>로 넣기(<code>.insert()</code>)·꺼내기(<code>.select()</code>) — 어제 앱이 한 일이 정확히 이 두 줄</li>
-  </ul>
-  <div class="codewrap code"><span class="label">② 개념 예시 (파이썬)</span><pre>from supabase import create_client
-
-# 프로젝트 주소와 키는 Supabase 대시보드에서 복사
-supabase = create_client(URL, KEY)
-
-# 데이터 한 줄 넣기
-supabase.table("visits").insert({"city": "서울", "temp": 31.2}).execute()
-
-# 데이터 꺼내기 (서울 것만)
-rows = supabase.table("visits").select("*").eq("city", "서울").execute()</pre></div>
-  <div class="callout tip">
-    <div class="h">💡 RLS — DB의 잠금장치</div>
-    <ul>
-      <li>RLS(Row Level Security) = <b>기본 전부 차단</b></li>
-      <li>허용 규칙(정책) 켠 것만 보임</li>
-      <li>“데이터 안 보여요” = 고장 아님, 안전하게 잠긴 것</li>
-    </ul>
-  </div>
-  <div class="callout warn">
-    <div class="h">🔑 키 두 종류 — 절대 헷갈리지 말 것</div>
-    <ul>
-      <li><b>publishable 키</b>(예전 anon) = 앱에 넣어도 되는 공개용 (RLS가 보호)</li>
-      <li><b>secret 키</b>(예전 service_role) = 모든 잠금 여는 마스터 → 웹앱·GitHub 업로드 금지</li>
-      <li>비밀 금고(Secrets)에만 보관</li>
-    </ul>
-  </div>
-
-  <h3>Neon — SQL을 직접 쓰는 PostgreSQL</h3>
-  <ul>
-    <li>PostgreSQL을 무료로 켜 주는 서비스</li>
-    <li>스트림릿 → <code>st.connection(type="sql")</code> 한 줄 연결 + SQL 직접 작성</li>
-  </ul>
-  <div class="codewrap code"><span class="label">② 개념 예시 (스트림릿 + SQL)</span><pre>import streamlit as st
-
-conn = st.connection("neon", type="sql")   # Neon 연결
-
-# 도시별로 방문 수를 세어 많은 순으로 상위 5개
-df = conn.query("""
-    SELECT city, COUNT(*) AS n
-    FROM visits
-    GROUP BY city
-    ORDER BY n DESC
-    LIMIT 5
-""")
-st.bar_chart(df, x="city", y="n")</pre></div>
-  <div class="callout tip">
-    <div class="h">💡 SQL 단어 네 개면 집계 끝</div>
-    <ul>
-      <li><code>COUNT</code>(세기) · <code>GROUP BY</code>(묶기) · <code>ORDER BY</code>(정렬) · <code>LIMIT</code>(개수)</li>
-      <li>“도시별로 묶어 세고, 많은 순으로 5개만”</li>
-      <li>이 SQL도 <b>AI에게 시켜서</b> 받으면 됨</li>
-    </ul>
-  </div>
-
-  <h2>4. [꿀팁 2] 자동화 + 흥미로운 API</h2>
-  <ul>
-    <li>사람이 매일 손으로 = 지침 → 컴퓨터가 정해진 시간마다 = 자동화</li>
-    <li>세상엔 공짜 흥미로운 API 많음</li>
-  </ul>
-
-  <h3>GitHub Actions — 매시간 알아서 데이터 쌓기</h3>
-  <ul>
-    <li>GitHub이 정해진 시간마다 내 코드 <b>대신 실행</b></li>
-    <li><code>.github/workflows/</code>에 <code>*.yml</code> 하나 두면 됨</li>
-  </ul>
-  <div class="codewrap code"><span class="label">② 개념 예시 (.github/workflows/collect.yml)</span><pre>name: 데이터 수집
-on:
-  schedule:
-    - cron: "5 * * * *"      # 매시간 5분에 실행 (UTC 기준!)
-  workflow_dispatch:          # 이 줄이 있으면 '수동 실행' 버튼도 생김
-jobs:
-  run:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - run: python collect.py
-        env:
-          API_KEY: ${{ secrets.API_KEY }}   # 비밀키는 Secrets에서</pre></div>
-  <div class="callout warn">
-    <div class="h">⏰ cron 시간은 UTC (한국시간 아님)</div>
-    <ul>
-      <li><code>cron: "5 * * * *"</code> = 매시간 5분에</li>
-      <li>기준 = UTC · 한국시간 = +9시간</li>
-      <li>한국 낮 12시 → UTC 새벽 3시(<code>0 3 * * *</code>)</li>
-    </ul>
-  </div>
-  <div class="callout tip">
-    <div class="h">💡 비밀키는 GitHub Secrets에</div>
-    <ul>
-      <li>API 키 = 코드 직접 작성 금지 → <b>Settings → Secrets and variables → Actions</b></li>
-      <li>꺼내 쓰기 = <code>${{ secrets.API_KEY }}</code></li>
-      <li><code>workflow_dispatch</code> → Actions 탭 수동 버튼으로 즉시 시험</li>
-    </ul>
-  </div>
-  <div class="callout check">
-    <div class="h">🛰️ 실물 구경 — 이 수업의 데이터가 바로 이 방식으로 살아있습니다</div>
-    <ul>
-      <li>우리가 5일 내내 쓴 예제 저장소(<a href="https://github.com/greatsong/modudata" target="_blank" rel="noopener">github.com/greatsong/modudata</a>)의 <b><a href="https://github.com/greatsong/modudata/actions" target="_blank" rel="noopener">Actions 탭</a></b>을 열어 봅니다</li>
-      <li><b>기온</b>·<b>박스오피스</b> 매일 · <b>혼잡도</b> 매시간 · <b>인구</b>·<b>지하철</b> 매월 — 로봇이 알아서 갱신 중 🤖</li>
-      <li>4일차 기온 데이터(<code>seoul.csv</code>)가 늘 <b>어제 기온까지</b> 담고 있던 비밀 = 지금 배운 cron 그 자체</li>
-      <li>위 개념 예시는 뼈대만 — 실물 <code>.yml</code>엔 <b>라이브러리 설치</b>와 <b>결과 저장(커밋)</b> 단계가 더 붙습니다 · Actions 탭에서 직접 확인</li>
-    </ul>
-  </div>
-
-  <h3>흥미로운 API 서랍</h3>
-  <ul>
-    <li>“언젠가 만들 수 있구나” 열어 두는 서랍 · 지금 다 안 해도 됨</li>
-  </ul>
-  <table class="daymap">
-    <thead><tr><th>API</th><th>무엇을 주나 / 기억할 점</th></tr></thead>
-    <tbody>
-      <tr><td><b>공공데이터포털<br>(<a href="https://www.data.go.kr" target="_blank" rel="noopener">data.go.kr</a>)</b></td><td>버스·미세먼지·관광 등. <b>serviceKey</b> 필요(인코딩/디코딩 두 형태). 주소 끝 <code>_type=json</code> 붙이면 다루기 쉬움</td></tr>
-      <tr><td><b>카카오 지도<br>(지오코딩)</b></td><td>주소 → 좌표로 지도에 점. <b>REST API 키</b>를 헤더에 <code>Authorization: KakaoAK 내키</code></td></tr>
-      <tr><td><b>GBIF</b></td><td>전 세계 생물 관찰 기록. “우리 동네 관찰된 새는?”</td></tr>
-      <tr><td><b>NASA NeoWs</b></td><td>지구 근처 소행성 정보. “오늘 가까이 온 소행성” · api.nasa.gov에서 무료 키 발급(DEMO_KEY는 시간당 30회 제한)</td></tr>
-      <tr><td><b>USGS</b></td><td>전 세계 지진 실시간. 규모·위치·시각을 지도에</td></tr>
-    </tbody>
-  </table>
-  <div class="callout tip">
-    <div class="h">💡 API도 결국 세 박자</div>
-    <ul>
-      <li>“이 API로 이런 화면 만들어 줘, 키는 여기” → AI에 주문</li>
-      <li>우리는 어떤 API 있는지 <b>서랍만 알면</b> 됨</li>
-      <li>나머지 = ① 주문 → ② 확인 → ③ 개선</li>
-    </ul>
-  </div>
-
-  <h2>5. [꿀팁 3] 다음 걸음</h2>
-  <ul>
-    <li>강의는 끝, 시작은 지금 · 혼자 계속 갈 <b>지도</b> ↓</li>
-  </ul>
-
-  <h3>데이터는 어디서 찾나요?</h3>
-  <table class="daymap">
-    <thead><tr><th>곳</th><th>있는 것</th></tr></thead>
-    <tbody>
-      <tr><td><b>서울 열린데이터광장</b><br>(<a href="https://data.seoul.go.kr" target="_blank" rel="noopener">data.seoul.go.kr</a>)</td><td>서울시 데이터 — 지하철 승하차, 공공자전거, 대기질 등</td></tr>
-      <tr><td><b>공공데이터포털</b><br>(<a href="https://www.data.go.kr" target="_blank" rel="noopener">data.go.kr</a>)</td><td>전국 공공기관 데이터의 큰 창고</td></tr>
-      <tr><td><b>학교알리미 · NEIS</b></td><td>학교 정보, 급식 식단 등 생활 밀착 데이터</td></tr>
-    </tbody>
-  </table>
-
-  <div class="callout warn">
-    <div class="h">💳 비용과 키 관리</div>
-    <ul>
-      <li>이 강의 도구 = 대부분 무료 한도로 충분</li>
-      <li>유료 전환 전 항상 안내 나옴</li>
-      <li>API 키·비밀번호 = 코드에 직접 쓰지 않기 → Secrets·<code>st.secrets</code></li>
-    </ul>
-  </div>
-
-  <div class="callout check">
-    <div class="h">🌱 더 배우고 싶다면</div>
-    <ul>
-      <li>반복 리듬 = 궁금한 질문 → 데이터 찾기 → AI에 앱 주문 → 배포 → 의심하며 다듬기</li>
-      <li>새 도구(DB·자동화·흥미로운 API) = 필요할 때 서랍에서 하나씩</li>
-      <li>배운 건 도구가 아니라 <b>이 리듬</b></li>
-    </ul>
+  <div class="linkgrid">
+    <a class="linkcard" href="extra.html"><div class="n">심화 · 선택</div><div class="tt">심화 서랍 — 더 가고 싶을 때</div><div class="d">진짜 DB(Supabase·Neon) · 자동화(GitHub Actions) · 흥미로운 API · 데이터 찾는 곳 ↗</div></a>
   </div>
 
   <h2>🎒 오늘의 체크 & 마무리</h2>
@@ -290,7 +119,7 @@ jobs:
     <li>내 앱 URL을 패들렛에 게시했다</li>
     <li>발표 세 줄(질문·데이터·발견)을 준비했다</li>
     <li>다른 사람 앱을 체험하고 좋아요·피드백을 남겼다</li>
-    <li>진짜 DB / 자동화 / 흥미로운 API = ‘필요할 때 여는 서랍’</li>
+    <li><a href="extra.html">심화 서랍</a>(진짜 DB·자동화·API)이 어디 있는지 안다</li>
     <li>데이터에 비판적 질문을 던질 줄 안다</li>
   </ul>
   <div class="callout tip">
@@ -311,7 +140,7 @@ jobs:
   </div>
   <div class="pager">
     <a class="prev" href="day4.html"><div class="dir">← 이전</div><div class="tt">4일차</div></a>
-    <a class="next" href="homework.html"><div class="dir">다음 →</div><div class="tt">선택 숙제 · 나만의 프로젝트</div></a>
+    <a class="next" href="extra.html"><div class="dir">다음 →</div><div class="tt">심화 서랍 · 더 가고 싶을 때</div></a>
   </div>
 </main>
 </div>
