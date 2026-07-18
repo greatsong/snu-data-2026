@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>병아리반 작품 갤러리 · 서울대학교 평생교육원</title>
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐥</text></svg>">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="inner">
+    <span class="brand"><span class="chick">🐥</span>병아리반 <span class="a">작품 갤러리</span></span>
+    <span class="spacer"></span>
+    <a class="home" href="../index.html">← 교재로 돌아가기</a>
+    <span id="modeBadge" class="badge">모드 확인 중…</span>
+  </div>
+</header>
+
+<div class="wrap">
+  <nav class="tabs" id="mainTabs">
+    <button class="tab active" data-view="gallery" type="button">🖼️ 갤러리</button>
+    <button class="tab" data-view="submit" type="button">📮 작품 제출</button>
+  </nav>
+
+  <main>
+
+    <!-- ============ 갤러리 화면 ============ -->
+    <section id="view-gallery" class="view active">
+      <div class="eyebrow">GALLERY</div>
+      <h1>수강생 작품 <span class="a">한눈에 보기</span></h1>
+      <div class="under"></div>
+      <p class="lead">동료 수강생이 배포한 앱을 둘러보고, 좋아요와 한 줄 피드백을 남겨보세요.</p>
+
+      <div class="filter-row">
+        <div class="chip-group" id="assignmentFilter">
+          <button class="chip-btn active" data-assignment="all" type="button">전체</button>
+          <button class="chip-btn" data-assignment="1일차 MBTI 페이지" type="button">1일차 · MBTI 페이지</button>
+          <button class="chip-btn" data-assignment="2일차 인구 대시보드" type="button">2일차 · 인구 대시보드</button>
+          <button class="chip-btn" data-assignment="3일차 AI 채팅앱" type="button">3일차 · AI 채팅앱</button>
+          <button class="chip-btn" data-assignment="4일차 기온 예측기" type="button">4일차 · 기온 예측기</button>
+          <button class="chip-btn" data-assignment="5일차 최종 프로젝트" type="button">5일차 · 최종 프로젝트</button>
+        </div>
+      </div>
+
+      <p id="galleryCount" class="count-line"></p>
+      <div id="galleryGrid" class="grid"></div>
+      <p id="galleryEmpty" class="empty-msg" hidden>조건에 맞는 작품이 아직 없어요.</p>
+    </section>
+
+    <!-- ============ 제출 화면 ============ -->
+    <section id="view-submit" class="view">
+      <div class="eyebrow">SUBMIT</div>
+      <h1>내 작품 <span class="a">제출하기</span></h1>
+      <div class="under"></div>
+      <p class="lead">앱 URL과 닉네임을 입력하면 갤러리에 바로 게시됩니다.</p>
+
+      <form id="submitForm" class="form-card" novalidate>
+        <div class="field">
+          <label for="f-assignment">산출물 구분 *</label>
+          <select id="f-assignment" required>
+            <option value="">선택하세요</option>
+            <option value="1일차 MBTI 페이지">1일차 · MBTI 페이지</option>
+            <option value="2일차 인구 대시보드">2일차 · 인구 대시보드</option>
+            <option value="3일차 AI 채팅앱">3일차 · AI 채팅앱</option>
+            <option value="4일차 기온 예측기">4일차 · 기온 예측기</option>
+            <option value="5일차 최종 프로젝트">5일차 · 최종 프로젝트</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="f-nickname">닉네임 *</label>
+          <input id="f-nickname" type="text" maxlength="20" placeholder="예: 별사탕" required>
+        </div>
+
+        <div class="field">
+          <label for="f-url">앱 URL * <span class="hint">(https:// 로 시작)</span></label>
+          <input id="f-url" type="text" maxlength="300" placeholder="https://your-app.streamlit.app" required>
+        </div>
+
+        <div class="field">
+          <label for="f-desc">한 줄 소개 *</label>
+          <input id="f-desc" type="text" maxlength="80" placeholder="어떤 질문을 어떻게 풀었는지 한 줄로 소개해주세요" required>
+        </div>
+
+        <div id="formMsg" class="form-msg" role="alert" hidden></div>
+
+        <button type="submit" class="btn-primary">갤러리에 게시하기</button>
+      </form>
+    </section>
+
+  </main>
+
+  <footer class="foot">
+    서울대학교 평생교육원 · 데이터 기반 바이브 코딩 병아리반 · 작품 갤러리 미니 앱 · 장애 시 강사에게 앱 URL을 알려주세요.
+  </footer>
+</div>
+
+<template id="cardTemplate">
+  <article class="card">
+    <div class="card-top">
+      <span class="badge assignment-badge"></span>
+    </div>
+    <h3 class="card-nickname"></h3>
+    <p class="card-desc"></p>
+    <div class="card-actions">
+      <a class="btn-go" target="_blank" rel="noopener noreferrer">바로가기 ↗</a>
+      <button type="button" class="btn-like">
+        <span class="like-icon">🩷</span> <span class="like-count">0</span>
+      </button>
+    </div>
+    <details class="feedback-block">
+      <summary>피드백 <span class="fb-count">(0)</span></summary>
+      <ul class="fb-list"></ul>
+      <form class="fb-form">
+        <input type="text" class="fb-nickname" maxlength="16" placeholder="닉네임" required>
+        <input type="text" class="fb-content" maxlength="60" placeholder="한 줄 피드백을 남겨주세요" required>
+        <button type="submit" class="btn-small">남기기</button>
+      </form>
+      <p class="fb-msg" hidden></p>
+    </details>
+  </article>
+</template>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

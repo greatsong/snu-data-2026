@@ -1,0 +1,148 @@
+<!DOCTYPE html><html lang="ko"><head><meta charset="utf-8">
+<title>갤러리 설치 복붙 도우미 · 서울대 평생교육원 병아리반</title>
+<style>
+body{font-family:sans-serif;background:#fffdf7;color:#3a2e1a;max-width:960px;margin:24px auto;padding:0 16px;line-height:1.6}
+h1{color:#e8930c} .guide{background:#fff6e0;border-radius:12px;padding:14px 18px;margin-bottom:18px}
+section{border:1px solid #f0e2bc;border-radius:12px;margin:14px 0;overflow:hidden}
+.head{display:flex;align-items:center;gap:10px;background:#fff6e0;padding:8px 14px}
+.head h2{font-size:1rem;margin:0} .note{font-size:.85rem;opacity:.75;flex:1}
+button{font:inherit;cursor:pointer;border:2px solid #e8930c;background:#fff;border-radius:8px;padding:4px 12px;font-weight:700}
+button:hover{background:#e8930c;color:#fff}
+pre{margin:0;padding:14px;background:#2b2417;color:#f5efdf;overflow:auto;max-height:340px;font-size:.8rem}
+</style></head><body>
+<h1>🖼️ 갤러리 설치 복붙 도우미</h1>
+<div class="guide">이 페이지는 <b>새 Supabase 프로젝트로 갤러리를 다시 연결</b>해야 할 때 쓰는 보조 도구입니다(이미 연결된 프로젝트가 정상 동작 중이면 안 열어봐도 됩니다).<br><b>순서</b>: ① <a href="https://supabase.com/dashboard" target="_blank" rel="noopener">supabase.com</a>에서 New project(서울 리전, 카드 불필요) →
+② 왼쪽 <b>SQL Editor</b> → 아래 schema.sql "전체 복사" → 붙여넣고 <b>Run</b> →
+③ Settings→API Keys에서 <b>publishable 키</b>, Settings→Data API에서 <b>Project URL</b> 복사 →
+④ config.js에 두 값 입력 → ⑤ `web/gallery` 폴더를 그대로 GitHub Pages/Vercel로 배포. 상세: SETUP.md</div>
+<section>
+  <div class="head"><h2>schema.sql</h2><span class="note">⭐ Supabase SQL Editor에 전체 붙여넣고 Run — 이것 하나면 테이블·정책·좋아요 함수까지 완성</span><button onclick="copyIt(this)">📋 전체 복사</button></div>
+  <pre>-- ============================================================
+-- 병아리반 작품 갤러리 — Supabase 스키마
+-- Supabase 대시보드 → SQL Editor 에 전체 붙여넣고 Run 하면 끝.
+-- ============================================================
+
+create extension if not exists pgcrypto;
+
+-- ---------- 개인 작품 (apps) ----------
+create table if not exists public.apps (
+  id           uuid primary key default gen_random_uuid(),
+  created_at   timestamptz not null default now(),
+  assignment   text not null check (assignment in (
+                 &#x27;1일차 MBTI 페이지&#x27;,
+                 &#x27;2일차 인구 대시보드&#x27;,
+                 &#x27;3일차 AI 채팅앱&#x27;,
+                 &#x27;4일차 기온 예측기&#x27;,
+                 &#x27;5일차 최종 프로젝트&#x27;
+               )),
+  nickname     text not null check (char_length(nickname) between 1 and 20),
+  url          text not null check (url ~ &#x27;^https://&#x27;),
+  description  text not null check (char_length(description) between 1 and 100),
+  likes        integer not null default 0 check (likes &gt;= 0)
+);
+
+create index if not exists apps_assignment_idx on public.apps (assignment);
+
+-- ---------- 한 줄 피드백 (feedback) ----------
+create table if not exists public.feedback (
+  id           uuid primary key default gen_random_uuid(),
+  app_id       uuid not null references public.apps (id) on delete cascade,
+  created_at   timestamptz not null default now(),
+  nickname     text not null check (char_length(nickname) between 1 and 16),
+  content      text not null check (char_length(content) between 1 and 80)
+);
+
+create index if not exists feedback_app_id_idx on public.feedback (app_id);
+
+-- ============================================================
+-- RLS (Row Level Security)
+-- 원칙: 누구나 읽고(select) 새로 쓸(insert) 수 있지만,
+--       수정(update)·삭제(delete)는 전면 차단.
+--       좋아요 증가만 아래 RPC 함수를 통해서만 허용.
+-- ============================================================
+
+alter table public.apps enable row level security;
+alter table public.feedback enable row level security;
+
+-- apps: 공개 조회 + 공개 등록만 허용 (update/delete 정책 없음 = 전면 차단)
+create policy &quot;apps_public_select&quot; on public.apps
+  for select using (true);
+
+create policy &quot;apps_public_insert&quot; on public.apps
+  for insert with check (true);
+
+-- feedback: 공개 조회 + 공개 등록만 허용 (update/delete 정책 없음 = 전면 차단)
+create policy &quot;feedback_public_select&quot; on public.feedback
+  for select using (true);
+
+create policy &quot;feedback_public_insert&quot; on public.feedback
+  for insert with check (true);
+
+-- ============================================================
+-- 좋아요 증가 RPC
+-- - 원자적 UPDATE 한 줄로 처리 → 동시에 여러 명이 눌러도 카운트 안전(레이스 컨디션 없음)
+-- - SECURITY DEFINER: 이 함수를 만든 소유자(postgres) 권한으로 실행되어
+--   apps 테이블에 update 정책이 없어도 likes 컬럼만 안전하게 증가시킬 수 있음
+--   → 클라이언트는 이 함수 호출(rpc) 외에는 절대 likes를 직접 update 할 수 없음
+-- ============================================================
+
+create or replace function public.increment_likes(p_app_id uuid)
+returns integer
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  new_likes integer;
+begin
+  update public.apps
+     set likes = likes + 1
+   where id = p_app_id
+  returning likes into new_likes;
+
+  if new_likes is null then
+    raise exception &#x27;app not found: %&#x27;, p_app_id;
+  end if;
+
+  return new_likes;
+end;
+$$;
+
+-- anon(공개) 롤과 authenticated 롤 모두 이 함수만 실행 가능 (테이블 직접 update는 여전히 불가)
+revoke all on function public.increment_likes(uuid) from public;
+grant execute on function public.increment_likes(uuid) to anon, authenticated;
+
+-- ============================================================
+-- (선택) 실시간 구독을 쓰고 싶다면 아래 주석 해제
+-- ============================================================
+-- alter publication supabase_realtime add table public.apps;
+-- alter publication supabase_realtime add table public.feedback;
+</pre>
+</section><section>
+  <div class="head"><h2>config.js</h2><span class="note">그다음 단계 — SUPABASE_URL·KEY 두 값만 채워서 저장 (publishable 키만, secret 금지)</span><button onclick="copyIt(this)">📋 전체 복사</button></div>
+  <pre>// ============================================================
+// 작품 갤러리 설정 파일
+// ------------------------------------------------------------
+// SUPABASE_URL / SUPABASE_KEY 를 채우면 실제 Supabase와 연동됩니다.
+// 비워두면(또는 이 파일이 없으면) 자동으로 &quot;데모 모드&quot;로 동작합니다.
+//   - 데모 모드: 샘플 작품 몇 개로 브라우저 메모리에서만 동작 (새로고침 시 초기화)
+//   - 실제 모드: 아래 두 값을 채우면 Supabase 프로젝트와 연동
+//
+// ⚠️ 반드시 &quot;publishable&quot;(공개용 anon) 키만 넣으세요. secret 키는 절대 넣지 마세요.
+// 설정 방법은 SETUP.md 참고.
+// ============================================================
+window.APP_CONFIG = {
+  SUPABASE_URL: &quot;&quot;,   // 예: https://xxxxxxxx.supabase.co
+  SUPABASE_KEY: &quot;&quot;    // 예: sb_publishable_xxxxxxxxxxxxxxxx (anon/publishable 키만)
+};
+</pre>
+</section>
+<script>
+function copyIt(btn){
+  const text = btn.closest('section').querySelector('pre').innerText;
+  navigator.clipboard && navigator.clipboard.writeText ? navigator.clipboard.writeText(text).then(()=>ok(btn)) : fallback(btn);
+  function ok(b){ b.textContent='✅ 복사됨'; setTimeout(()=>b.textContent='📋 전체 복사',1500); }
+  function fallback(b){ const r=document.createRange(); r.selectNodeContents(b.closest('section').querySelector('pre'));
+    const s=getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent='드래그된 영역을 Cmd+C'; }
+}
+</script></body></html>
