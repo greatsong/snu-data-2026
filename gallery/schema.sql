@@ -99,6 +99,18 @@ grant execute on function public.increment_likes(uuid) to anon, authenticated;
 -- alter publication supabase_realtime add table public.apps;
 -- alter publication supabase_realtime add table public.feedback;
 
--- 좋아요 위조 방지: 익명 insert에서 likes 컬럼 지정 차단 (증가는 RPC로만)
-revoke insert (likes) on public.apps from anon;
-revoke insert (likes) on public.apps from authenticated;
+-- 좋아요 위조 방지 (확실판 · 2026-07-18)
+-- REVOKE 방식은 테이블 전체 INSERT 권한에 무시되므로, 트리거로 강제한다.
+-- insert 시 likes 값을 무엇으로 보내든 항상 0으로 덮어씀. 증가는 increment_likes RPC로만.
+create or replace function public.force_likes_zero()
+returns trigger language plpgsql as $$
+begin
+  new.likes := 0;
+  return new;
+end;
+$$;
+
+drop trigger if exists trg_force_likes_zero on public.apps;
+create trigger trg_force_likes_zero
+  before insert on public.apps
+  for each row execute function public.force_likes_zero();
