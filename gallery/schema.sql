@@ -98,3 +98,7 @@ grant execute on function public.increment_likes(uuid) to anon, authenticated;
 -- ============================================================
 -- alter publication supabase_realtime add table public.apps;
 -- alter publication supabase_realtime add table public.feedback;
+
+-- 좋아요 위조 방지: 익명 insert에서 likes 컬럼 지정 차단 (증가는 RPC로만)
+revoke insert (likes) on public.apps from anon;
+revoke insert (likes) on public.apps from authenticated;

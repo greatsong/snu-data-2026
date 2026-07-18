@@ -199,3 +199,10 @@ footer.foot { max-width: var(--maxw); margin: 0 auto; padding: 14px 20px 40px; c
   .fb-form { flex-direction: column; }
   .fb-form .fb-nickname { flex: 1; }
 }
+
+/* 모바일 헤더 깨짐 방지 (2026-07-18 테스트 결함 수정) */
+@media (max-width: 480px) {
+  .topbar .inner { flex-wrap: wrap; gap: 8px; padding: 10px 12px; }
+  .brand { white-space: nowrap; font-size: 0.95rem; min-width: 0; }
+  .brand .chick { font-size: 1rem; }
+}
