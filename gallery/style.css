@@ -206,3 +206,10 @@ footer.foot { max-width: var(--maxw); margin: 0 auto; padding: 14px 20px 40px; c
   .brand { white-space: nowrap; font-size: 0.95rem; min-width: 0; }
   .brand .chick { font-size: 1rem; }
 }
+
+/* 사용법 안내 (30초 가이드) */
+.howto { background: var(--surface, #fff6e0); border: 1px solid #f0e2bc; border-radius: 12px; padding: 12px 16px; margin: 14px 0; }
+.howto summary { cursor: pointer; font-weight: 800; color: var(--accent, #e8930c); }
+.howto ol { margin: 12px 0 6px; padding-left: 22px; line-height: 1.8; }
+.howto .howto-tip { font-size: .88rem; opacity: .8; margin: 6px 0 0; }
+@media (max-width: 480px) { .howto { padding: 10px 12px; } }
