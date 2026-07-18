@@ -314,6 +314,80 @@ if year &gt; int(yearly["연도"].max()):
     </ul>
   </div>
 
+  <h3>3-4. 한 걸음 더 (추가 학습) — 영화 흥행 예측기 (①②③)</h3>
+  <div class="callout tip">
+    <div class="h">🎬 왜 영화도 해 보나</div>
+    <ul>
+      <li>기온 예측기는 입력이 <b>연도 하나</b> · 영화는 <b>여러 조건</b>(스크린수·상영횟수·첫날 관객)으로 예측 — <b>입력이 여럿</b>인 머신러닝을 경험</li>
+      <li>흥행 데이터는 <b>천만 영화 한 편이 판을 다 흔드는</b> 성질 · 그대로 학습하면 큰 영화에만 끌려감</li>
+      <li>여유가 있으면 도전 · 시간이 빠듯하면 오늘 밤 숙제로</li>
+    </ul>
+  </div>
+  <ul>
+    <li>데이터 = <b>예제 저장소 주소 그대로</b>(<code>kobis.csv</code> · 최근 개봉 영화 515편 · 원자료는 영화진흥위원회 <a href="https://www.kobis.or.kr" target="_blank" rel="noopener">kobis.or.kr</a>) — 다운로드 없이 주소로 바로 불러오기</li>
+    <li>열 = 영화명·개봉일·스크린수·상영횟수·순위·<b>관객수</b>(첫날)·<b>최종관객</b> · 목표 = 초반 지표로 <b>최종관객 예측</b></li>
+  </ul>
+  <div class="codewrap prompt"><span class="label">① 샘플 프롬프트</span><pre>스트림릿(streamlit) '영화 흥행 예측기' 앱 하나(main.py)를 만들어줘. 조건:
+
+- 데이터는 이 주소에서 불러와(최근 개봉 영화 515편이야.
+  열은 영화명, 개봉일, 스크린수, 상영횟수, 순위, 관객수(개봉 첫날), 최종관객):
+  https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis.csv
+- 스크린수, 상영횟수, 첫날 관객수(관객수 열)로 최종관객을 예측하는
+  선형회귀 모델을 scikit-learn으로 만들어줘.
+- 흥행 숫자는 편차가 아주 커서 몇몇 대박 영화가 결과를 좌우해.
+  그러니 입력과 정답을 로그로 바꿔서 학습하고, 예측값은 다시 원래 크기로 되돌려 보여줘.
+- 화면 위에 R²(결정계수) 값을 카드로 보여주고, 이 값이 뭔지 한 줄로 설명해줘.
+- 스크린수·상영횟수·첫날 관객수를 슬라이더나 입력창으로 넣으면
+  예측 최종관객을 크게 보여줘.
+- 필요한 라이브러리 목록(requirements.txt)도 같이 줘.
+  버전 숫자 없이 이름만, 스트림릿·판다스·넘파이는 기본 설치라 빼고.
+- 한국어 라벨, 따뜻한 톤, 초보자용 한국어 주석. main.py 전체 코드를 한 번에 줘.</pre></div>
+  <ul>
+    <li>핵심 → 여기서도 <code>model.fit()</code> 한 줄 · 다만 <b>입력이 여러 개</b>이고 <b>로그로 바꿔</b> 학습</li>
+  </ul>
+  <div class="codewrap code"><span class="label">② AI가 준 코드 (예시)</span><pre>import streamlit as st
+import pandas as pd
+import numpy as np
+from sklearn.linear_model import LinearRegression
+
+st.title("🎬 영화 흥행 예측기")
+
+# ① 수집 — CSV 불러오기 (최근 영화 515편)
+url = "https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis.csv"
+df = pd.read_csv(url)
+
+# ② 전처리 — 입력 X, 정답 y · 흥행은 편차가 커서 로그로 다룸
+X = df[["스크린수", "상영횟수", "관객수"]]   # 관객수 = 개봉 첫날
+y = df["최종관객"]
+Xlog, ylog = np.log1p(X), np.log1p(y)
+
+# ③ 학습 — 이 한 줄이 '학습'! 입력이 여러 개인 것만 빼면 똑같음
+model = LinearRegression()
+model.fit(Xlog, ylog)
+
+# ④ 평가 — R²(결정계수): 1에 가까울수록 잘 맞음
+r2 = model.score(Xlog, ylog)
+st.metric("R² (얼마나 잘 맞나)", f"{r2:.2f}")
+
+# ⑤ 예측 — 세 값을 넣으면 최종관객 예측 (로그를 다시 원래 크기로)
+screens = st.number_input("스크린수", 1, 3000, 1200)
+shows   = st.number_input("상영횟수", 1, 20000, 4500)
+day1    = st.number_input("첫날 관객수", 1, 2000000, 110000)
+pred = np.expm1(model.predict(np.log1p([[screens, shows, day1]])))[0]
+st.subheader(f"예측 최종관객: 약 {int(pred):,}명")</pre></div>
+  <div class="callout warn">
+    <div class="h">⚠️ 왜 로그로 바꿨을까 — 이상치와 척도</div>
+    <ul>
+      <li>천만 영화 한 편이 있으면 회귀 직선이 그쪽으로 <b>확 쏠림</b> · 작은 영화 예측이 엉망</li>
+      <li>로그로 바꾸면 큰 영화와 작은 영화가 <b>비슷한 무게</b>로 · 실측: 로그 없이 R²≈0.32 → 로그 쓰면 <b>0.76~0.83</b></li>
+      <li>같은 데이터라도 <b>어떤 척도로 보느냐</b>가 결과를 바꾼다 — 데이터를 다루는 눈</li>
+    </ul>
+  </div>
+  <div class="codewrap improve"><span class="label">③ 프롬프트 개선 (예시)</span><pre>좋아! 이어서 고쳐줘.
+- 예측 최종관객이 '천만 돌파'면 축하 문구를, 백만 미만이면 다른 문구를 띄워줘.
+- 실제 최종관객과 예측값을 비교하는 산점도를 그려줘(대각선이 완벽한 예측).
+- 스크린수 하나만 썼을 때와 세 개 다 썼을 때 R²가 어떻게 다른지 보여줘.</pre></div>
+
   <h2>📌 오늘 밤 — 내 프로젝트 주제 정하기</h2>
   <ul>
     <li>내일 = 나만의 프로젝트 마무리</li>
@@ -356,7 +430,7 @@ if year &gt; int(yearly["연도"].max()):
   </div>
   <h2>📚 오늘의 용어</h2>
   <details class="glossary">
-    <summary>오늘 나온 낱말 7개 — 외울 필요 없습니다 · 잊으면 여기로</summary>
+    <summary>오늘 나온 낱말 9개 — 외울 필요 없습니다 · 잊으면 여기로</summary>
     <div class="gin">
     <table class="glossary-table">
       <tr><th>용어</th><th>뜻</th></tr>
@@ -364,6 +438,8 @@ if year &gt; int(yearly["연도"].max()):
       <tr><td class="term">테이블·열</td><td>데이터베이스의 표와 항목 — 엑셀의 시트와 열</td></tr>
       <tr><td class="term">scikit-learn</td><td>파이썬 머신러닝 대표 라이브러리</td></tr>
       <tr><td class="term">선형회귀</td><td>점들 사이로 가장 잘 맞는 직선을 긋는 방법</td></tr>
+      <tr><td class="term">다중 입력(여러 특징)</td><td>연도 하나가 아니라 여러 조건(스크린수·상영횟수 등)으로 예측하는 것</td></tr>
+      <tr><td class="term">로그 변환</td><td>편차가 큰 값(흥행 관객 등)을 비슷한 무게로 다루려 크기를 눌러 주는 것</td></tr>
       <tr><td class="term">학습</td><td>데이터에서 규칙(직선)을 찾아내는 과정</td></tr>
       <tr><td class="term">R²(결정계수)</td><td>직선이 데이터를 얼마나 잘 설명하는지 나타내는 0~1 점수</td></tr>
       <tr><td class="term">훈련 데이터</td><td>학습에 쓴 데이터 — 이 범위 밖 예측은 참고용으로만</td></tr>

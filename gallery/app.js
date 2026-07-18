@@ -79,7 +79,7 @@
       ],
     },
     {
-      id: nextDemoId(), assignment: "4일차 기온 예측기", nickname: "구름빵",
+      id: nextDemoId(), assignment: "4일차 머신러닝 프로젝트", nickname: "구름빵",
       url: "https://example.com/demo-temperature-predictor",
       description: "서울의 2050년 여름 기온을 예측해보는 앱이에요", likes: 8,
       feedback: [{ nickname: "무지개", content: "회귀선 설명이 이해하기 쉬웠어요" }],

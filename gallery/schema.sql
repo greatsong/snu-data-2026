@@ -13,7 +13,7 @@ create table if not exists public.apps (
                  '1일차 MBTI 페이지',
                  '2일차 인구 대시보드',
                  '3일차 AI 채팅앱',
-                 '4일차 기온 예측기',
+                 '4일차 머신러닝 프로젝트',
                  '5일차 최종 프로젝트'
                )),
   nickname     text not null check (char_length(nickname) between 1 and 20),
