@@ -213,3 +213,9 @@ footer.foot { max-width: var(--maxw); margin: 0 auto; padding: 14px 20px 40px; c
 .howto ol { margin: 12px 0 6px; padding-left: 22px; line-height: 1.8; }
 .howto .howto-tip { font-size: .88rem; opacity: .8; margin: 6px 0 0; }
 @media (max-width: 480px) { .howto { padding: 10px 12px; } }
+
+/* 사용성 보강 (2026-07-18) */
+.empty-cta { margin-top: 10px; }
+.len-hint { display: block; margin-top: 4px; font-size: .82rem; color: var(--accent, #e8930c); }
+.howto summary { padding: 4px 2px; }           /* 클릭 영역 확대 */
+.howto > summary { display: list-item; }

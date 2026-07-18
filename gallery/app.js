@@ -473,3 +473,28 @@
 
   document.addEventListener("DOMContentLoaded", init);
 })();
+
+// ── 사용성 보강 (2026-07-18 점검 반영) ──
+document.addEventListener("click", (e) => {
+  const btn = e.target.closest("[data-go-submit]");
+  if (!btn) return;
+  const tab = [...document.querySelectorAll(".tab")].find(b => (b.dataset.view || "") === "submit");
+  if (tab) { tab.click(); window.scrollTo({ top: 0, behavior: "smooth" }); }
+});
+// 닉네임/팀명이 최대 길이에 닿으면 조용히 잘리지 않게 안내
+document.addEventListener("input", (e) => {
+  const el = e.target;
+  if (!el.maxLength || el.maxLength < 0 || el.tagName !== "INPUT") return;
+  if (el.value.length >= el.maxLength) {
+    let hint = el.parentElement.querySelector(".len-hint");
+    if (!hint) {
+      hint = document.createElement("span");
+      hint.className = "len-hint";
+      el.parentElement.appendChild(hint);
+    }
+    hint.textContent = `최대 ${el.maxLength}자까지 쓸 수 있어요.`;
+  } else {
+    const hint = el.parentElement.querySelector(".len-hint");
+    if (hint) hint.remove();
+  }
+});
