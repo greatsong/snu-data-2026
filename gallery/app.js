@@ -444,14 +444,7 @@
   // 10. 모드 배지
   // ---------------------------------------------------------
   function renderModeBadge() {
-    const badge = $("#modeBadge");
-    if (useSupabase) {
-      badge.textContent = "실제 모드 (Supabase 연동)";
-      badge.classList.add("live");
-    } else {
-      badge.textContent = "데모 모드 (샘플 데이터)";
-      badge.classList.add("demo");
-    }
+    // 모드 배지는 화면에 표시하지 않는다 (요청에 따라 제거)
   }
 
   // ---------------------------------------------------------
