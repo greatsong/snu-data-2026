@@ -89,7 +89,7 @@
   </div>
   <div class="callout err">
     <div class="h">🧯 예상 오류</div>
-    <p><b>데이터가 안 뜸</b> → API 주소 오타·인터넷 연결 확인(Open-Meteo는 키·CORS 문제 없음). · <b>그래프가 안 뜸</b> → CDN 라이브러리 누락 → “그래프 라이브러리를 CDN으로 넣어줘”. · <b>빈 화면</b> → fetch가 비동기라 데이터 오기 전에 그림 → “데이터를 받은 뒤에 그리도록 해줘”. · <b>파일명을 weather.html로 안 만듦</b> → index.html 덮어써 MBTI 사라짐 → 새 파일로.</p>
+    <p><b>데이터가 안 뜸</b> → API 주소 오타·인터넷 연결 확인(Open-Meteo는 키·CORS 문제 없음). · <b>그래프가 안 뜸 · “Chart is not defined”</b> → Chart.js가 안 실린 채 그래프 코드가 먼저 돎(CDN 태그 누락·로드 순서·학교망 차단) → “Chart.js를 CDN으로 넣고, 그래프 코드는 그게 다 불러와진 뒤에 실행되게 해줘”. 이 오류는 <b>날씨 정보를 불러오지 못했습니다</b>로 뭉뚱그려 뜨는 경우가 많음 — 데이터는 멀쩡한데 그래프에서 터진 것. · <b>빈 화면</b> → fetch가 비동기라 데이터 오기 전에 그림 → “데이터를 받은 뒤에 그리도록 해줘”. · <b>파일명을 weather.html로 안 만듦</b> → index.html 덮어써 MBTI 사라짐 → 새 파일로.</p>
   </div>
   <div class="callout theory">
     <div class="h">📖 이론 심화 — 브라우저 HTML의 한계 = 스트림릿의 이유</div>

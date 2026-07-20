@@ -209,7 +209,8 @@ function show(t){
 - 데이터는 'API 키가 필요 없는' Open-Meteo API에서 브라우저가 직접 불러오게 해줘(별도 서버 없이):
   https://api.open-meteo.com/v1/forecast?latitude=37.57&amp;longitude=126.98&amp;current=temperature_2m,relative_humidity_2m,wind_speed_10m&amp;hourly=temperature_2m&amp;daily=temperature_2m_max,temperature_2m_min&amp;timezone=Asia/Seoul
 - 상단 요약 카드: 현재 기온, 습도, 풍속.
-- 오늘 시간대별 기온 꺾은선 그래프 1개(그래프 라이브러리는 CDN으로).
+- 오늘 시간대별 기온 꺾은선 그래프 1개. 그래프는 Chart.js를 CDN으로 불러와서 그려줘.
+- 그래프 코드는 Chart.js가 다 불러와진 다음에 실행되게 해줘. 그래프가 안 그려져도 위쪽 숫자 카드는 그대로 보여야 해.
 - 7일간 최고/최저 기온도 보여줘.
 - 따뜻한 크림·노란색 톤, 한국어 라벨, 초보자도 읽기 쉽게.
 - 완성된 weather.html 전체 코드를 한 번에 줘.</pre></div>
