@@ -29,7 +29,6 @@
     <div class="t">🎯 오늘 만드는 것</div>
     <ul>
       <li><b>MBTI×포켓몬 페이지</b> — MBTI 고르면 어울리는 포켓몬 · GitHub Pages 배포</li>
-      <li><b>HTML 날씨 대시보드</b> — 기온 데이터를 AI가 예쁜 한 장으로</li>
       <li><b>주식 대시보드(맛보기)</b> — 스트림릿으로 켠 첫 웹앱</li>
     </ul>
   </div>
@@ -156,14 +155,6 @@ function show(t){
   <ul>
     <li>브라우저에서 열어 확인 · 마음에 안 들면 <b>대화로 개선</b></li>
   </ul>
-  <div class="codewrap improve"><span class="label">③ 프롬프트 개선 (예시)</span><pre>좋아! 이어서 고쳐줘.
-- 16유형마다 포켓몬을 다 채우고, 어울리는 이유를 더 재미있게 써줘.
-- 고른 유형에 따라 배경색을 다르게 해줘.
-- 포켓몬 이미지도 보여줘. 주소를 지어내지 말고 PokeAPI의 공식 스프라이트를 쓰고,
-  이미지가 안 뜨면 원래 이모지가 대신 보이게 해줘(이때부터는 인터넷이 필요해).
-- '결과를 이미지로 저장' 버튼을 추가해줘. 화면을 이미지로 바꾸는 라이브러리는
-  html2canvas를 CDN으로 불러오고, 저장 코드는 그게 다 불러와진 뒤에 실행되게 해줘.</pre></div>
-
   <div class="callout tip">
     <div class="h">💡 바이브 코딩의 핵심 리듬</div>
     <ul>
@@ -187,57 +178,9 @@ function show(t){
     </ul>
   </div>
 
-  <h2>2. AI로 ‘실시간 날씨 대시보드’ 만들기 (키 없는 API)</h2>
+  <h2>2. 왜 스트림릿을 배울까? — 첫 웹앱 켜기</h2>
   <ul>
-    <li><b>키가 필요 없는 API</b>에서 <b>지금 이 순간</b> 날씨를 바로 불러오는 대시보드</li>
-    <li>파일 속 숫자가 아니라 <b>실시간 데이터</b> — "살아있는 데이터" 첫 맛보기</li>
-    <li>코드는 AI가 · 우리는 주문·배포만</li>
-  </ul>
-
-  <div class="callout tip">
-    <div class="h">📡 데이터 출처 = Open-Meteo (API 키 불필요)</div>
-    <ul>
-      <li>무료 날씨 API <a href="https://open-meteo.com" target="_blank" rel="noopener">open-meteo.com</a> · <b>키 없이</b> 브라우저에서 바로 호출(CORS 허용)</li>
-      <li>서울 좌표 = 위도 <code>37.57</code> · 경도 <code>126.98</code></li>
-      <li><b>키가 필요한</b> API(유튜브 등)는 3일차에 배웁니다</li>
-    </ul>
-  </div>
-
-  <ol class="steps">
-    <li><span class="st">AI에게 아래 주문서 그대로 붙여넣기</span></li>
-  </ol>
-  <div class="codewrap prompt"><span class="label">① 샘플 프롬프트</span><pre>'실시간 날씨 대시보드'를 HTML 파일 하나(weather.html)로 만들어줘. 조건:
-
-- 파일 하나로 끝나고, 외부 설치 없이 브라우저에서 바로 열려야 해(GitHub Pages에 올릴 거야).
-- 데이터는 'API 키가 필요 없는' Open-Meteo API에서 브라우저가 직접 불러오게 해줘(별도 서버 없이):
-  https://api.open-meteo.com/v1/forecast?latitude=37.57&amp;longitude=126.98&amp;current=temperature_2m,relative_humidity_2m,wind_speed_10m&amp;hourly=temperature_2m&amp;daily=temperature_2m_max,temperature_2m_min&amp;timezone=Asia/Seoul
-- 상단 요약 카드: 현재 기온, 습도, 풍속.
-- 오늘 시간대별 기온 꺾은선 그래프 1개. 그래프는 Chart.js를 CDN으로 불러와서 그려줘.
-- 그래프 코드는 Chart.js가 다 불러와진 다음에 실행되게 해줘. 그래프가 안 그려져도 위쪽 숫자 카드는 그대로 보여야 해.
-- 7일간 최고/최저 기온도 보여줘.
-- 따뜻한 크림·노란색 톤, 한국어 라벨, 초보자도 읽기 쉽게.
-- 완성된 weather.html 전체 코드를 한 번에 줘.</pre></div>
-  <ol class="steps" start="2">
-    <li><span class="st">받은 코드를 GitHub에 새 파일로</span><br>같은 저장소에 <code>weather.html</code> 만들고 붙여넣기 · 커밋<br><span style="font-size:.86em;opacity:.75">Pages 설정은 <b>저장소당 한 번</b> — §1에서 이미 켜 둔 저장소라, 커밋만 하면 잠시 후(1분 안팎) 자동 배포됩니다</span></li>
-    <li><span class="st">주소로 확인</span><br><code>https://사용자이름.github.io/my-mbti/weather.html</code> · 새로고침하면 값이 바뀜(실시간!)</li>
-  </ol>
-  <ul>
-    <li>여기서도 세 박자 · 결과 보고 <b>③ 개선</b> 이어서 주문</li>
-  </ul>
-  <div class="codewrap improve"><span class="label">③ 프롬프트 개선 (예시)</span><pre>좋아! 이어서 고쳐줘.
-- 맨 위에 도시 선택 드롭다운(서울·부산·제주)을 넣고, 고르면 그 도시 날씨로 바꿔줘.
-- 맑음·비 같은 날씨 상태를 큰 이모지로 보여줘.
-- 3일 예보 카드도 추가해줘.</pre></div>
-  <div class="callout tip">
-    <div class="h">💡 기억할 것</div>
-    <ul>
-      <li><b>① 주문 → ② 결과 → ③ 개선</b> · 반복 = 바이브 코딩</li>
-    </ul>
-  </div>
-
-  <h2>3. 왜 스트림릿을 배울까? — 첫 웹앱 켜기</h2>
-  <ul>
-    <li>브라우저 HTML로도 API·드롭다운은 됨 (방금 봤듯)</li>
+    <li>브라우저 HTML로도 화면 만들기까지는 됨 (방금 MBTI 페이지처럼)</li>
     <li>단, <b>파이썬 데이터 분석</b> · <b>비밀 열쇠(API 키) 숨기기</b>가 필요하면 부족</li>
     <li>→ <b>스트림릿</b> = 파이썬 코드를 버튼·입력창 있는 웹앱으로</li>
     <li>오늘 목표: 종목 입력 → <b>1년 주가 그래프</b> 뜨는 앱 배포</li>
@@ -283,14 +226,13 @@ plotly</pre></div>
   <h2>🎒 오늘의 체크 & 링크</h2>
   <ul class="checklist">
     <li>내 GitHub Pages 주소가 생겼다 (MBTI×포켓몬)</li>
-    <li>HTML 날씨 대시보드를 배포했다</li>
     <li>스트림릿으로 앱을 켜 봤다 (미완성도 OK)</li>
     <li>에러가 나면 <b>통째로 복붙</b>하면 된다는 걸 안다</li>
   </ul>
   <div class="callout tip">
     <div class="h">📌 내일을 위한 준비</div>
     <ul>
-      <li>오늘 만든 3개 주소 메모 → 마지막 날 <b>나만의 프로젝트</b> 재료</li>
+      <li>오늘 만든 2개 주소 메모 → 마지막 날 <b>나만의 프로젝트</b> 재료</li>
     </ul>
   </div>
 
