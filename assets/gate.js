@@ -4,6 +4,23 @@
   function apply() {
     var released = (typeof window.RELEASED_DAY === 'number') ? window.RELEASED_DAY : 1;
 
+    // ── 날짜 자동 공개 ────────────────────────────
+    // RELEASE_SCHEDULE의 각 항목은 '그 시각(한국 시간)이 지나면 해당 일차가 열림'.
+    // Date.parse는 +09:00 오프셋을 UTC로 환산하므로, 보는 사람의 시간대와 무관하게
+    // 전 세계 동시에 같은 순간에 열린다. 자동·수동 중 '더 많이 열린 쪽'을 따른다.
+    try {
+      var sched = window.RELEASE_SCHEDULE;
+      if (Array.isArray(sched)) {
+        var now = Date.now();
+        for (var i = 0; i < sched.length; i++) {
+          var t = Date.parse(sched[i].at);
+          if (!isNaN(t) && now >= t && sched[i].day > released) {
+            released = sched[i].day;
+          }
+        }
+      }
+    } catch (e) {}
+
     // ── 강사 미리보기 모드 ──────────────────────────
     // 켜기: 아무 수강생용 페이지나 ?preview=teacher 붙여 접속 (이 브라우저에 기억됨)
     // 끄기: ?preview=off — 수강생과 같은 화면으로 복귀 (수업 화면 공유 전 권장)
