@@ -450,6 +450,41 @@
   // ---------------------------------------------------------
   // 11. 시작
   // ---------------------------------------------------------
+  // 5초마다 새 작품을 받아온다. 다만 화면을 다시 그리면 사용자가 하던 일이 끊기므로
+  // (입력 중 · 피드백 펼침 · 제출 탭) 지금 건드리면 안 되는 상황이면 이번 회차는 건너뛴다.
+  const REFRESH_MS = 5000;
+
+  function busyNow() {
+    if (document.visibilityState !== "visible") return true;      // 다른 탭 보는 중
+    if (document.querySelector(".tab.active")?.dataset.view !== "gallery") return true;
+    const el = document.activeElement;
+    if (el && /^(INPUT|TEXTAREA|SELECT)$/.test(el.tagName)) return true; // 입력 중
+    if (gridEl.querySelector("details[open]")) return true;        // 피드백 펼쳐 둠
+    return false;
+  }
+
+  // 내용이 그대로면 다시 그리지 않는다 (깜빡임 방지)
+  function snapshot() {
+    return appsCache.map((a) => a.id + ":" + a.likes + ":" + (a.feedback ? a.feedback.length : 0)).join("|");
+  }
+
+  function startAutoRefresh() {
+    if (!useSupabase) return; // 데모 모드는 받아올 곳이 없다
+    let last = snapshot();
+    setInterval(async () => {
+      if (busyNow()) return;
+      try {
+        await loadApps();
+      } catch (e) {
+        return; // 잠깐 끊긴 것일 수 있으니 조용히 넘기고 다음 회차에 다시 시도
+      }
+      const now = snapshot();
+      if (now === last) return;
+      last = now;
+      renderGallery();
+    }, REFRESH_MS);
+  }
+
   async function init() {
     initTabs();
     initFilters();
@@ -462,6 +497,7 @@
       countEl.textContent = "데이터를 불러오지 못했어요. Supabase 설정(config.js)을 확인해주세요.";
     }
     renderGallery();
+    startAutoRefresh();
   }
 
   document.addEventListener("DOMContentLoaded", init);
