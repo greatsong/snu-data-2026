@@ -231,14 +231,14 @@ st.dataframe(pd.DataFrame(rows))</pre></div>
   <ul>
     <li>서울 연도별 평균기온 → 직선 학습 → 슬라이더로 예측</li>
     <li>도구 = scikit-learn <code>LinearRegression</code>(가장 잘 맞는 직선 긋기) · requirements.txt엔 <code>scikit-learn</code>·<code>plotly</code>만(기본 설치 제외 · 버전 없이)</li>
-    <li>데이터 = <b>예제 저장소 주소 그대로</b>(<code>seoul.csv</code> · 1907년부터의 <b>일별</b> 기온 · 원자료는 기상청 <a href="https://data.kma.go.kr" target="_blank" rel="noopener">data.kma.go.kr</a>) — 다운로드 없이 주소로 바로 불러오기 · <b>매일 아침 자동 갱신</b>(어제 기온까지 · 원리는 <a href="extra.html">심화 자료</a>의 자동화에서!)</li>
+    <li>데이터 = <b>예제 저장소 주소 그대로</b>(<code>seoul.csv</code> · 1907년부터의 <b>일별</b> 기온 · 원자료는 기상청 <a href="https://data.kma.go.kr" target="_blank" rel="noopener">data.kma.go.kr</a>) — 다운로드 없이 주소로 바로 불러오기 · <b>매일 아침 자동 갱신</b>(최근 기온까지 · 원리는 <a href="extra.html">심화 자료</a>의 자동화에서!)</li>
     <li>일별 → <b>연도별 평균</b>으로 묶어 학습 · <b>관측일이 부족한 해</b>(첫 해·올해·1950~53 전쟁 시기)는 평균이 왜곡되니 빼기 = 방금 배운 ML 5단계의 <b>② 전처리</b> 실전 · "데이터에도 역사가 있다" 🕵️</li>
   </ul>
   <div class="codewrap code"><span class="label">requirements.txt</span><pre>scikit-learn
 plotly</pre></div>
   <div class="codewrap prompt"><span class="label">① 샘플 프롬프트</span><pre>스트림릿 '서울 기온 예측기' 앱 하나(main.py)를 만들어줘. 스트림릿 클라우드에 올릴 거야. 조건:
 
-- 데이터는 이 주소에서 불러와(1907년부터 어제까지의 일별 기온이야.
+- 데이터는 이 주소에서 불러와(1907년부터 최근까지의 일별 기온이야.
   열은 날짜, 지점, 평균기온, 최저기온, 최고기온):
   https://raw.githubusercontent.com/greatsong/modudata/main/data/seoul.csv
 - 날짜에서 연도를 뽑아 '연도별 평균기온'으로 묶어줘.
@@ -262,7 +262,7 @@ from sklearn.linear_model import LinearRegression
 
 st.title("🌡️ 서울 기온 예측기")
 
-# ① 수집 — CSV 불러오기 (1907년~어제, 일별 기온 · 매일 자동 갱신)
+# ① 수집 — CSV 불러오기 (1907년~최근, 일별 기온 · 매일 자동 갱신)
 url = "https://raw.githubusercontent.com/greatsong/modudata/main/data/seoul.csv"
 df = pd.read_csv(url)
 
@@ -324,12 +324,12 @@ if year &gt; int(yearly["연도"].max()):
     </ul>
   </div>
   <ul>
-    <li>데이터 = <b>예제 저장소 주소 그대로</b>(<code>kobis.csv</code> · 최근 개봉 영화 515편 · 원자료는 영화진흥위원회 <a href="https://www.kobis.or.kr" target="_blank" rel="noopener">kobis.or.kr</a>) — 다운로드 없이 주소로 바로 불러오기</li>
+    <li>데이터 = <b>예제 저장소 주소 그대로</b>(<code>kobis.csv</code> · 최근 개봉한 영화들 · 원자료는 영화진흥위원회 <a href="https://www.kobis.or.kr" target="_blank" rel="noopener">kobis.or.kr</a>) — 다운로드 없이 주소로 바로 불러오기</li>
     <li>열 = 영화명·개봉일·스크린수·상영횟수·순위·<b>관객수</b>(첫날)·<b>최종관객</b> · 목표 = 초반 지표로 <b>최종관객 예측</b></li>
   </ul>
   <div class="codewrap prompt"><span class="label">① 샘플 프롬프트</span><pre>스트림릿(streamlit) '영화 흥행 예측기' 앱 하나(main.py)를 만들어줘. 조건:
 
-- 데이터는 이 주소에서 불러와(최근 개봉 영화 515편이야.
+- 데이터는 이 주소에서 불러와(최근 개봉한 영화들이야.
   열은 영화명, 개봉일, 스크린수, 상영횟수, 순위, 관객수(개봉 첫날), 최종관객):
   https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis.csv
 - 스크린수, 상영횟수, 첫날 관객수(관객수 열)로 최종관객을 예측하는
@@ -352,7 +352,7 @@ from sklearn.linear_model import LinearRegression
 
 st.title("🎬 영화 흥행 예측기")
 
-# ① 수집 — CSV 불러오기 (최근 영화 515편)
+# ① 수집 — CSV 불러오기 (최근 개봉 영화)
 url = "https://raw.githubusercontent.com/greatsong/modudata/main/data/kobis.csv"
 df = pd.read_csv(url)
 
