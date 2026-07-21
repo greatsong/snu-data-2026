@@ -336,6 +336,58 @@ st.plotly_chart(fig, use_container_width=True)</pre></div>
     </ul>
   </div>
 
+  <ul>
+    <li>🎈 <b>재미로 하나</b> — §2의 인구 피라미드에 <b>연도 슬라이더</b>를 달아, 12년을 애니메이션으로 (예: 서울 강남구 <b>대치1동</b>)</li>
+  </ul>
+  <div class="codewrap prompt"><span class="label">① 샘플 프롬프트</span><pre>2일차에 만든 '인구 피라미드'를 연도 애니메이션으로 바꿔줘.
+
+- 데이터는 같은 파일(population_yearly.csv.gz). 이번엔 한 해만 고르지 말고 2015~2026년을 전부 써줘.
+- 시도 → 시군구 → 동을 드롭다운으로 고르면 그 동네 피라미드가 나오게. (예: 서울 강남구 대치1동)
+- 피라미드에 '연도 슬라이더로 애니메이션'을 달아서, 재생 버튼을 누르면 2015년부터 2026년까지 모양이 바뀌게.
+- 남자는 왼쪽(파랑), 여자는 오른쪽(살구색), 세로축은 나이(0세가 맨 아래).
+- 연도가 바뀌어도 막대 길이를 비교할 수 있게 가로축 폭은 고정해줘.
+- 한국어 라벨, 따뜻한 톤. 초보자용 한국어 주석.</pre></div>
+  <ul>
+    <li>켜면 <b>드롭다운 3개 + 재생 버튼</b>이 뜨고, 재생하면 2015→2026년 인구 모양이 해마다 바뀌어요 · 이런 <b>모습</b>이면 성공</li>
+  </ul>
+  <div class="codewrap code"><span class="label">② AI가 준 코드 (예시)</span><pre>import streamlit as st
+import pandas as pd
+import plotly.express as px
+
+st.title("🏘️ 연도별 인구 피라미드")
+
+# 1) 데이터 불러오기 (2015~2026년 전부)
+url = ("https://raw.githubusercontent.com/greatsong/"
+       "modudata/main/data/population_yearly.csv.gz")
+df = pd.read_csv(url)
+
+# 2) 시도 → 시군구 → 동 고르기 (연도는 애니메이션이 담당)
+sido = st.selectbox("시도", sorted(df["시도"].unique()))
+sgg  = st.selectbox("시군구", sorted(df[df["시도"] == sido]["시군구"].unique()))
+d2   = df[(df["시도"] == sido) &amp; (df["시군구"] == sgg)]
+dong = st.selectbox("동", sorted(d2["동"].unique()))
+picked = d2[d2["동"] == dong]          # 예: 대치1동
+
+# 3) 모든 연도의 나이별 남/여 인구를 '긴 표'로 (남자는 음수 = 왼쪽)
+rows = []
+for _, r in picked.iterrows():
+    for a in range(101):
+        mcol = f"남_{a}세" if a &lt; 100 else "남_100세 이상"
+        fcol = f"여_{a}세" if a &lt; 100 else "여_100세 이상"
+        age  = f"{a}세" if a &lt; 100 else "100세 이상"
+        rows.append({"연도": int(r["연도"]), "나이": age, "성별": "남자", "인구": -int(r[mcol])})
+        rows.append({"연도": int(r["연도"]), "나이": age, "성별": "여자", "인구":  int(r[fcol])})
+long = pd.DataFrame(rows).sort_values("연도")
+
+# 4) 연도 슬라이더로 애니메이션 (0세가 맨 아래로 오도록 나이 순서를 100→0)
+mx = long["인구"].abs().max()
+age_order = ["100세 이상"] + [f"{a}세" for a in range(99, -1, -1)]
+fig = px.bar(long, x="인구", y="나이", color="성별", orientation="h",
+             animation_frame="연도", range_x=(-mx*1.1, mx*1.1),
+             category_orders={"나이": age_order},
+             color_discrete_map={"남자": "#5B8FB9", "여자": "#E8998D"})
+st.plotly_chart(fig, use_container_width=True)</pre></div>
+
   <h2>📌 내일을 위한 준비</h2>
   <ul>
     <li>오늘 = 인구 데이터로 ‘읽는 눈’ 훈련 · 이제 <b>내 관심 주제</b>로</li>
