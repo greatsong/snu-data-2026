@@ -346,6 +346,7 @@ st.plotly_chart(fig, use_container_width=True)</pre></div>
 - 피라미드에 '연도 슬라이더로 애니메이션'을 달아서, 재생 버튼을 누르면 2015년부터 2026년까지 모양이 바뀌게.
 - 남자는 왼쪽(파랑), 여자는 오른쪽(살구색), 세로축은 나이(0세가 맨 아래).
 - 연도가 바뀌어도 막대 길이를 비교할 수 있게 가로축 폭은 고정해줘.
+- 피라미드 아래에, 이 동네의 '평균 연령'과 '중앙값 연령'이 2015~2026년 동안 어떻게 변했는지 꺾은선 그래프로 같이 보여줘.
 - 한국어 라벨, 따뜻한 톤. 초보자용 한국어 주석.</pre></div>
   <ul>
     <li>켜면 <b>드롭다운 3개 + 재생 버튼</b>이 뜨고, 재생하면 2015→2026년 인구 모양이 해마다 바뀌어요 · 이런 <b>모습</b>이면 성공</li>
@@ -386,7 +387,30 @@ fig = px.bar(long, x="인구", y="나이", color="성별", orientation="h",
              animation_frame="연도", range_x=(-mx*1.1, mx*1.1),
              category_orders={"나이": age_order},
              color_discrete_map={"남자": "#5B8FB9", "여자": "#E8998D"})
-st.plotly_chart(fig, use_container_width=True)</pre></div>
+st.plotly_chart(fig, use_container_width=True)
+
+# 5) 평균 연령·중앙값 연령이 해마다 어떻게 변했는지 ('100세 이상'은 100세로 셈)
+def age_stats(r):
+    pops = [int(r[f"남_{a}세"]) + int(r[f"여_{a}세"]) if a &lt; 100
+            else int(r["남_100세 이상"]) + int(r["여_100세 이상"]) for a in range(101)]
+    total = sum(pops)
+    mean = sum(a * p for a, p in enumerate(pops)) / total   # a가 곧 나이
+    cum, median = 0, 100
+    for a, p in enumerate(pops):
+        cum += p
+        if cum &gt;= total / 2:            # 누적이 절반을 넘는 첫 나이 = 중앙값
+            median = a
+            break
+    return round(mean, 1), median
+
+stats = []
+for _, r in picked.iterrows():
+    m, md = age_stats(r)
+    stats.append({"연도": int(r["연도"]), "평균 연령": m, "중앙값 연령": md})
+stats_df = pd.DataFrame(stats).sort_values("연도")
+
+fig2 = px.line(stats_df, x="연도", y=["평균 연령", "중앙값 연령"], markers=True)
+st.plotly_chart(fig2, use_container_width=True)</pre></div>
 
   <h2>📌 내일을 위한 준비</h2>
   <ul>
