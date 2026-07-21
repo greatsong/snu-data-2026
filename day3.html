@@ -85,11 +85,12 @@
 - 초보자용으로 주석을 한국어로 달고, main.py 전체 코드를 한 번에 줘.</pre></div>
   <ul>
     <li>누를 때마다 다른 값 → 파일이 아니라 그 순간 창구에서 받아옴 = "살아있는 데이터"</li>
+    <li>이번엔 예시 코드 없이 진행 — ①을 그대로 넣어 받은 내 코드가 곧 ②, 화면이 뜨면 아래 ③으로</li>
   </ul>
   <div class="codewrap improve"><span class="label">③ 프롬프트 개선 (예시)</span><pre>좋아! 여기서 이어서 고쳐줘.
 - 받아온 JSON 원본도 접었다 펼 수 있게 보여줘. 어떻게 생겼는지 궁금해.
 - 고양이 상식을 한국어로 번역해서 함께 보여주면 더 좋겠어.
-- 버튼 색과 카드를 따뜻한 노란 톤으로 예쁘게 꾸며줘.</pre></div>
+- 버튼과 결과 영역을 따뜻한 노란 톤으로 예쁘게 꾸며줘.</pre></div>
   <div class="callout tip">
     <div class="h">💡 JSON = 라벨 붙은 상자</div>
     <ul>
@@ -160,40 +161,100 @@
   <div class="codewrap code"><span class="label">② AI가 준 코드 (예시)</span><pre>import streamlit as st
 import requests
 
-st.title("📺 유튜브 채널 대시보드")
+# -----------------------------
+# 기본 페이지 설정
+# -----------------------------
+st.set_page_config(page_title="유튜브 채널 통계 대시보드", page_icon="📊")
 
-# 🔑 키는 코드에 직접 쓰지 않고, 비밀 금고(secrets)에서 꺼냅니다
+st.title("📊 유튜브 채널 통계 대시보드")
+st.write("채널 ID를 입력하면 구독자 수, 조회수, 영상 수를 한눈에 보여드려요!")
+
+# -----------------------------
+# API 키 불러오기 (secrets 금고에서!)
+# -----------------------------
+# ⚠️ 절대 코드에 API 키를 직접 쓰지 않아요.
+# .streamlit/secrets.toml 파일이나 Streamlit Cloud의 Secrets 설정에
+# YOUTUBE_API_KEY = "여기에_실제_키" 형태로 넣어주세요.
 API_KEY = st.secrets["YOUTUBE_API_KEY"]
 
-# 채널 ID 입력창 (기본값은 구글 개발자 채널)
-channel_id = st.text_input("채널 ID", "UC_x5XG1OV2P6uZZ5FSM9Ttw")
+# -----------------------------
+# 채널 ID 입력받기
+# -----------------------------
+channel_id = st.text_input(
+    "유튜브 채널 ID를 입력하세요",
+    placeholder="예: UC_x5XG1OV2P6uZZ5FSM9Ttw",
+)
 
-if channel_id:
-    # 유튜브 '창구' 주소에 요청을 보냅니다
-    url = "https://www.googleapis.com/youtube/v3/channels"
-    params = {"part": "statistics", "id": channel_id, "key": API_KEY}
-    res = requests.get(url, params=params)
+search_btn = st.button("조회하기 🔍")
 
-    if res.status_code == 200 and res.json().get("items"):
-        # 응답(JSON) 상자에서 statistics 값을 꺼냅니다
-        stats = res.json()["items"][0]["statistics"]
-        subs = int(stats["subscriberCount"])
-        views = int(stats["viewCount"])
-        videos = int(stats["videoCount"])
-        avg = round(views / videos) if videos else 0
-
-        # metric 카드 4개로 보여주기
-        c1, c2, c3, c4 = st.columns(4)
-        c1.metric("구독자", f"{subs:,}")
-        c2.metric("총 조회수", f"{views:,}")
-        c3.metric("영상 수", f"{videos:,}")
-        c4.metric("영상당 평균 조회수", f"{avg:,}")
+# -----------------------------
+# 조회 버튼을 눌렀을 때 실행
+# -----------------------------
+if search_btn:
+    if not channel_id.strip():
+        st.warning("채널 ID를 먼저 입력해 주세요! 😊")
     else:
-        st.warning("채널을 찾지 못했어요. 채널 ID를 다시 확인해 주세요. 🙏")</pre></div>
+        # YouTube Data API v3의 channels 엔드포인트 호출
+        url = "https://www.googleapis.com/youtube/v3/channels"
+        params = {
+            "part": "snippet,statistics",
+            "id": channel_id.strip(),
+            "key": API_KEY,
+        }
+
+        response = requests.get(url, params=params)
+
+        # 상태코드가 200이 아니면 에러 안내
+        if response.status_code != 200:
+            st.error(
+                "😥 API 요청 중 문제가 발생했어요. "
+                f"(상태코드: {response.status_code}) "
+                "API 키가 올바른지, 요청 한도를 넘지 않았는지 확인해 주세요."
+            )
+        else:
+            data = response.json()
+            items = data.get("items", [])
+
+            # 채널을 못 찾은 경우 (items가 비어있음)
+            if len(items) == 0:
+                st.error(
+                    "🔍 채널을 찾을 수 없어요. "
+                    "채널 ID가 정확한지 다시 한번 확인해 주세요!"
+                )
+            else:
+                # 필요한 정보 꺼내오기
+                channel = items[0]
+                channel_name = channel["snippet"]["title"]
+                stats = channel["statistics"]
+
+                subscriber_count = int(stats.get("subscriberCount", 0))
+                view_count = int(stats.get("viewCount", 0))
+                video_count = int(stats.get("videoCount", 0))
+
+                # 영상당 평균 조회수 계산 (0으로 나누기 방지)
+                if video_count &gt; 0:
+                    avg_view_per_video = round(view_count / video_count)
+                else:
+                    avg_view_per_video = 0
+
+                st.success(f"'{channel_name}' 채널 정보를 불러왔어요! 🎉")
+
+                # -----------------------------
+                # 지표 카드 4개로 보여주기
+                # -----------------------------
+                col1, col2, col3, col4 = st.columns(4)
+
+                col1.metric("구독자 수", f"{subscriber_count:,}명")
+                col2.metric("총 조회수", f"{view_count:,}회")
+                col3.metric("영상 수", f"{video_count:,}개")
+                col4.metric("영상당 평균 조회수", f"{avg_view_per_video:,}회")</pre></div>
+  <div class="codewrap code"><span class="label">requirements.txt</span><pre>requests</pre></div>
+  <ul><li>requirements.txt엔 <code>requests</code> 한 줄이면 충분 · 스트림릿·판다스·넘파이는 기본 설치, 버전 없이</li></ul>
 
   <ul><li>마음에 안 들면 → 대화로 고치기</li></ul>
   <div class="codewrap improve"><span class="label">③ 프롬프트 개선 (예시)</span><pre>좋아! 여기서 이어서 고쳐줘.
-- 채널 이름과 프로필 이미지도 함께 위에 크게 보여줘(snippet 정보 사용).
+- 지금은 채널 이름이 알림 문구에만 나오니,
+  프로필 이미지와 함께 맨 위에 크게 올려줘(snippet 정보 사용).
 - 좋아하는 채널 3개를 미리 버튼으로 넣어서, 누르면 바로 통계가 뜨게.
 - 영상당 평균 조회수가 100만이 넘으면 카드 옆에 🔥 이모지를 붙여줘.</pre></div>
 
@@ -262,54 +323,68 @@ SOLAR_API_KEY = "업스테이지_콘솔에서_받은_키"</pre></div>
 - Solar API(모델 solar-open2, 접속 주소 https://api.upstage.ai/v1)를
   openai 라이브러리로 사용해.
 - API 키는 코드에 쓰지 말고, 비밀 금고(secrets)의 SOLAR_API_KEY에서 불러와.
-- 답이 빨리 나오도록 추론(생각) 강도는 최소로 설정해 줘.
+- 모델 이름은 'solar-open2'를 글자 그대로 써줘. 다른 이름으로 바꾸지 마.
+- 답이 빨리 나오도록 추론(생각) 강도는 최소로 해줘.
+  temperature가 아니라 reasoning_effort 값을 'low'로 주는 방식이야.
 - 채팅 입력창으로 메시지를 보내면, AI의 답이 말풍선으로 이어지게 해줘.
 - 대화 기록을 세션에 저장해서, 이전 대화를 기억하며 이어서 답하게 해줘.
 - 시스템 프롬프트로 '너는 따뜻하고 친절한 데이터 분석 선생님이야.
   반드시 순수 한국어로만 답해'라는 성격을 줘.
 - 필요한 라이브러리 목록(requirements.txt)도 같이 줘.
   버전 숫자 없이 이름만, 스트림릿·판다스·넘파이는 기본 설치라 빼고.
+  이 앱은 openai 하나만 적으면 돼.
 - 초보자용 한국어 주석을 달아. main.py 전체 코드를 한 번에 줘.</pre></div>
 
   <ul><li>아래는 받게 될 코드의 <b>모습</b> 예시 · 라이브러리 이름·형태 조금 달라도 OK</li></ul>
   <div class="codewrap code"><span class="label">② AI가 준 코드 (예시)</span><pre>import streamlit as st
 from openai import OpenAI
 
-st.title("🤖 나만의 AI 채팅")
+# 페이지 기본 설정
+st.set_page_config(page_title="AI 데이터 분석 선생님", page_icon="🤖")
+st.title("🤖 AI 데이터 분석 선생님")
 
-# 🔑 AI 키도 비밀 금고에서 꺼냅니다 (접속 주소만 Solar로)
-client = OpenAI(api_key=st.secrets["SOLAR_API_KEY"],
-                base_url="https://api.upstage.ai/v1")
+# Streamlit Cloud의 secrets 금고에서 API 키를 안전하게 불러오기
+client = OpenAI(
+    api_key=st.secrets["SOLAR_API_KEY"],
+    base_url="https://api.upstage.ai/v1",
+)
 
-# 성격 부여(시스템 프롬프트)
-SYSTEM = "너는 따뜻하고 친절한 데이터 분석 선생님이야. 반드시 순수 한국어로만 답해."
+# 시스템 프롬프트 (AI의 성격 설정)
+SYSTEM_PROMPT = "너는 따뜻하고 친절한 데이터 분석 선생님이야. 반드시 순수 한국어로만 답해"
 
-# 지난 대화를 기억하는 메모장
+# 세션에 대화 기록이 없으면 처음 한 번만 초기화
 if "messages" not in st.session_state:
-    st.session_state.messages = []
+    st.session_state.messages = [{"role": "system", "content": SYSTEM_PROMPT}]
 
-# 지금까지의 대화를 말풍선으로 다시 그리기
-for m in st.session_state.messages:
-    with st.chat_message(m["role"]):
-        st.markdown(m["content"])
+# 이전 대화 내용을 말풍선으로 화면에 그려주기 (system 메시지는 숨김)
+for msg in st.session_state.messages:
+    if msg["role"] != "system":
+        with st.chat_message(msg["role"]):
+            st.markdown(msg["content"])
 
-# 아래 입력창에 사용자가 뭔가 치면
-if prompt := st.chat_input("무엇이든 물어보세요"):
-    st.session_state.messages.append({"role": "user", "content": prompt})
+# 채팅 입력창 (사용자가 메시지를 입력하는 곳)
+user_input = st.chat_input("궁금한 것을 물어보세요!")
+
+if user_input:
+    # 사용자 메시지를 기록하고 화면에 표시
+    st.session_state.messages.append({"role": "user", "content": user_input})
     with st.chat_message("user"):
-        st.markdown(prompt)
+        st.markdown(user_input)
 
-    # AI가 '생성'한 답 받기 (대화 기록을 통째로 보내 기억하게)
-    resp = client.chat.completions.create(
-        model="solar-open2",
-        messages=[{"role": "system", "content": SYSTEM}]
-                 + st.session_state.messages,
-        reasoning_effort="minimal",  # '골똘히 생각' 모드 끄기 → 빠릿한 채팅
-    )
-    reply = resp.choices[0].message.content
-    st.session_state.messages.append({"role": "assistant", "content": reply})
+    # AI 답변 받아오기
     with st.chat_message("assistant"):
-        st.markdown(reply)</pre></div>
+        response = client.chat.completions.create(
+            model="solar-open2",              # 모델 이름은 그대로 유지
+            messages=st.session_state.messages,  # 이전 대화 전체를 함께 전달 (기억 유지)
+            reasoning_effort="low",           # 추론 강도 최소 -&gt; 빠른 응답
+        )
+        answer = response.choices[0].message.content
+        st.markdown(answer)
+
+    # AI 답변도 기록에 저장 (다음 질문에 이어서 사용)
+    st.session_state.messages.append({"role": "assistant", "content": answer})</pre></div>
+  <div class="codewrap code"><span class="label">requirements.txt</span><pre>openai</pre></div>
+  <ul><li>requirements.txt엔 <code>openai</code> 한 줄이면 충분 · 스트림릿·판다스·넘파이는 기본 설치, 버전 없이</li></ul>
 
   <ul><li>잘 되면 → 성격 바꾸기 · 맥락 더 주기</li></ul>
   <div class="codewrap improve"><span class="label">③ 프롬프트 개선 (예시)</span><pre>좋아! 여기서 이어서 고쳐줘.
@@ -346,7 +421,12 @@ if prompt := st.chat_input("무엇이든 물어보세요"):
 
 - 실시간 혼잡 로그(매시간 자동 수집된 CSV):
   https://raw.githubusercontent.com/greatsong/modudata/main/data/seoul_congestion_log.csv
-  열: 시각·지역명·혼잡도·인구max·위도·경도 (서울 명소 23곳)
+  열: 시각·코드·지역명·혼잡도·인구min·인구max·위도·경도 (서울 명소 23곳)
+- '시각' 값은 '2026-06-30 23:00'처럼 분까지만 있는 문자열이야.
+  날짜로 바꿀 때 이 형식을 그대로 지정해줘.
+- '혼잡도' 값은 숫자가 아니라 여유·보통·약간 붐빔·붐빔 네 가지 말이야.
+  그대로 평균을 내면 오류가 나니, 여유=1, 보통=2, 약간 붐빔=3, 붐빔=4 숫자로
+  바꾼 뒤에 집계와 색에 써줘.
 - '시각'에서 시(hour)를 뽑아, 명소별 시간대 평균 유동인구(인구max)를 구해줘.
 - plotly로 지도에 점을 찍고, 시간대별로 넘어가는 애니메이션(슬라이더·재생 버튼)으로 만들어줘.
   점 크기 = 유동인구, 색 = 혼잡도, 배경 타일 없이.
@@ -356,9 +436,18 @@ if prompt := st.chat_input("무엇이든 물어보세요"):
   <ul>
     <li>여기에 2일차 <b>거주 고령 지도(면)</b>를 배경으로 깔면 → “<b>사는 사람(밤) vs 지금 있는 사람(낮)</b>” 대비 완성 · ③ 개선으로 ↓</li>
   </ul>
-  <div class="codewrap improve"><span class="label">③ 프롬프트 개선 (예시)</span><pre>배경에 서울 행정동 고령비율 단계구분도(2일차 seoul_dong.geojson)를 파란 면으로 깔고,
-그 위에 혼잡 점을 빨간 버블로 얹어줘.
-호버에 지역명·유동인구·그 동네 고령비율이 뜨게.
+  <div class="codewrap improve"><span class="label">③ 프롬프트 개선 (예시)</span><pre>배경에 서울 행정동 고령비율 단계구분도를 파란 면으로 깔고,
+그 위에 혼잡 점을 빨간 버블로 얹어줘(파란 배경과 구분되게, 혼잡한 곳일수록 진하게).
+- 행정동 경계(2일차와 같은 파일, 속성은 '코드'·'동'·'구'):
+  https://raw.githubusercontent.com/greatsong/modudata/main/data/boundaries/seoul_dong.geojson
+- 고령비율은 2일차처럼 인구 데이터에서 계산해줘:
+  https://raw.githubusercontent.com/greatsong/modudata/main/data/population_yearly.csv.gz
+  이 표의 열은 연도·시도·시군구·동·코드와 나이별 인구 열('계_0세'~'계_100세 이상' 형식)이야.
+  '시도'가 '서울특별시'인 2026년 행만 골라, 동마다 '계_65세'부터 '계_100세 이상' 열의 합을
+  '계_' 전체 열의 합으로 나눠. 이 표는 한 행이 동 하나라서 따로 묶지 않아도 되고,
+  동 이름은 표의 '동' 열에 이미 있어(인구 표에 '구'라는 열은 없으니 쓰지 마).
+  경계와는 '코드'로 짝지어(혼잡 데이터의 '코드'가 아니라 인구 표의 '코드', 문자열로).
+- 호버에 지역명·유동인구·혼잡도·그 동네 고령비율이 뜨게.
 → "가산·강남은 밤엔 텅 비고 낮엔 폭발, 고덕·구로는 낮밤이 비슷"이 눈에 보이게.</pre></div>
   <div class="callout warn">
     <div class="h">⏳ 오늘은 ‘감탄’이 핵심 (강사 데모 중심)</div>

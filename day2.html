@@ -129,7 +129,11 @@
 - 데이터는 이 주소의 CSV를 pandas로 읽어(압축 파일이지만 판다스로 그냥 읽혀):
   https://raw.githubusercontent.com/greatsong/modudata/main/data/population_yearly.csv.gz
 - 가장 최신 연도만 남겨줘.
-- 남자/여자 인구 열을 모두 더해 동네(행)마다 '총인구' 열을 하나 만들어줘.
+- 표에는 연도·시도·시군구·동·코드 열과 나이별 인구 열이 있어.
+  나이별 열은 '계_0세', '남_0세', '여_0세'처럼 나이 하나마다 하나씩,
+  '계_100세 이상'까지 이어져. '남자인구' 같은 단일 열은 따로 없어.
+- 동네(행)마다 '남_'으로 시작하는 모든 열과 '여_'로 시작하는 모든 열을
+  전부 더해 '총인구' 열을 하나 만들어줘.
 - 화면에 순서대로 세 가지를 보여줘:
   1) 총인구의 describe() 결과 표
   2) 총인구 히스토그램
@@ -166,7 +170,7 @@
     <ul>
       <li>주민등록 인구통계 <a href="https://jumin.mois.go.kr" target="_blank" rel="noopener">jumin.mois.go.kr</a></li>
       <li>큰 흐름: <b>연령별 인구현황 → 읍면동 → 1세 단위 → CSV 다운로드</b> · 자세한 절차는 <b>교재 참고</b>(화면은 바뀔 수 있음)</li>
-      <li><b>빠른 실습</b> → 예제 저장소 <code>population_yearly.csv.gz</code> · 직접 받은 파일도 사용 가능 (받을 땐 <b>남녀 구분</b> 옵션으로)</li>
+      <li><b>빠른 실습</b> → 예제 저장소 <code>population_yearly.csv.gz</code> · 직접 받은 파일도 사용 가능 (받을 땐 <b>남녀 구분</b> 옵션으로 · 직접 받은 CSV는 한글 인코딩이 cp949일 수 있어요)</li>
     </ul>
   </div>
 
@@ -174,7 +178,7 @@
     <li>오늘도 <b>워크숍식 레벨업</b> · 한 계단씩</li>
   </ul>
   <ol class="steps">
-    <li><span class="st">LV1 · 배포 뼈대</span><br><code>my-population-app</code> Public 저장소 · <code>requirements.txt</code> + 빈 <code>main.py</code> → <b>먼저 스트림릿 켜기</b> · "Hello"만 떠도 성공</li>
+    <li><span class="st">LV1 · 배포 뼈대</span><br><code>my-population-app</code> Public 저장소 · <code>requirements.txt</code>(오늘 실습은 <code>plotly</code> 한 줄 — 스트림릿·판다스·넘파이는 기본 설치라 안 적음) + 빈 <code>main.py</code> → <b>먼저 스트림릿 켜기</b> · "Hello"만 떠도 성공</li>
     <li><span class="st">LV2 · 데이터 읽기</span><br>CSV 불러와 <code>df.head()</code>로 <b>표 화면에 띄우기</b> · 생김새 확인</li>
     <li><span class="st">LV3 · 그래프</span><br>동네 하나 골라 <b>인구 피라미드</b> 그리기</li>
     <li><span class="st">LV4 · 대시보드</span><br>총인구·평균연령·고령화율 <b>지표 카드</b> 얹어 완성</li>
@@ -194,6 +198,9 @@
 - 고른 동네의 '인구 피라미드'를 plotly 가로 막대그래프로 그려줘.
   남자는 왼쪽(값을 음수로), 여자는 오른쪽(양수)에 두고, 세로축은 나이.
   세로축은 0세가 맨 아래, 100세 이상이 맨 위로(아래에서 위로 나이가 커지게).
+- 다 그린 뒤 세로축 순서를 꼭 확인해줘. 맨 아래 눈금이 0세, 맨 위가 100세 이상이어야 해.
+  축을 통째로 뒤집는 옵션이나 값 크기순 정렬 옵션은 쓰지 말고,
+  나이 라벨을 0세부터 100세 이상까지 순서 그대로 축에 고정해줘.
 - 한국어 라벨, 따뜻한 톤. 초보자용으로 주석을 한국어로 달아줘.
 - 필요한 라이브러리 목록(requirements.txt)도 같이 줘.
   버전 숫자 없이 이름만, 스트림릿·판다스·넘파이는 기본 설치라 빼고.
@@ -202,48 +209,160 @@
   <ul>
     <li>AI가 <b>완성된 코드 한 덩어리</b>를 줌 · 글자까지 똑같지 않아도 OK · 이런 <b>모습</b>이면 성공</li>
   </ul>
-  <div class="codewrap code"><span class="label">② AI가 준 코드 (예시)</span><pre>import streamlit as st
+  <div class="codewrap code"><span class="label">② AI가 준 코드 (예시)</span><pre># -------------------------------------------------
+# 동네별 인구 피라미드 (Streamlit + Plotly)
+# -------------------------------------------------
+import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 
+# 페이지 기본 설정 (따뜻한 느낌을 위해 넓은 레이아웃 사용)
+st.set_page_config(page_title="동네별 인구 피라미드", page_icon="🏘️", layout="wide")
+
+# -------------------------------------------------
+# 1. 데이터 불러오기 (캐시로 한 번만 다운로드)
+# -------------------------------------------------
+@st.cache_data(show_spinner="데이터를 불러오는 중이에요...")
+def load_data():
+    url = "https://raw.githubusercontent.com/greatsong/modudata/main/data/population_yearly.csv.gz"
+    # 확장자가 .gz면 pandas가 알아서 압축을 풀어서 읽어줍니다.
+    df = pd.read_csv(url, compression="gzip")
+    return df
+
+df = load_data()
+
+# -------------------------------------------------
+# 2. 가장 최신 연도만 골라내기
+# -------------------------------------------------
+latest_year = df["연도"].max()
+df_latest = df[df["연도"] == latest_year].copy()
+
 st.title("🏘️ 동네별 인구 피라미드")
+st.caption(f"📅 기준 연도: {latest_year}년")
 
-# 1) 데이터 불러오기 (gz 압축이지만 판다스가 알아서 풀어서 읽음)
-url = ("https://raw.githubusercontent.com/greatsong/"
-       "modudata/main/data/population_yearly.csv.gz")
-df = pd.read_csv(url)
-df = df[df["연도"] == df["연도"].max()]    # 가장 최신 연도만
+# -------------------------------------------------
+# 3. 시도 → 시군구 → 동 선택 (드롭다운 3개)
+# -------------------------------------------------
+col1, col2, col3 = st.columns(3)
 
-# 2) 시도 → 시군구 → 동 순서로 고르기
-sido = st.selectbox("시도", sorted(df["시도"].unique()))
-sgg  = st.selectbox("시군구", sorted(df[df["시도"] == sido]["시군구"].unique()))
-d2   = df[(df["시도"] == sido) &amp; (df["시군구"] == sgg)]
-dong = st.selectbox("동네", sorted(d2["동"].unique()))
-row  = d2[d2["동"] == dong].iloc[0]
+with col1:
+    sido_list = sorted(df_latest["시도"].dropna().unique())
+    sido = st.selectbox("시도 선택", sido_list)
 
-# 3) 나이별 남/여 인구 뽑기 (열 이름: 남_0세 … 남_100세 이상)
-ages   = [f"{a}세" for a in range(100)] + ["100세 이상"]
-male   = [row[f"남_{a}"] for a in ages]
-female = [row[f"여_{a}"] for a in ages]
+with col2:
+    sigungu_list = sorted(
+        df_latest.loc[df_latest["시도"] == sido, "시군구"].dropna().unique()
+    )
+    sigungu = st.selectbox("시군구 선택", sigungu_list)
 
-# 4) 피라미드 그리기 — 남자는 왼쪽(음수), 여자는 오른쪽(양수)
+with col3:
+    dong_list = sorted(
+        df_latest.loc[
+            (df_latest["시도"] == sido) &amp; (df_latest["시군구"] == sigungu), "동"
+        ]
+        .dropna()
+        .unique()
+    )
+    dong = st.selectbox("동 선택", dong_list)
+
+# 선택한 동네 한 행만 뽑기
+row_df = df_latest[
+    (df_latest["시도"] == sido)
+    &amp; (df_latest["시군구"] == sigungu)
+    &amp; (df_latest["동"] == dong)
+]
+
+if row_df.empty:
+    st.warning("선택한 동네의 데이터가 없어요. 다른 동네를 골라보세요.")
+    st.stop()
+
+row = row_df.iloc[0]
+
+# -------------------------------------------------
+# 4. 나이 순서를 0세부터 100세 이상까지 '고정'해서 만들기
+#    (이 리스트 순서가 그대로 세로축 순서가 됩니다)
+# -------------------------------------------------
+ages = [f"{i}세" for i in range(100)] + ["100세 이상"]
+
+# 남자는 음수로 만들어서 왼쪽, 여자는 양수로 만들어서 오른쪽에 그림
+male_values = [-row.get(f"남_{age}", 0) for age in ages]
+female_values = [row.get(f"여_{age}", 0) for age in ages]
+
+# -------------------------------------------------
+# 5. Plotly로 인구 피라미드 그리기
+# -------------------------------------------------
 fig = go.Figure()
-fig.add_bar(y=ages, x=[-m for m in male], name="남자", orientation="h")
-fig.add_bar(y=ages, x=female,             name="여자", orientation="h")
-fig.update_layout(barmode="relative", title=f"{sido} {sgg} {dong} 인구 피라미드",
-                  xaxis_title="인구 수", yaxis_title="나이")
 
-st.plotly_chart(fig, use_container_width=True)</pre></div>
+fig.add_trace(
+    go.Bar(
+        y=ages,
+        x=male_values,
+        name="남자",
+        orientation="h",
+        marker_color="#6FA3D9",  # 따뜻한 톤의 파란색
+        hovertemplate="나이: %{y}&lt;br&gt;남자: %{customdata}명&lt;extra&gt;&lt;/extra&gt;",
+        customdata=[abs(v) for v in male_values],
+    )
+)
+
+fig.add_trace(
+    go.Bar(
+        y=ages,
+        x=female_values,
+        name="여자",
+        orientation="h",
+        marker_color="#F4978E",  # 살구색 톤
+        hovertemplate="나이: %{y}&lt;br&gt;여자: %{x}명&lt;extra&gt;&lt;/extra&gt;",
+    )
+)
+
+fig.update_layout(
+    title=f"{sido} {sigungu} {dong} 인구 피라미드 ({latest_year}년)",
+    barmode="overlay",
+    bargap=0.1,
+    plot_bgcolor="#FFFBF5",   # 따뜻한 크림색 배경
+    paper_bgcolor="#FFFBF5",
+    xaxis_title="인구 수 (명)",
+    yaxis_title="나이",
+    legend_title="성별",
+)
+
+# x축은 음수/양수 대신 절댓값으로 보이게(라벨만 바꿈)
+max_val = max(max(abs(v) for v in male_values), max(female_values)) if len(ages) &gt; 0 else 0
+tick_step = max(1, round(max_val / 4, -1) if max_val &gt; 0 else 1)
+tickvals = list(range(-int(max_val), int(max_val) + 1, int(tick_step) if tick_step else 1))
+fig.update_xaxes(
+    tickvals=tickvals,
+    ticktext=[str(abs(v)) for v in tickvals],
+)
+
+# ---------------------------------------------------------------
+# ⭐ 핵심: 세로축(나이) 순서를 '고정 배열'로 지정
+# ages 리스트의 첫 번째("0세")가 맨 아래, 마지막("100세 이상")이 맨 위로 옵니다.
+# autorange 뒤집기나 값 정렬 옵션은 사용하지 않습니다.
+# ---------------------------------------------------------------
+fig.update_yaxes(
+    categoryorder="array",
+    categoryarray=ages,
+)
+
+st.plotly_chart(fig, use_container_width=True)
+
+# -------------------------------------------------
+# 6. 세로축 순서 확인용 안내 (그림 아래 체크 문구)
+# -------------------------------------------------
+st.info(
+    "✅ 그래프의 세로축을 확인해보세요! 맨 아래 눈금이 **0세**, 맨 위 눈금이 **100세 이상**이어야 합니다."
+)</pre></div>
 
   <ul>
     <li>만든 앱을 켜서 확인 · 아쉬운 점은 <b>대화로 개선</b> (①②③ 그대로)</li>
   </ul>
   <div class="codewrap improve"><span class="label">③ 프롬프트 개선 (예시)</span><pre>좋아! 이제 여기에 지표 카드를 더해줘.
 - 그래프 위에 지표 카드 3개를 나란히: 총인구, 평균연령, 고령화율(65세 이상 비율, %).
-- 남자 막대는 파란색, 여자 막대는 분홍색으로.
-- x축(인구 수)에 음수가 그대로 보이면 이상하니, 눈금 숫자는 절댓값으로 보여줘.
 - 피라미드 아래에 '이 동네는 아이가 많은 편인가요, 어르신이 많은 편인가요?'
-  한 줄 설명을 자동으로 붙여줘.</pre></div>
+  한 줄 설명을 자동으로 붙여줘.
+- 고령화율이 20%를 넘는 동네면 카드 옆에 주의 표시를 붙여줘.</pre></div>
 
   <div class="callout check">
     <div class="h">✔️ 지표 카드(st.metric)가 왜 중요한가?</div>
@@ -275,12 +394,18 @@ st.plotly_chart(fig, use_container_width=True)</pre></div>
 - 인구 데이터(압축 CSV인데 판다스로 그냥 읽혀):
   https://raw.githubusercontent.com/greatsong/modudata/main/data/population_yearly.csv.gz
   2015~2026년(매년 6월) 전국 읍·면·동, 1세 단위 인구야. '2026년'만 골라줘.
+  표에는 연도·시도·시군구·동·코드 열과 나이별 인구 열이 있어.
+  나이별 열은 '계_0세', '남_0세', '여_0세' 형식으로 나이마다 하나씩 있고,
+  '나이'나 '연령' 같은 열은 따로 없어.
 - 시군구 경계 GeoJSON(코드 5자리):
   https://raw.githubusercontent.com/greatsong/modudata/main/data/boundaries/sigungu_kr.geojson
+  requests로 내려받아 JSON으로 읽어줘. 각 지역의 속성은 '코드', '시군구', '시도' 세 가지야.
 - 각 동 '코드'의 앞 5자리로 묶어 시군구별 65세 이상 비율(%)을 계산해줘.
+  65세 이상 인구는 '계_65세'부터 '계_100세 이상'까지 열의 합,
+  전체 인구는 '계_'로 시작하는 모든 열의 합으로 구해줘(남_·여_ 열은 더하지 마).
 - plotly 단계구분도로, 배경 지도(타일) 없이 경계만 그리고 고령화율 높을수록 진하게 칠해줘.
 - 지역은 이름이 아니라 '코드'로 정확히 맞춰줘. 경계 파일의 '코드' 속성과 짝짓고, 코드는 문자열로 다뤄.
-- 마우스를 올리면 시군구 이름과 고령화율(%)이 보이게.
+- 마우스를 올리면 시군구 이름('시군구' 속성)과 고령화율(%)이 보이게.
 - 필요한 라이브러리 목록(requirements.txt)도 같이 줘.
   버전 숫자 없이 이름만, 스트림릿·판다스·넘파이는 기본 설치라 빼고.</pre></div>
   <ul>
@@ -307,8 +432,9 @@ st.plotly_chart(fig, use_container_width=True)</pre></div>
   <div class="codewrap prompt"><span class="label">① 샘플 프롬프트</span><pre>지도를 '서울'만, 서울 행정동 경계로 바꿔줘.
 - 경계(코드 10자리):
   https://raw.githubusercontent.com/greatsong/modudata/main/data/boundaries/seoul_dong.geojson
+  requests로 내려받아 JSON으로 읽어줘. 각 지역의 속성은 '코드', '동', '구' 세 가지야.
 - 같은 population_yearly에서 서울(시도) 2026년만 골라, 동별 65세 이상 비율(%)을 계산.
-- 지역 이름 말고 '코드'로 경계와 짝지어 칠하고(코드는 문자열), 마우스를 올리면 동 이름·고령화율(%)이 보이게.
+- 지역 이름 말고 '코드'로 경계와 짝지어 칠하고(코드는 문자열), 마우스를 올리면 동 이름('동' 속성)·고령화율(%)이 보이게.
 (경기도를 볼 사람은 파일명만 gyeonggi_dong.geojson 으로 바꾸면 됨)</pre></div>
   <div class="callout mini">
     <div class="h">🖼️ 갤러리에 올리기</div>
@@ -351,66 +477,165 @@ st.plotly_chart(fig, use_container_width=True)</pre></div>
   <ul>
     <li>켜면 <b>드롭다운 3개 + 재생 버튼</b>이 뜨고, 재생하면 2015→2026년 인구 모양이 해마다 바뀌어요 · 이런 <b>모습</b>이면 성공</li>
   </ul>
-  <div class="codewrap code"><span class="label">② AI가 준 코드 (예시)</span><pre>import streamlit as st
+  <div class="codewrap code"><span class="label">② AI가 준 코드 (예시)</span><pre># -------------------------------------------------
+# 동네별 인구 피라미드 (연도 애니메이션 버전)
+# -------------------------------------------------
+import streamlit as st
 import pandas as pd
-import plotly.express as px
+import numpy as np
+import plotly.graph_objects as go
 
-st.title("🏘️ 연도별 인구 피라미드")
+st.set_page_config(page_title="동네별 인구 피라미드 (연도 애니메이션)", page_icon="🏘️", layout="wide")
 
-# 1) 데이터 불러오기 (2015~2026년 전부)
-url = ("https://raw.githubusercontent.com/greatsong/"
-       "modudata/main/data/population_yearly.csv.gz")
-df = pd.read_csv(url)
+# -------------------------------------------------
+# 1. 데이터 불러오기 (한 번만 다운로드하도록 캐시)
+# -------------------------------------------------
+@st.cache_data(show_spinner="데이터를 불러오는 중이에요...")
+def load_data():
+    url = "https://raw.githubusercontent.com/greatsong/modudata/main/data/population_yearly.csv.gz"
+    df = pd.read_csv(url, compression="gzip")
+    return df
 
-# 2) 시도 → 시군구 → 동 고르기 (연도는 애니메이션이 담당)
-sido = st.selectbox("시도", sorted(df["시도"].unique()))
-sgg  = st.selectbox("시군구", sorted(df[df["시도"] == sido]["시군구"].unique()))
-d2   = df[(df["시도"] == sido) &amp; (df["시군구"] == sgg)]
-dong = st.selectbox("동", sorted(d2["동"].unique()))
-picked = d2[d2["동"] == dong]          # 예: 대치1동
+df = load_data()
 
-# 3) 모든 연도의 나이별 남/여 인구를 '긴 표'로 (남자는 음수 = 왼쪽)
-rows = []
-for _, r in picked.iterrows():
-    for a in range(101):
-        mcol = f"남_{a}세" if a &lt; 100 else "남_100세 이상"
-        fcol = f"여_{a}세" if a &lt; 100 else "여_100세 이상"
-        age  = f"{a}세" if a &lt; 100 else "100세 이상"
-        rows.append({"연도": int(r["연도"]), "나이": age, "성별": "남자", "인구": -int(r[mcol])})
-        rows.append({"연도": int(r["연도"]), "나이": age, "성별": "여자", "인구":  int(r[fcol])})
-long = pd.DataFrame(rows).sort_values("연도")
+st.title("🏘️ 동네별 인구 피라미드 (2015~2026 애니메이션)")
 
-# 4) 연도 슬라이더로 애니메이션 (0세가 맨 아래로 오도록 나이 순서를 100→0)
-mx = long["인구"].abs().max()
-age_order = ["100세 이상"] + [f"{a}세" for a in range(99, -1, -1)]
-fig = px.bar(long, x="인구", y="나이", color="성별", orientation="h",
-             animation_frame="연도", range_x=(-mx*1.1, mx*1.1),
-             category_orders={"나이": age_order},
-             color_discrete_map={"남자": "#5B8FB9", "여자": "#E8998D"})
+# -------------------------------------------------
+# 2. 시도 → 시군구 → 동 선택 (전체 연도 기준으로 목록 생성)
+# -------------------------------------------------
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    sido = st.selectbox("시도 선택", sorted(df["시도"].dropna().unique()))
+with col2:
+    sub = df[df["시도"] == sido]
+    sigungu = st.selectbox("시군구 선택", sorted(sub["시군구"].dropna().unique()))
+with col3:
+    sub2 = sub[sub["시군구"] == sigungu]
+    dong = st.selectbox("동 선택", sorted(sub2["동"].dropna().unique()))
+
+# 선택한 동네의 전체 연도 데이터만 남기기
+loc_df = df[(df["시도"] == sido) &amp; (df["시군구"] == sigungu) &amp; (df["동"] == dong)].copy()
+loc_df = loc_df.sort_values("연도")
+years = sorted(loc_df["연도"].unique())  # 보통 2015~2026
+
+if loc_df.empty:
+    st.warning("데이터가 없어요. 다른 동네를 선택해보세요.")
+    st.stop()
+
+# -------------------------------------------------
+# 3. 나이 순서 고정 (0세 ~ 100세 이상, 이 순서가 곧 세로축 순서)
+# -------------------------------------------------
+ages = [f"{i}세" for i in range(100)] + ["100세 이상"]
+age_num = list(range(101))  # 나이를 숫자로도 다뤄야 평균/중앙값 계산 가능 (100세 이상은 100으로 취급)
+
+# -------------------------------------------------
+# 4. 연도별 남/여 인구 배열 미리 계산
+# -------------------------------------------------
+def get_values(row):
+    male = np.array([row.get(f"남_{a}", 0) for a in ages], dtype=float)
+    female = np.array([row.get(f"여_{a}", 0) for a in ages], dtype=float)
+    return male, female
+
+year_data = {}  # {연도: (남자배열, 여자배열)}
+for _, row in loc_df.iterrows():
+    year_data[row["연도"]] = get_values(row)
+
+# 가로축 폭 고정을 위해, 모든 연도 중 최댓값 찾기
+max_val = 0
+for m, f in year_data.values():
+    max_val = max(max_val, m.max(), f.max())
+max_val = max_val * 1.1  # 여유 있게 10% 더 크게
+
+# -------------------------------------------------
+# 5. 애니메이션용 Figure 만들기 (frames = 연도별 스냅샷)
+# -------------------------------------------------
+first_year = years[0]
+male0, female0 = year_data[first_year]
+
+fig = go.Figure(
+    data=[
+        go.Bar(y=ages, x=-male0, name="남자", orientation="h", marker_color="#6FA3D9"),
+        go.Bar(y=ages, x=female0, name="여자", orientation="h", marker_color="#F4978E"),
+    ],
+    layout=go.Layout(
+        title=f"{sido} {sigungu} {dong} 인구 피라미드 - {first_year}년",
+        barmode="overlay",
+        bargap=0.1,
+        plot_bgcolor="#FFFBF5",
+        paper_bgcolor="#FFFBF5",
+        xaxis=dict(range=[-max_val, max_val], title="인구 수 (명)",  # 가로축 폭 고정!
+                   tickvals=[-max_val, -max_val / 2, 0, max_val / 2, max_val],
+                   ticktext=[f"{abs(v):,.0f}" for v in [-max_val, -max_val / 2, 0, max_val / 2, max_val]]),  # 눈금은 절댓값으로
+        yaxis=dict(title="나이", categoryorder="array", categoryarray=ages),  # 0세가 맨 아래
+        legend_title="성별",
+        updatemenus=[{
+            "type": "buttons",
+            "buttons": [
+                {"label": "▶ 재생", "method": "animate",
+                 "args": [None, {"frame": {"duration": 700, "redraw": True}, "fromcurrent": True}]},
+                {"label": "⏸ 정지", "method": "animate",
+                 "args": [[None], {"frame": {"duration": 0}, "mode": "immediate"}]},
+            ],
+        }],
+        sliders=[{
+            "steps": [
+                {"label": str(y), "method": "animate",
+                 "args": [[str(y)], {"frame": {"duration": 700, "redraw": True}, "mode": "immediate"}]}
+                for y in years
+            ],
+        }],
+    ),
+    frames=[
+        go.Frame(
+            name=str(y),
+            data=[
+                go.Bar(x=-year_data[y][0]),
+                go.Bar(x=year_data[y][1]),
+            ],
+            layout=go.Layout(title=f"{sido} {sigungu} {dong} 인구 피라미드 - {y}년"),
+        )
+        for y in years
+    ],
+)
+
 st.plotly_chart(fig, use_container_width=True)
 
-# 5) 평균 연령·중앙값 연령이 해마다 어떻게 변했는지 ('100세 이상'은 100세로 셈)
-def age_stats(r):
-    pops = [int(r[f"남_{a}세"]) + int(r[f"여_{a}세"]) if a &lt; 100
-            else int(r["남_100세 이상"]) + int(r["여_100세 이상"]) for a in range(101)]
-    total = sum(pops)
-    mean = sum(a * p for a, p in enumerate(pops)) / total   # a가 곧 나이
-    cum, median = 0, 100
-    for a, p in enumerate(pops):
-        cum += p
-        if cum &gt;= total / 2:            # 누적이 절반을 넘는 첫 나이 = 중앙값
-            median = a
-            break
-    return round(mean, 1), median
+# -------------------------------------------------
+# 6. 연도별 평균 연령 / 중앙값 연령 계산
+# -------------------------------------------------
+def weighted_median(values, weights):
+    # 가중치(인구수)를 반영한 중앙값 계산
+    order = np.argsort(values)
+    values, weights = np.array(values)[order], np.array(weights)[order]
+    cum = np.cumsum(weights)
+    half = cum[-1] / 2
+    return values[np.searchsorted(cum, half)]
 
-stats = []
-for _, r in picked.iterrows():
-    m, md = age_stats(r)
-    stats.append({"연도": int(r["연도"]), "평균 연령": m, "중앙값 연령": md})
-stats_df = pd.DataFrame(stats).sort_values("연도")
+mean_ages, median_ages = [], []
+for y in years:
+    male, female = year_data[y]
+    total = male + female  # 남녀 합친 나이별 인구수
+    mean_ages.append(np.sum(np.array(age_num) * total) / total.sum())
+    median_ages.append(weighted_median(age_num, total))
 
-fig2 = px.line(stats_df, x="연도", y=["평균 연령", "중앙값 연령"], markers=True)
-st.plotly_chart(fig2, use_container_width=True)</pre></div>
+# -------------------------------------------------
+# 7. 평균/중앙값 연령 변화 꺾은선 그래프
+# -------------------------------------------------
+line_fig = go.Figure()
+line_fig.add_trace(go.Scatter(x=years, y=mean_ages, mode="lines+markers",
+                               name="평균 연령", line=dict(color="#E07A5F", width=3)))
+line_fig.add_trace(go.Scatter(x=years, y=median_ages, mode="lines+markers",
+                               name="중앙값 연령", line=dict(color="#3D405B", width=3)))
+line_fig.update_layout(
+    title=f"{sido} {sigungu} {dong} 평균·중앙값 연령 변화 (2015~2026)",
+    xaxis_title="연도", yaxis_title="나이",
+    plot_bgcolor="#FFFBF5", paper_bgcolor="#FFFBF5",
+)
+
+st.plotly_chart(line_fig, use_container_width=True)
+
+st.info("✅ 슬라이더나 ▶ 재생 버튼으로 연도를 바꿔가며 인구 구조 변화를 확인해보세요!")</pre></div>
 
   <h2>📌 내일을 위한 준비</h2>
   <ul>
