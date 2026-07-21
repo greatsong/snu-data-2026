@@ -63,6 +63,87 @@
     </tbody>
   </table>
 
+  <details class="glossary">
+    <summary>🔬 더 알아보기 — API가 대체 뭐예요? — 관공서에서 등본 떼기로 이해하기</summary>
+    <div class="gin">
+      <p style="margin:10px 0 12px">API는 <b>‘정해진 양식을 채워 보내면, 원하는 결과물을 정해진 형식으로 돌려주는 창구’</b>예요. 아래 <b>두 줄을 각각 클릭</b>해 보세요 — 동사무소 등본 떼기와 내 앱의 날씨 받기가 똑같이 ‘<b>요청 → 응답</b>’으로 흐릅니다.</p>
+<svg class="api-svg" viewBox="0 0 760 500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="클릭하면 신청서가 가고 결과물이 돌아오는 API 비유 애니메이션">
+  <defs>
+    <marker id="arR" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#7d93ef"/></marker>
+    <marker id="arL" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#e98bb6"/></marker>
+    <filter id="ds2" x="-30%" y="-30%" width="160%" height="170%"><feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#2a3568" flood-opacity="0.14"/></filter>
+  </defs>
+  <rect x="14" y="58" width="732" height="184" rx="14" fill="transparent" style="cursor:pointer" onclick="playLane(&#39;A&#39;)"/>
+  <text x="380" y="100" text-anchor="middle" font-size="11.5" font-weight="800" fill="#3b47c2" style="pointer-events:none">👆 ‘비유’ 클릭 — 등본 신청해 보기</text>
+  <g filter="url(#ds2)" style="pointer-events:none"><rect x="24" y="112" width="140" height="76" rx="16" fill="#ffffff" stroke="#e6e8f2"/></g>
+  <text x="94" y="148" text-anchor="middle" font-size="27" style="pointer-events:none">🙋</text>
+  <text x="94" y="174" text-anchor="middle" font-size="12" font-weight="800" fill="#2b2d3a" style="pointer-events:none">나 = 민원인</text>
+  <g filter="url(#ds2)" style="pointer-events:none"><rect x="596" y="112" width="140" height="76" rx="16" fill="#eef0ff" stroke="#c3c9f5"/></g>
+  <text x="666" y="146" text-anchor="middle" font-size="25" style="pointer-events:none">🏛️</text>
+  <text x="666" y="168" text-anchor="middle" font-size="11.5" font-weight="800" fill="#3b47c2" style="pointer-events:none">관공서 창구</text>
+  <text x="666" y="182" text-anchor="middle" font-size="9.5" fill="#8a8fb0" style="pointer-events:none">데이터 보관</text>
+  <line x1="172" y1="135" x2="586" y2="135" stroke="#9fb0f5" stroke-width="2" stroke-dasharray="5 5" marker-end="url(#arR)" style="pointer-events:none"/>
+  <text x="378" y="127" text-anchor="middle" font-size="10" fill="#5B6CF0" font-weight="700" style="pointer-events:none">요청(신청서) →</text>
+  <line x1="586" y1="165" x2="172" y2="165" stroke="#f0b9d2" stroke-width="2" stroke-dasharray="5 5" marker-end="url(#arL)" style="pointer-events:none"/>
+  <text x="378" y="183" text-anchor="middle" font-size="10" fill="#E0568A" font-weight="700" style="pointer-events:none">← 응답(결과물)</text>
+  <g opacity="0" style="pointer-events:none">
+    <rect x="-36" y="-23" width="72" height="46" rx="5" fill="#ffffff" stroke="#b9c0f5"/>
+    <rect x="-36" y="-23" width="72" height="12" rx="5" fill="#5B6CF0"/><rect x="-36" y="-17" width="72" height="6" fill="#5B6CF0"/>
+    <text x="0" y="-14" text-anchor="middle" font-size="7.5" font-weight="700" fill="#ffffff">📝 등본 신청서</text>
+    <text x="0" y="1" text-anchor="middle" font-size="8" font-weight="700" fill="#3b47c2" opacity="0">이름: 홍길동<animate attributeName="opacity" begin="reqMoveA.begin" dur="2.4s" keyTimes="0;0.08;0.14;1" values="0;0;1;1"/></text>
+    <text x="0" y="12" text-anchor="middle" font-size="8" font-weight="700" fill="#3b47c2" opacity="0">주소: 서울 ○○구<animate attributeName="opacity" begin="reqMoveA.begin" dur="2.4s" keyTimes="0;0.16;0.22;1" values="0;0;1;1"/></text>
+    <animate attributeName="opacity" begin="reqMoveA.begin" dur="2.4s" keyTimes="0;0.05;0.30;0.85;1" values="0;1;1;1;0"/>
+    <animateTransform id="reqMoveA" attributeName="transform" type="translate" begin="indefinite" dur="2.4s" calcMode="spline" keyTimes="0;0.30;1" values="200,135;200,135;556,135" keySplines="0 0 1 1;0.42 0 0.2 1"/>
+  </g>
+  <g opacity="0" style="pointer-events:none">
+    <rect x="-36" y="-26" width="72" height="52" rx="5" fill="#ffffff" stroke="#f0c6da"/>
+    <rect x="-36" y="-26" width="72" height="12" rx="5" fill="#E0568A"/><rect x="-36" y="-20" width="72" height="6" fill="#E0568A"/>
+    <text x="0" y="-17" text-anchor="middle" font-size="7.5" font-weight="700" fill="#ffffff">📄 주민등록등본</text>
+    <text x="0" y="-2" text-anchor="middle" font-size="8.5" font-weight="800" fill="#2b2d3a">홍길동</text>
+    <text x="0" y="9" text-anchor="middle" font-size="7.5" fill="#55524c">서울 ○○구</text>
+    <circle cx="0" cy="18" r="6" fill="none" stroke="#e0392f" stroke-width="1.2"/><text x="0" y="20.5" text-anchor="middle" font-size="6" font-weight="800" fill="#e0392f">印</text>
+    <animate attributeName="opacity" begin="reqMoveA.end" dur="2.4s" keyTimes="0;0.05;0.15;0.85;1" values="0;1;1;1;0"/>
+    <animateTransform attributeName="transform" type="translate" begin="reqMoveA.end" dur="2.4s" calcMode="spline" keyTimes="0;0.10;1" values="556,165;556,165;200,165" keySplines="0 0 1 1;0.42 0 0.2 1"/>
+  </g>
+  <line x1="40" y1="262" x2="720" y2="262" stroke="#eceef5" stroke-width="1"/>
+  <rect x="14" y="280" width="732" height="184" rx="14" fill="transparent" style="cursor:pointer" onclick="playLane(&#39;B&#39;)"/>
+  <text x="380" y="322" text-anchor="middle" font-size="11.5" font-weight="800" fill="#0e9488" style="pointer-events:none">👆 ‘실전’ 클릭 — 강수확률 받아 보기</text>
+  <g filter="url(#ds2)" style="pointer-events:none"><rect x="24" y="334" width="140" height="76" rx="16" fill="#ffffff" stroke="#e6e8f2"/></g>
+  <text x="94" y="370" text-anchor="middle" font-size="27" style="pointer-events:none">💻</text>
+  <text x="94" y="396" text-anchor="middle" font-size="12" font-weight="800" fill="#2b2d3a" style="pointer-events:none">내 앱 · 브라우저</text>
+  <g filter="url(#ds2)" style="pointer-events:none"><rect x="596" y="334" width="140" height="76" rx="16" fill="#eef0ff" stroke="#c3c9f5"/></g>
+  <text x="666" y="368" text-anchor="middle" font-size="25" style="pointer-events:none">☁️</text>
+  <text x="666" y="390" text-anchor="middle" font-size="11.5" font-weight="800" fill="#3b47c2" style="pointer-events:none">Open-Meteo</text>
+  <text x="666" y="404" text-anchor="middle" font-size="9.5" fill="#8a8fb0" style="pointer-events:none">= 관공서(API)</text>
+  <line x1="172" y1="357" x2="586" y2="357" stroke="#9fb0f5" stroke-width="2" stroke-dasharray="5 5" marker-end="url(#arR)" style="pointer-events:none"/>
+  <text x="378" y="349" text-anchor="middle" font-size="10" fill="#5B6CF0" font-weight="700" style="pointer-events:none">요청(신청서) →</text>
+  <line x1="586" y1="387" x2="172" y2="387" stroke="#f0b9d2" stroke-width="2" stroke-dasharray="5 5" marker-end="url(#arL)" style="pointer-events:none"/>
+  <text x="378" y="405" text-anchor="middle" font-size="10" fill="#E0568A" font-weight="700" style="pointer-events:none">← 응답(결과물)</text>
+  <g opacity="0" style="pointer-events:none">
+    <rect x="-36" y="-29" width="72" height="57" rx="5" fill="#ffffff" stroke="#b9c0f5"/>
+    <rect x="-36" y="-29" width="72" height="12" rx="5" fill="#0e9488"/><rect x="-36" y="-23" width="72" height="6" fill="#0e9488"/>
+    <text x="0" y="-20" text-anchor="middle" font-size="7.5" font-weight="700" fill="#ffffff">📝 요청 (URL)</text>
+    <text x="0" y="-5" text-anchor="middle" font-size="8" font-weight="700" fill="#3b47c2" opacity="0">위도: 37.5<animate attributeName="opacity" begin="reqMoveB.begin" dur="2.4s" keyTimes="0;0.06;0.12;1" values="0;0;1;1"/></text>
+    <text x="0" y="6" text-anchor="middle" font-size="8" font-weight="700" fill="#3b47c2" opacity="0">경도: 127<animate attributeName="opacity" begin="reqMoveB.begin" dur="2.4s" keyTimes="0;0.12;0.18;1" values="0;0;1;1"/></text>
+    <text x="0" y="17" text-anchor="middle" font-size="8" font-weight="700" fill="#3b47c2" opacity="0">시간: 15시<animate attributeName="opacity" begin="reqMoveB.begin" dur="2.4s" keyTimes="0;0.18;0.24;1" values="0;0;1;1"/></text>
+    <animate attributeName="opacity" begin="reqMoveB.begin" dur="2.4s" keyTimes="0;0.05;0.30;0.85;1" values="0;1;1;1;0"/>
+    <animateTransform id="reqMoveB" attributeName="transform" type="translate" begin="indefinite" dur="2.4s" calcMode="spline" keyTimes="0;0.30;1" values="200,357;200,357;556,357" keySplines="0 0 1 1;0.42 0 0.2 1"/>
+  </g>
+  <g opacity="0" style="pointer-events:none">
+    <rect x="-36" y="-26" width="72" height="52" rx="5" fill="#ffffff" stroke="#f0c6da"/>
+    <rect x="-36" y="-26" width="72" height="12" rx="5" fill="#0e9488"/><rect x="-36" y="-20" width="72" height="6" fill="#0e9488"/>
+    <text x="0" y="-17" text-anchor="middle" font-size="7.5" font-weight="700" fill="#ffffff">📦 응답 (JSON)</text>
+    <text x="0" y="3" text-anchor="middle" font-size="16" font-weight="800" fill="#2b2d3a">☔ 60%</text>
+    <text x="0" y="18" text-anchor="middle" font-size="7.5" fill="#8a8fa6">강수확률</text>
+    <animate attributeName="opacity" begin="reqMoveB.end" dur="2.4s" keyTimes="0;0.05;0.15;0.85;1" values="0;1;1;1;0"/>
+    <animateTransform attributeName="transform" type="translate" begin="reqMoveB.end" dur="2.4s" calcMode="spline" keyTimes="0;0.10;1" values="556,387;556,387;200,387" keySplines="0 0 1 1;0.42 0 0.2 1"/>
+  </g>
+  <text x="380" y="476" text-anchor="middle" font-size="11" fill="#7a7f95" style="pointer-events:none">이름·주소 = 위도·경도·시간(신청) · 주민등록등본 = 강수확률(결과) · 관공서 = API 서버 · 🔑 일부는 ‘신분증=키’ 필요</text>
+</svg>
+<script>function playLane(L){var m=document.getElementById("reqMove"+L);if(m){try{m.beginElement();}catch(e){}}}</script>
+    </div>
+  </details>
+
   <ul>
     <li>상태코드 = 응답과 함께 오는 번호표 · 셋만 기억</li>
     <li><code>200</code> 성공 · <code>404</code> 없음(주소 오류) · <code>429</code> 과다요청(잠깐 쉬기)</li>

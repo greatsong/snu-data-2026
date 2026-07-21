@@ -233,3 +233,6 @@ table.glossary-table th { background: #fff3d6; color: #b45309; font-weight: 800;
 table.glossary-table td.term { white-space: nowrap; font-weight: 700; }
 table.glossary-table td.dayn { white-space: nowrap; font-weight: 800; color: var(--muted); font-size: 0.82rem; }
 .glossary-more { font-size: 0.9rem; margin: 8px 0 0; }
+
+/* API 비유 애니메이션 (3일차 더 알아보기 · 2026-vibe-pico ch5에서 이식) */
+.api-svg { width: 100%; height: auto; background: #fffdf9; border: 1px solid var(--border); border-radius: 14px; padding: 8px; }
