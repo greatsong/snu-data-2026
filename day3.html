@@ -85,8 +85,61 @@
 - 초보자용으로 주석을 한국어로 달고, main.py 전체 코드를 한 번에 줘.</pre></div>
   <ul>
     <li>누를 때마다 다른 값 → 파일이 아니라 그 순간 창구에서 받아옴 = "살아있는 데이터"</li>
-    <li>이번엔 예시 코드 없이 진행 — ①을 그대로 넣어 받은 내 코드가 곧 ②, 화면이 뜨면 아래 ③으로</li>
+    <li>AI가 아래 <b>모습</b>의 코드를 줌 (똑같지 않아도 OK)</li>
   </ul>
+  <div class="codewrap code"><span class="label">② AI가 준 코드 (예시)</span><pre>import streamlit as st
+import requests
+
+# 페이지 기본 설정
+st.set_page_config(page_title="API 연습용 앱", page_icon="🐱")
+st.title("🐱 API 연습용 스트림릿 앱")
+st.write("버튼을 눌러서 외부 API를 호출해 보는 연습용 앱이에요.")
+
+st.divider()
+
+# ── 1. 고양이 상식 가져오기 ──────────────────────
+st.header("1️⃣ 랜덤 고양이 상식")
+
+if st.button("고양이 상식 가져오기"):
+    # catfact.ninja 창구에 요청 보내기
+    response = requests.get("https://catfact.ninja/fact")
+
+    # 상태코드가 200(성공)인지 확인
+    if response.status_code == 200:
+        data = response.json()   # 응답을 JSON으로 바꾸고
+        fact = data["fact"]      # 'fact' 라벨의 값 꺼내기
+        st.markdown(f"### 🐾 {fact}")
+    else:
+        st.error(f"요청이 실패했어요 😢 (상태코드: {response.status_code})")
+
+st.divider()
+
+# ── 2. 랜덤 인물 정보 가져오기 ────────────────────
+st.header("2️⃣ 랜덤 인물 정보")
+
+if st.button("랜덤 인물 가져오기"):
+    response = requests.get("https://randomuser.me/api/")
+
+    if response.status_code == 200:
+        data = response.json()
+        person = data["results"][0]          # 목록의 첫 번째 인물
+        first = person["name"]["first"]
+        last = person["name"]["last"]
+        country = person["location"]["country"]
+
+        st.markdown(f"### 👤 이름: {first} {last}")
+        st.markdown(f"### 🌍 사는 나라: {country}")
+    else:
+        st.error(f"요청이 실패했어요 😢 (상태코드: {response.status_code})")</pre></div>
+  <div class="codewrap code"><span class="label">requirements.txt</span><pre>requests</pre></div>
+  <div class="callout check">
+    <div class="h">✔️ 여기까지 성공 확인</div>
+    <ul>
+      <li>버튼을 누를 때마다 <b>다른 고양이 상식</b>이 뜨면 성공</li>
+      <li>같은 값만 나오면 → 새로고침 말고 버튼을 다시</li>
+      <li>연타하다 429가 뜨면 고장 아님 · "잠깐 쉬었다 다시"라는 뜻</li>
+    </ul>
+  </div>
   <div class="codewrap improve"><span class="label">③ 프롬프트 개선 (예시)</span><pre>좋아! 여기서 이어서 고쳐줘.
 - 받아온 JSON 원본도 접었다 펼 수 있게 보여줘. 어떻게 생겼는지 궁금해.
 - 고양이 상식을 한국어로 번역해서 함께 보여주면 더 좋겠어.
@@ -105,16 +158,22 @@
     <li>신분증(키) 필요한 진짜 창구 = <b>YouTube Data API v3</b></li>
     <li>받아올 값 → 구독자 수 · 총 조회수 · 영상 수</li>
   </ul>
-
-  <h3>먼저 열쇠(API 키) 받기 — 3단계</h3>
+  <div class="callout tip">
+    <div class="h">🗝️ 오늘 열쇠는 강사가 나눠 줍니다</div>
+    <ul>
+      <li>수업에선 <b>강사가 준비한 실습용 키</b>를 채팅으로 받아 씁니다 (발급 과정 생략)</li>
+      <li>오늘의 연습 = 발급이 아니라 <b>키를 안전하게 쓰는 습관</b> (금고에 넣고, 코드엔 안 쓰기)</li>
+      <li>내 키는 집에서 5분이면 만들 수 있어요 → 이 절 끝의 <b>(참고) 집에서 내 키 만들기</b></li>
+    </ul>
+  </div>
   <ul>
-    <li>발급처 → 구글 클라우드 콘솔 (console.cloud.google.com)</li>
-    <li>강사 화면 같이 보며 천천히 · 딱 3걸음</li>
+    <li>2일차처럼 <b>워크숍식 레벨업</b> · 한 계단씩 · 계단마다 성공 확인</li>
   </ul>
   <ol class="steps">
-    <li><span class="st">프로젝트 만들기</span><br>상단 프로젝트 선택 → <b>새 프로젝트</b> → 이름 <code>my-youtube</code> → 생성 후 선택</li>
-    <li><span class="st">YouTube Data API v3 사용 설정</span><br><b>API 및 서비스 → 라이브러리</b> → <code>YouTube Data API v3</code> 검색 → <b>사용 설정(Enable)</b></li>
-    <li><span class="st">API 키 발급</span><br><b>API 및 서비스 → 사용자 인증정보</b> → <b>사용자 인증정보 만들기 → API 키</b> → 키 복사</li>
+    <li><span class="st">LV1 · 빈 앱 먼저 배포</span><br><code>my-youtube-app</code> Public 저장소 + 빈 <code>main.py</code> → 스트림릿 켜기 · "Hello"만 떠도 성공</li>
+    <li><span class="st">LV2 · 열쇠를 금고에</span><br>받은 실습용 키를 <b>비밀 금고(secrets)</b>에 넣기 (아래 안내) · 키가 코드에 안 보이면 성공</li>
+    <li><span class="st">LV3 · 대시보드 완성</span><br>① 프롬프트로 주문 → <b>카드 4개에 숫자가 차면 성공</b></li>
+    <li><span class="st">LV4 · 대화로 개선</span><br>③으로 프로필 이미지·즐겨찾기까지 (여유 있는 분만)</li>
   </ol>
   <div class="callout warn">
     <div class="h">🔒 열쇠, 코드에 그냥 쓰면 안 됨</div>
@@ -130,7 +189,14 @@
     <li>스트림릿 비밀 금고 → <code>.streamlit/secrets.toml</code></li>
     <li>키는 이 파일에만 · 코드에서는 <code>st.secrets</code>로 꺼내기</li>
   </ul>
-  <div class="codewrap code"><span class="label">.streamlit/secrets.toml</span><pre>YOUTUBE_API_KEY = "여기에_발급받은_키를_붙여넣기"</pre></div>
+  <div class="codewrap code"><span class="label">.streamlit/secrets.toml</span><pre>YOUTUBE_API_KEY = "여기에_받은_실습용_키를_붙여넣기"</pre></div>
+  <div class="callout tip">
+    <div class="h">💡 배포한 앱에서는 금고가 따로</div>
+    <ul>
+      <li>내 컴퓨터 = <code>.streamlit/secrets.toml</code> 파일 · 스트림릿 클라우드 = 앱 <b>Settings → Secrets</b> 화면</li>
+      <li>배포한 앱이 키를 못 찾으면 → Settings → Secrets에 같은 내용을 붙여넣었는지 확인</li>
+    </ul>
+  </div>
   <div class="callout warn">
     <div class="h">🧯 그리고 .gitignore에 꼭 추가</div>
     <ul>
@@ -266,6 +332,38 @@ if search_btn:
       <li>못 찾으면 → AI에게 "이 핸들의 채널 ID 찾는 법 알려줘"</li>
     </ul>
   </div>
+  <div class="callout check">
+    <div class="h">✔️ 여기까지 성공 확인 — 빈 화면은 대부분 이 둘</div>
+    <ul>
+      <li><b>카드 4개에 숫자가 차면 성공</b> (LV3 통과)</li>
+      <li>에러도 없이 <b>빈 화면</b>이면 → ① 채널 ID가 <code>UC…</code>인지 (핸들 넣으면 못 찾음) ② 배포 앱이면 Settings → Secrets에 키를 넣었는지</li>
+      <li>모르겠으면 에러·화면 상태를 통째로 복사해 AI에게 붙여넣기</li>
+    </ul>
+  </div>
+  <div class="callout warn">
+    <div class="h">⏳ 시간이 부족하면 (무른 경계)</div>
+    <ul>
+      <li>오늘 완성 기준 = <b>카드 4개에 숫자 (LV3)</b> · LV4 꾸미기는 선택</li>
+      <li>막히면 여기서 멈추고 다음 절(AI 채팅앱)로 · 못 끝낸 부분은 4일차 시작에 이어서</li>
+    </ul>
+  </div>
+  <details class="glossary">
+    <summary>🔑 (참고) 집에서 내 키 만들기 — 구글 클라우드 3단계 · 수업에서는 안 합니다</summary>
+    <div class="gin">
+      <ul>
+        <li>발급처 → 구글 클라우드 콘솔 (<a href="https://console.cloud.google.com" target="_blank" rel="noopener"><code>console.cloud.google.com</code></a>) · 무료 · 5분</li>
+      </ul>
+      <ol class="steps">
+        <li><span class="st">프로젝트 만들기</span><br>상단 프로젝트 선택 → <b>새 프로젝트</b> → 이름 <code>my-youtube</code> → 생성 후 선택</li>
+        <li><span class="st">YouTube Data API v3 사용 설정</span><br><b>API 및 서비스 → 라이브러리</b> → <code>YouTube Data API v3</code> 검색 → <b>사용 설정(Enable)</b></li>
+        <li><span class="st">API 키 발급</span><br><b>API 및 서비스 → 사용자 인증정보</b> → <b>사용자 인증정보 만들기 → API 키</b> → 키 복사 → secrets에 붙여넣기</li>
+      </ol>
+      <ul>
+        <li>키는 받았는데 403 오류면 → 2단계(사용 설정)를 건너뛰었는지 확인</li>
+        <li>내 키가 생기면 실습용 키 자리에 바꿔 넣기만 하면 끝</li>
+      </ul>
+    </div>
+  </details>
 
   <h2>3. 나만의 AI 채팅앱 만들기</h2>
   <ul>
@@ -273,11 +371,12 @@ if search_btn:
     <li>AI(LLM) API = 매번 새로운 답을 <b>생성</b> → 나만의 챗봇</li>
   </ul>
 
-  <h3>AI 열쇠 받기</h3>
+  <h3>AI 열쇠 준비하기</h3>
   <ul>
-    <li>예시 → <b>Solar</b>(솔라) — 우리나라 AI 회사 <b>업스테이지</b>의 모델 (한국어 강함 · 무료 키)</li>
-    <li>발급처 → 업스테이지 콘솔 (<a href="https://console.upstage.ai" target="_blank" rel="noopener">console.upstage.ai</a>) → 로그인 → <b>API Keys</b> → <b>Create API key</b></li>
-    <li>모델 → <code>solar-open2</code> · <b>카드 등록 없이</b> 무료 키 · 다른 회사도 발급 경로는 비슷(요금 방식은 다름 · 아래 표)</li>
+    <li>오늘 쓰는 AI → <b>Solar</b>(솔라) — 우리나라 AI 회사 <b>업스테이지</b>의 모델 (한국어 강함 · 무료 키)</li>
+    <li>이 키도 <b>강사가 나눠 줍니다</b> → 받아서 secrets에 유튜브 키와 <b>나란히</b> 추가 (아래)</li>
+    <li>내 키 만들기 (집에서 3분) → 업스테이지 콘솔 (<a href="https://console.upstage.ai" target="_blank" rel="noopener">console.upstage.ai</a>) → 로그인 → <b>API Keys</b> → <b>Create API key</b> · <b>카드 등록 없이</b> 무료</li>
+    <li>모델 → <code>solar-open2</code> · 다른 회사도 발급 경로는 비슷(요금 방식은 다름 · 아래 표)</li>
   </ul>
   <div class="callout tip">
     <div class="h">🗝️ 제미나이·챗지피티·클로드 열쇠도 방법은 비슷 (핵심만)</div>
@@ -393,6 +492,21 @@ if user_input:
 - '대화 지우기' 버튼을 넣어서 세션에 쌓인 대화 기록을 비울 수 있게 해줘.
 - (도전) 유튜브 영상의 댓글 목록을 붙여넣으면, 그 댓글들을 맥락으로 넣어
   '전체 반응을 3줄로 요약해줘'라고 AI에게 시킬 수 있게 해줘.</pre></div>
+  <div class="callout check">
+    <div class="h">✔️ 여기까지 성공 확인 — 조용해도 고장 아님</div>
+    <ul>
+      <li>인사를 건네서 <b>AI가 한국어로 답하면 성공</b></li>
+      <li>답이 30초 넘게 안 오면 → 고장이 아니라 AI가 <b>깊게 생각 중</b>일 확률이 큼 · ①의 "추론 강도 최소" 줄이 빠졌는지 확인하고 다시 주문</li>
+      <li>기다리는 동안 버튼·전송 연타 금지 (429로 이어짐)</li>
+    </ul>
+  </div>
+  <div class="callout warn">
+    <div class="h">⏳ 시간이 부족하면 (무른 경계)</div>
+    <ul>
+      <li>오늘 완성 기준 = <b>AI와 대화 한 번</b> · 말투 고르기·댓글 요약은 선택</li>
+      <li>막히면 그대로 두어도 됩니다 · 4일차 시작 전에 이어서 완성</li>
+    </ul>
+  </div>
 
   <div class="callout tip">
     <div class="h">💡 데이터 API vs AI API</div>
@@ -403,8 +517,9 @@ if user_input:
     </ul>
   </div>
 
-  <h2>4. 실시간 API가 ‘애니메이션’이 되는 순간 (하이라이트)</h2>
+  <h2>4. 실시간 API가 ‘애니메이션’이 되는 순간 (하이라이트 · 강사 데모)</h2>
   <ul>
+    <li>이 절은 <b>강사 화면으로 감상하는 구간</b> · 따라 만들기는 선택 (여유 있는 분이 집에서) · 아래 프롬프트는 그때 쓰라고 남겨 둔 것</li>
     <li>API 한 번 호출 = <b>딱 지금 이 순간</b>의 스냅샷 (서울 어디가 <b>지금</b> 붐비나)</li>
     <li>그걸 <b>매시간 자동으로 쌓으면</b> → 시간축이 생김 → <b>하루 애니메이션</b></li>
     <li>서울 <b>실시간 도시데이터 API</b>(주요 명소 23곳 혼잡도·유동인구)를 우리가 매시간 모아 둠</li>
@@ -502,6 +617,59 @@ if user_input:
 - 숫자가 문자열로 오니 숫자로 바꿔서 정렬·그래프.
 - 필요한 라이브러리 목록(requirements.txt)도 같이 줘.
   버전 숫자 없이 이름만, 스트림릿·판다스·넘파이는 기본 설치라 빼고.</pre></div>
+  <ul><li>혼자 하는 숙제라 예시 코드도 붙여 둡니다 · 내 것과 똑같지 않아도 이런 <b>모습</b>이면 성공</li></ul>
+  <div class="codewrap code"><span class="label">② AI가 준 코드 (예시)</span><pre>import streamlit as st
+import pandas as pd
+import requests
+from datetime import datetime, timedelta
+
+# 기본 설정
+st.set_page_config(page_title="KOBIS 일별 박스오피스", layout="wide")
+st.title("🎬 KOBIS 일별 박스오피스 TOP 10")
+
+# 어제 날짜 자동 계산 (KOBIS는 YYYYMMDD 형식)
+yesterday = datetime.now() - timedelta(days=1)
+target_dt = yesterday.strftime("%Y%m%d")
+st.caption(f"조회 기준일(어제): {yesterday.strftime('%Y-%m-%d')}")
+
+# 비밀 금고에서 인증키 불러오기
+KOBIS_KEY = st.secrets["KOBIS_KEY"]
+
+# API 호출
+url = "http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json"
+params = {"key": KOBIS_KEY, "targetDt": target_dt}
+res = requests.get(url, params=params)
+
+if res.status_code != 200:
+    st.error(f"요청이 실패했어요 (상태코드: {res.status_code})")
+    st.stop()
+
+data = res.json()
+box_list = data.get("boxOfficeResult", {}).get("dailyBoxOfficeList", [])
+
+if not box_list:
+    st.error("데이터가 없어요. 인증키와 날짜를 확인해 주세요.")
+    st.stop()
+
+df = pd.DataFrame(box_list)
+
+# 문자열로 오는 숫자들을 진짜 숫자로 변환
+for col in ["rank", "audiCnt", "audiAcc", "scrnCnt"]:
+    df[col] = pd.to_numeric(df[col])
+
+# 보기 좋게 한국어 열 이름으로 정리
+표 = df[["rank", "movieNm", "audiCnt", "audiAcc", "scrnCnt"]].copy()
+표.columns = ["순위", "영화명", "관객수", "누적관객", "스크린수"]
+표 = 표.sort_values("순위").reset_index(drop=True)
+
+st.subheader("📋 박스오피스 TOP 10")
+st.dataframe(표, use_container_width=True)
+
+# 관객수 상위 5편 막대그래프
+st.subheader("📈 관객수 상위 5편")
+top5 = 표.sort_values("관객수", ascending=False).head(5)
+st.bar_chart(top5.set_index("영화명")["관객수"])</pre></div>
+  <div class="codewrap code"><span class="label">requirements.txt</span><pre>requests</pre></div>
   <ul>
     <li>다른 창구도 같은 방식 · 예: 서울 실시간 인구(유동인구) <a href="https://data.seoul.go.kr" target="_blank" rel="noopener">data.seoul.go.kr</a> · 공공데이터포털 <a href="https://www.data.go.kr" target="_blank" rel="noopener">data.go.kr</a></li>
   </ul>
@@ -511,6 +679,14 @@ if user_input:
       <li>표·그래프에 진짜 숫자가 차면 성공 · 빈 화면이면 인증키·날짜 형식(<code>YYYYMMDD</code>) 확인</li>
       <li>KOBIS 숫자는 <b>문자열</b>('820653')로 옴 → 숫자 변환 필수 · <b>오늘 날짜는 데이터 없음</b>(어제 사용)</li>
       <li>더 자세히는 <b>교재 6장</b> 참고</li>
+    </ul>
+  </div>
+  <div class="callout mini">
+    <div class="h">🌙 내일 준비 — Supabase 가입만 해 두기 (5분 · 선택)</div>
+    <ul>
+      <li>내일은 데이터를 <b>진짜 저장소(DB)</b>에 쌓습니다 · 가입과 프로젝트 생성만 미리 하면 수업이 한결 가벼워요</li>
+      <li><a href="https://supabase.com" target="_blank" rel="noopener"><code>supabase.com</code></a> 가입(카드 없음·무료) → <b>New project</b> → 이름과 DB 비밀번호를 정해 생성까지만 (준비에 1~2분 걸림)</li>
+      <li>비밀번호는 기억할 곳에 적어 두기 · 못 해도 괜찮아요, 내일 같이 합니다</li>
     </ul>
   </div>
   <h2>📚 오늘의 용어</h2>
