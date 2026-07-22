@@ -757,7 +757,7 @@ SOLAR_API_KEY = "강사에게_받은_키"</pre></div>
     <div class="h">💸 과금 폭탄 주의 — 두 가지만 지키면 안전</div>
     <ul>
       <li><b>① 키 유출 = 남이 내 카드로 씀</b> — GitHub에 올라간 키는 봇이 <b>몇 분 안에</b> 주워감. 그래서 secrets 습관이 중요. 유출 의심 시 <b>즉시 그 키 삭제 후 재발급</b></li>
-      <li><b>② 좋은 모델 = 비싼 모델</b> — 최고급 모델은 저렴한 모델의 수십 배 요금. 연습·실습엔 <b>무료·저렴한 모델</b>로 충분 (<b>Solar</b>(무료 베타) · Gemini <b>flash</b>(무료 한도) · GPT <b>mini 계열</b> · Claude <b>Haiku</b>)</li>
+      <li><b>② 좋은 모델 = 비싼 모델</b> — 최고급 모델은 저렴한 모델의 수십 배 요금. 연습·실습엔 <b>무료·저렴한 모델</b>로 충분 (<b>Solar</b>(무료 베타) · Gemini <b>flash</b>(무료 한도) · GPT <b>Luna 등 저가형</b> · Claude <b>Haiku</b>)</li>
       <li>유료 결제 시 콘솔에서 <b>월 사용 한도(예산)</b>를 꼭 설정 — 실수해도 한도에서 멈춤</li>
     </ul>
   </div>
@@ -888,12 +888,12 @@ if user_input:
       <ul>
         <li><b>발급</b> → <a href="https://platform.openai.com" target="_blank" rel="noopener"><code>platform.openai.com</code></a> 로그인 → <b>API keys → Create new secret key</b> · 카드 등록 + 크레딧 충전(선불) 필요</li>
         <li><b>금고</b> → <code>OPENAI_API_KEY = "발급키"</code></li>
-        <li><b>프롬프트에서 바꿔 말하기</b> → <i>"OpenAI API(모델 gpt-5-mini)를 openai 라이브러리로 사용해. 접속 주소는 기본값 그대로. API 키는 비밀 금고(secrets)의 OPENAI_API_KEY에서 불러와."</i> · "추론 강도" 줄은 빼기</li>
+        <li><b>프롬프트에서 바꿔 말하기</b> → <i>"OpenAI API(모델 gpt-5.6-luna)를 openai 라이브러리로 사용해. 접속 주소는 기본값 그대로. API 키는 비밀 금고(secrets)의 OPENAI_API_KEY에서 불러와."</i> · "추론 강도" 줄은 빼기</li>
         <li>주의: <b>챗지피티 웹사이트 구독(Plus)과 API 크레딧은 별개</b> — 구독 중이어도 API는 따로 충전</li>
       </ul>
       <div class="codewrap code"><span class="label">코드에서 바뀌는 곳 (이 부분만 다름)</span><pre>client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 # base_url 줄 자체가 필요 없음 (기본 주소 사용)
-# 모델 이름은 "gpt-5-mini", reasoning_effort 줄은 삭제</pre></div>
+# 모델 이름은 "gpt-5.6-luna", reasoning_effort 줄은 삭제</pre></div>
     </div>
     <div class="tabpane">
       <ul>
