@@ -13,7 +13,7 @@ pre{margin:0;padding:14px;background:#2b2417;color:#f5efdf;overflow:auto;max-hei
 <h1>🖼️ 갤러리 설치 복붙 도우미</h1>
 <div class="guide">이 페이지는 <b>새 Supabase 프로젝트로 갤러리를 다시 연결</b>해야 할 때 쓰는 보조 도구입니다(이미 연결된 프로젝트가 정상 동작 중이면 안 열어봐도 됩니다).<br><b>순서</b>: ① <a href="https://supabase.com/dashboard" target="_blank" rel="noopener">supabase.com</a>에서 New project(서울 리전, 카드 불필요) →
 ② 왼쪽 <b>SQL Editor</b> → 아래 schema.sql "전체 복사" → 붙여넣고 <b>Run</b> →
-③ Settings→API Keys에서 <b>publishable 키</b>, Settings→Data API에서 <b>Project URL</b> 복사 →
+③ Settings→API Keys에서 <b>publishable 키</b>, Settings→Data API에서 <b>API URL</b> 복사 →
 ④ config.js에 두 값 입력 → ⑤ `web/gallery` 폴더를 그대로 GitHub Pages/Vercel로 배포. 상세: SETUP.md</div>
 <section>
   <div class="head"><h2>schema.sql</h2><span class="note">⭐ Supabase SQL Editor에 전체 붙여넣고 Run — 이것 하나면 테이블·정책·좋아요 함수까지 완성</span><button onclick="copyIt(this)">📋 전체 복사</button></div>
