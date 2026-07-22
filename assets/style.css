@@ -245,3 +245,16 @@ table.glossary-table td.dayn { white-space: nowrap; font-weight: 800; color: var
 .tabs .tabbar button.on { color: var(--accent); border-bottom-color: var(--accent); background: #fff; }
 .tabs .tabpane { display: none; padding: 4px 16px 14px; }
 .tabs .tabpane.on { display: block; }
+
+/* ── 주소 만들기 상자 (3일차 KOBIS) ── */
+.urlmaker { border: 1.5px solid var(--border); border-radius: var(--radius-sm); background: #fff; padding: 14px 16px; margin: 14px 0; }
+.urlmaker .um-label { font-weight: 800; font-size: 0.93rem; color: var(--text-soft); display: block; margin-bottom: 8px; }
+.urlmaker input { width: 100%; box-sizing: border-box; padding: 10px 12px; border: 1.5px solid var(--border); border-radius: 8px; font-family: var(--mono); font-size: 0.9rem; background: #fffdf7; }
+.urlmaker input:focus { outline: none; border-color: var(--teal); }
+.urlmaker .made { margin-top: 10px; background: var(--code-bg); color: var(--code-text); font-family: var(--mono); font-size: 0.82rem; padding: 10px 12px; border-radius: 8px; word-break: break-all; line-height: 1.5; }
+.urlmaker .btns { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; }
+.urlmaker .btns button, .urlmaker .btns a { border: 0; border-radius: 8px; padding: 9px 14px; font-weight: 800; font-size: 0.88rem; font-family: var(--font); cursor: pointer; text-decoration: none; display: inline-block; }
+.urlmaker .copybtn { background: var(--teal); color: #fff; }
+.urlmaker .copybtn:disabled { opacity: 0.4; cursor: not-allowed; }
+.urlmaker .openbtn { background: var(--blue-soft); color: #2f6bd6; }
+.urlmaker .um-note { font-size: 0.8rem; color: var(--muted); margin-top: 8px; }
