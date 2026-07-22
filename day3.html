@@ -783,9 +783,10 @@ SOLAR_API_KEY = "강사에게_받은_키"</pre></div>
   openai 라이브러리로 사용해.
 - API 키는 코드에 쓰지 말고, 비밀 금고(secrets)의 SOLAR_API_KEY에서 불러와.
 - 모델 이름은 'solar-open2'를 글자 그대로 써줘. 다른 이름으로 바꾸지 마.
-- 답이 빨리 나오도록 추론(생각) 강도는 최소로 해줘.
-  temperature가 아니라 reasoning_effort 값을 'low'로 주는 방식이야.
+- 답이 빨리 나오도록 추론(생각) 기능은 꺼줘.
+  temperature가 아니라 reasoning_effort 값을 'none'으로 주는 방식이야.
 - 채팅 입력창으로 메시지를 보내면, AI의 답이 말풍선으로 이어지게 해줘.
+- 답변은 스트리밍으로 받아서, 글자가 실시간으로 흘러나오게 보여줘.
 - 대화 기록을 세션에 저장해서, 이전 대화를 기억하며 이어서 답하게 해줘.
 - 시스템 프롬프트로 '너는 따뜻하고 친절한 데이터 분석 선생님이야.
   반드시 순수 한국어로만 답해'라는 성격을 줘.
@@ -835,13 +836,16 @@ if user_input:
     # AI 답변 받아오기 (실패하면 에러 화면 대신 친절한 안내)
     with st.chat_message("assistant"):
         try:
-            response = client.chat.completions.create(
+            stream = client.chat.completions.create(
                 model="solar-open2",              # 모델 이름은 그대로 유지
                 messages=st.session_state.messages,  # 이전 대화 전체를 함께 전달 (기억 유지)
-                reasoning_effort="low",           # 추론 강도 최소 -&gt; 빠른 응답
+                reasoning_effort="none",          # 추론 끄기 -&gt; 즉시 답변 시작
+                stream=True,                      # 스트리밍 -&gt; 글자가 실시간으로 흐름
             )
-            answer = response.choices[0].message.content
-            st.markdown(answer)
+            answer = st.write_stream(
+                chunk.choices[0].delta.content or ""
+                for chunk in stream if chunk.choices
+            )
             # AI 답변도 기록에 저장 (다음 질문에 이어서 사용)
             st.session_state.messages.append({"role": "assistant", "content": answer})
         except Exception:
@@ -856,11 +860,11 @@ if user_input:
   말투를 바꾸면 이미 진행 중인 대화에도 다음 답부터 바로 적용되게 해줘.
 - '대화 지우기' 버튼을 넣어서 세션에 쌓인 대화 기록을 비울 수 있게 해줘.</pre></div>
   <div class="callout check">
-    <div class="h">✔️ 여기까지 성공 확인 — 조용해도 고장 아님</div>
+    <div class="h">✔️ 여기까지 성공 확인</div>
     <ul>
-      <li>인사를 건네서 <b>AI가 한국어로 답하면 성공</b></li>
-      <li>답이 30초 넘게 안 오면 → 고장이 아니라 AI가 <b>깊게 생각 중</b>일 확률이 큼 · ①의 "추론 강도 최소" 줄이 빠졌는지 확인하고 다시 주문</li>
-      <li>기다리는 동안 버튼·전송 연타 금지 (429로 이어짐)</li>
+      <li>인사를 건네서 <b>AI가 한국어로 답하면 성공</b> · 글자가 실시간으로 흘러나오면 스트리밍까지 성공</li>
+      <li>답이 한참 안 오면 → ①의 "추론 기능은 꺼줘" 줄이 빠졌는지 확인하고 다시 주문 (추론이 켜지면 수십 초 생각부터 함)</li>
+      <li>기다리는 동안 전송 연타 금지 (429로 이어짐)</li>
     </ul>
   </div>
 
@@ -888,7 +892,7 @@ if user_input:
       <ul>
         <li><b>발급</b> → <a href="https://aistudio.google.com" target="_blank" rel="noopener"><code>aistudio.google.com</code></a> 로그인 → <b>Get API key</b> → 새 키 만들기 · 무료 한도 넉넉(카드 불필요)</li>
         <li><b>금고</b> → <code>GEMINI_API_KEY = "발급키"</code></li>
-        <li><b>프롬프트에서 바꿔 말하기</b> → "Solar API…" 문장을 이렇게: <i>"구글 Gemini API(모델 gemini-3.6-flash, 접속 주소 https://generativelanguage.googleapis.com/v1beta/openai/)를 openai 라이브러리로 사용해. API 키는 비밀 금고(secrets)의 GEMINI_API_KEY에서 불러와."</i> · "추론 강도" 줄은 빼기</li>
+        <li><b>프롬프트에서 바꿔 말하기</b> → "Solar API…" 문장을 이렇게: <i>"구글 Gemini API(모델 gemini-3.6-flash, 접속 주소 https://generativelanguage.googleapis.com/v1beta/openai/)를 openai 라이브러리로 사용해. API 키는 비밀 금고(secrets)의 GEMINI_API_KEY에서 불러와."</i> · "추론 기능" 줄은 빼기</li>
       </ul>
       <div class="codewrap code"><span class="label">코드에서 바뀌는 곳 (이 부분만 다름)</span><pre>client = OpenAI(
     api_key=st.secrets["GEMINI_API_KEY"],
@@ -900,7 +904,7 @@ if user_input:
       <ul>
         <li><b>발급</b> → <a href="https://platform.openai.com" target="_blank" rel="noopener"><code>platform.openai.com</code></a> 로그인 → <b>API keys → Create new secret key</b> · 카드 등록 + 크레딧 충전(선불) 필요</li>
         <li><b>금고</b> → <code>OPENAI_API_KEY = "발급키"</code></li>
-        <li><b>프롬프트에서 바꿔 말하기</b> → <i>"OpenAI API(모델 gpt-5.6-luna)를 openai 라이브러리로 사용해. 접속 주소는 기본값 그대로. API 키는 비밀 금고(secrets)의 OPENAI_API_KEY에서 불러와."</i> · "추론 강도" 줄은 빼기</li>
+        <li><b>프롬프트에서 바꿔 말하기</b> → <i>"OpenAI API(모델 gpt-5.6-luna)를 openai 라이브러리로 사용해. 접속 주소는 기본값 그대로. API 키는 비밀 금고(secrets)의 OPENAI_API_KEY에서 불러와."</i> · "추론 기능" 줄은 빼기</li>
         <li>주의: <b>챗지피티 웹사이트 구독(Plus)과 API 크레딧은 별개</b> — 구독 중이어도 API는 따로 충전</li>
       </ul>
       <div class="codewrap code"><span class="label">코드에서 바뀌는 곳 (이 부분만 다름)</span><pre>client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
@@ -911,7 +915,7 @@ if user_input:
       <ul>
         <li><b>발급</b> → <a href="https://platform.claude.com" target="_blank" rel="noopener"><code>platform.claude.com</code></a> 로그인 → <b>Settings → API keys → Create API Key</b> · 크레딧 충전(선불, 소액 가능)</li>
         <li><b>금고</b> → <code>ANTHROPIC_API_KEY = "발급키"</code></li>
-        <li><b>프롬프트에서 바꿔 말하기</b> → <i>"Claude API(모델 claude-haiku-4-5, 접속 주소 https://api.anthropic.com/v1/)를 openai 라이브러리로 사용해. API 키는 비밀 금고(secrets)의 ANTHROPIC_API_KEY에서 불러와."</i> · "추론 강도" 줄은 빼기</li>
+        <li><b>프롬프트에서 바꿔 말하기</b> → <i>"Claude API(모델 claude-haiku-4-5, 접속 주소 https://api.anthropic.com/v1/)를 openai 라이브러리로 사용해. API 키는 비밀 금고(secrets)의 ANTHROPIC_API_KEY에서 불러와."</i> · "추론 기능" 줄은 빼기</li>
         <li>주의: <b>클로드 웹사이트 구독과 API 크레딧도 별개</b></li>
       </ul>
       <div class="codewrap code"><span class="label">코드에서 바뀌는 곳 (이 부분만 다름)</span><pre>client = OpenAI(
@@ -1123,8 +1127,8 @@ wordcloud</pre></div>
   Solar API(모델 solar-open2, 접속 주소 https://api.upstage.ai/v1, openai 라이브러리)에
   보내서 '전체 반응을 한국어 세 줄로 요약'하게 해줘.
   모델 이름은 'solar-open2'를 글자 그대로 써줘. 다른 이름으로 바꾸지 마.
-  키는 비밀 금고(secrets)의 SOLAR_API_KEY에서. 추론(생각) 강도는 최소로
-  (reasoning_effort 값을 'low'로 주는 방식).
+  키는 비밀 금고(secrets)의 SOLAR_API_KEY에서. 추론(생각) 기능은 꺼줘
+  (reasoning_effort 값을 'none'으로 주는 방식).
 - 요약에 긍정 반응과 부정 반응의 비율(대략적인 백분율)도 추정해서 붙이게 해줘.
 - 빼고 싶은 말(불용어)을 쉼표로 적는 입력창을 넣어줘(예: 너무, 정말).
   거기 적은 말은 빈도 그래프와 워드클라우드에서 모두 빠지게 해줘.
@@ -1268,7 +1272,7 @@ wordcloud</pre></div>
       <tr><td class="term">비밀 금고(secrets)</td><td>API 키를 코드 밖에 안전하게 보관하는 곳</td></tr>
       <tr><td class="term">세션</td><td>앱이 켜져 있는 동안 기억을 유지하는 공간 — 대화 기록 등</td></tr>
       <tr><td class="term">시스템 프롬프트</td><td>AI에게 미리 심어 주는 성격·규칙 — “너는 친절한 선생님이야”</td></tr>
-      <tr><td class="term">추론(생각) 강도</td><td>AI가 답하기 전에 생각하는 깊이 — 깊으면 꼼꼼, 얕으면 빠름</td></tr>
+      <tr><td class="term">추론(생각) 기능</td><td>AI가 답하기 전에 생각하는 단계 — 끄면 즉시 답하고, 켜면 느리지만 꼼꼼</td></tr>
       <tr><td class="term">워드클라우드</td><td>자주 나온 낱말일수록 크게 그리는 그림 — 글 뭉치를 한눈에</td></tr>
     </table>
     <p class="glossary-more"><a href="glossary.html">📚 전체 용어사전 보기 →</a></p>
