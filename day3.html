@@ -316,7 +316,7 @@
     <li><span class="st">열쇠를 금고에</span><br>앱 <b>Settings → Secrets</b>에 아래 한 줄 저장 (키는 코드가 아니라 여기에만) · 위 상자에 키를 붙여넣었다면 <b>아래 내용이 이미 내 키로 채워져</b> 있어 복사만 하면 됨</li>
     <li><span class="st">기본 코드 붙여넣기</span><br>아래 <b>함께 읽는 코드</b>를 <code>main.py</code>에 그대로 → 저장 → 앱 확인</li>
   </ol>
-  <div class="codewrap code"><span class="label">Settings → Secrets (비밀 금고 · 위에 붙여넣은 키가 자동으로 채워짐)</span><pre class="secrets-kobis">KOBIS_KEY = "발급받은_키_붙여넣기"</pre></div>
+  <div class="codewrap code"><span class="label">Settings → Secrets (비밀 금고 · 위에 붙여넣은 키가 자동으로 채워짐)</span><pre class="secrets-sync">KOBIS_KEY = "발급받은_키_붙여넣기"</pre></div>
   <div class="codewrap code"><span class="label">🔍 함께 읽는 코드 — 프롬프트 없이 그대로 사용</span><pre>import streamlit as st
 import requests
 from datetime import datetime, timedelta
@@ -572,11 +572,16 @@ st.bar_chart(top5.set_index("영화명")["관객수"])</pre></div>
   </div>
   <ol class="steps">
     <li><span class="st">LV1 · 빈 앱 배포</span><br><code>my-youtube-app</code> Public 저장소 + <code>main.py</code> → 스트림릿 연결</li>
-    <li><span class="st">LV2 · 열쇠를 금고에</span><br>받은 키를 Secrets에 <b>추가</b> (아래처럼 한 파일에 여러 줄) · 키가 코드에 안 보이면 통과</li>
+    <li><span class="st">LV2 · 열쇠를 금고에</span><br>받은 키를 Secrets에 <b>추가</b> (아래처럼 한 파일에 여러 줄) · 아래 상자에 붙여넣으면 예시가 채워짐 · 키가 코드에 안 보이면 통과</li>
     <li><span class="st">LV3 · 대시보드 완성</span><br>① 프롬프트로 주문 → <b>카드 4개에 숫자가 차면 성공</b></li>
     <li><span class="st">LV4 · 대화로 개선</span><br>③으로 프로필 이미지·즐겨찾기까지 (여유 있는 분만)</li>
   </ol>
-  <div class="codewrap code"><span class="label">Settings → Secrets (금고 하나에 열쇠 여러 개)</span><pre class="secrets-kobis">KOBIS_KEY = "아까_발급받은_키"
+  <div class="urlmaker">
+    <span class="um-label">🗝️ 채팅으로 받은 유튜브 키 붙여넣기 — 아래 금고 예시에 자동으로 채워집니다</span>
+    <input type="text" id="yt-key" placeholder="강사가 채팅으로 보낸 실습용 키 붙여넣기" autocomplete="off" spellcheck="false">
+    <div class="um-note">키는 이 화면 안에서만 쓰이고 어디에도 저장·전송되지 않습니다</div>
+  </div>
+  <div class="codewrap code"><span class="label">Settings → Secrets (금고 하나에 열쇠 여러 개 · 붙여넣은 키가 자동으로 채워짐)</span><pre class="secrets-sync">KOBIS_KEY = "아까_발급받은_키"
 YOUTUBE_API_KEY = "강사에게_받은_실습용_키"</pre></div>
   <div class="codewrap prompt"><span class="label">① 샘플 프롬프트</span><pre>스트림릿 앱 하나(main.py)를 만들어줘. 유튜브 채널 통계 대시보드야. 스트림릿 클라우드에 올릴 거야.
 
@@ -750,7 +755,12 @@ if search_btn:
     <li>내 키 만들기 (집에서 3분) → 업스테이지 콘솔 (<a href="https://console.upstage.ai" target="_blank" rel="noopener">console.upstage.ai</a>) → 로그인 → <b>API Keys</b> → <b>Create New Key</b> · <b>카드 등록 없이</b> 무료</li>
     <li>모델 → <code>solar-open2</code> · 다른 회사 AI를 쓰고 싶다면 → 이 절 끝의 <b>회사별 탭</b> 참고</li>
   </ul>
-  <div class="codewrap code"><span class="label">Settings → Secrets (오늘의 열쇠 세 개)</span><pre class="secrets-kobis">KOBIS_KEY = "아침에_발급받은_키"
+  <div class="urlmaker">
+    <span class="um-label">🗝️ 채팅으로 받은 Solar 키 붙여넣기 — 아래 금고 예시에 자동으로 채워집니다</span>
+    <input type="text" id="solar-key" placeholder="강사가 채팅으로 보낸 실습용 키 붙여넣기" autocomplete="off" spellcheck="false">
+    <div class="um-note">키는 이 화면 안에서만 쓰이고 어디에도 저장·전송되지 않습니다</div>
+  </div>
+  <div class="codewrap code"><span class="label">Settings → Secrets (오늘의 열쇠 세 개 · 붙여넣은 키가 자동으로 채워짐)</span><pre class="secrets-sync">KOBIS_KEY = "아침에_발급받은_키"
 YOUTUBE_API_KEY = "강사에게_받은_키"
 SOLAR_API_KEY = "강사에게_받은_키"</pre></div>
   <div class="callout warn">
@@ -1269,20 +1279,32 @@ wordcloud</pre></div>
     var day = String(d.getUTCDate()).padStart(2, "0");
     return "" + d.getUTCFullYear() + m + day;
   }
-  var secretsPres = document.querySelectorAll("pre.secrets-kobis");
+  var secretsPres = document.querySelectorAll("pre.secrets-sync");
   secretsPres.forEach(function (pre) { pre.dataset.original = pre.textContent; });
-  function syncSecrets(key) {
+  var keyInputs = {
+    KOBIS_KEY: input,
+    YOUTUBE_API_KEY: document.getElementById("yt-key"),
+    SOLAR_API_KEY: document.getElementById("solar-key"),
+  };
+  function syncSecrets() {
     secretsPres.forEach(function (pre) {
       var text = pre.dataset.original;
-      if (key) {
-        text = text.replace(/KOBIS_KEY = "[^"]*"/, 'KOBIS_KEY = "' + key + '"');
-      }
+      Object.keys(keyInputs).forEach(function (name) {
+        var el = keyInputs[name];
+        var val = el ? el.value.trim() : "";
+        if (val) {
+          text = text.replace(new RegExp(name + ' = "[^"]*"'), name + ' = "' + val + '"');
+        }
+      });
       pre.textContent = text;
     });
   }
+  ["YOUTUBE_API_KEY", "SOLAR_API_KEY"].forEach(function (name) {
+    if (keyInputs[name]) keyInputs[name].addEventListener("input", syncSecrets);
+  });
   function update() {
     var key = input.value.trim();
-    syncSecrets(key);
+    syncSecrets();
     if (!key) {
       urlBox.textContent = "키를 붙여넣으면, 어제 날짜가 채워진 완성 주소가 여기 나타납니다";
       copyBtn.disabled = true;
