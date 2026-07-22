@@ -567,7 +567,7 @@ st.bar_chart(top5.set_index("영화명")["관객수"])</pre></div>
     <div class="h">🗝️ 이번 열쇠는 강사가 나눠 줍니다</div>
     <ul>
       <li>유튜브 키는 구글 클라우드에서 발급받는데 단계가 많아, 수업에선 <b>강사가 준비한 실습용 키</b>를 받아 씁니다</li>
-      <li>발급(2단계)만 건너뛸 뿐 나머지 단계는 똑같음 · 내 키는 집에서 5분이면 → 이 절 끝 <b>(참고) 집에서 내 키 만들기</b></li>
+      <li>발급(2단계)만 건너뛸 뿐 나머지 단계는 똑같음 · 직접 발급도 어렵지 않아요 → 이 절 끝의 접힌 안내 <b>(참고) 내 유튜브 키 직접 만들기</b></li>
     </ul>
   </div>
   <ol class="steps">
@@ -716,19 +716,22 @@ if search_btn:
     </ul>
   </div>
   <details class="glossary">
-    <summary>🔑 (참고) 집에서 내 키 만들기 — 구글 클라우드 3단계 · 수업에서는 안 합니다</summary>
+    <summary>🔑 (참고) 내 유튜브 키 직접 만들기 — 어렵지 않습니다 · 차근차근 5단계 (5분)</summary>
     <div class="gin">
       <ul>
-        <li>발급처 → 구글 클라우드 콘솔 (<a href="https://console.cloud.google.com" target="_blank" rel="noopener"><code>console.cloud.google.com</code></a>) · 무료 · 5분</li>
+        <li>수업에서는 배부 키로 진행하지만, 직접 만들어도 어렵지 않아요 · 발급처 → 구글 클라우드 콘솔 (<a href="https://console.cloud.google.com" target="_blank" rel="noopener"><code>console.cloud.google.com</code></a>) · 무료 · 카드 등록 불필요</li>
       </ul>
       <ol class="steps">
-        <li><span class="st">프로젝트 만들기</span><br>상단 프로젝트 선택 → <b>새 프로젝트</b> → 이름 <code>my-youtube</code> → 생성 후 선택</li>
-        <li><span class="st">YouTube Data API v3 사용 설정</span><br><b>API 및 서비스 → 라이브러리</b> → <code>YouTube Data API v3</code> 검색 → <b>사용 설정(Enable)</b></li>
-        <li><span class="st">API 키 발급</span><br><b>API 및 서비스 → 사용자 인증정보</b> → <b>사용자 인증정보 만들기 → API 키</b> → 키 복사 → secrets에 붙여넣기</li>
+        <li><span class="st">1. 콘솔 접속</span><br>구글 계정으로 <code>console.cloud.google.com</code> 로그인 · 처음이면 약관 동의 화면이 한 번 나옵니다</li>
+        <li><span class="st">2. 프로젝트 만들기</span><br>화면 <b>상단의 프로젝트 선택 상자</b> 클릭 → <b>새 프로젝트</b> → 이름 <code>my-youtube</code> → <b>만들기</b> → 만들어지면 다시 상단 상자에서 <b>그 프로젝트를 선택</b> (선택을 잊는 경우가 많아요)</li>
+        <li><span class="st">3. YouTube Data API v3 켜기</span><br>왼쪽 메뉴 <b>API 및 서비스 → 라이브러리</b> → 검색창에 <code>YouTube Data API v3</code> → 클릭 → 파란 <b>사용(Enable)</b> 버튼 · 이 단계를 건너뛰면 키가 있어도 403 오류가 납니다</li>
+        <li><span class="st">4. API 키 발급</span><br><b>API 및 서비스 → 사용자 인증정보</b> → 상단 <b>+ 사용자 인증정보 만들기 → API 키</b> → 키가 바로 화면에 뜹니다 → <b>복사</b></li>
+        <li><span class="st">5. 금고에 넣기</span><br>Settings → Secrets의 <code>YOUTUBE_API_KEY</code> 값을 배부 키에서 <b>내 키로 바꿔치기</b> · 앱은 그대로 두면 끝</li>
       </ol>
       <ul>
-        <li>키는 받았는데 403 오류면 → 2단계(사용 설정)를 건너뛰었는지 확인</li>
-        <li>내 키가 생기면 실습용 키 자리에 바꿔 넣기만 하면 끝</li>
+        <li><b>403 오류</b>가 나면 → 3단계(사용 설정)를 건너뛰었는지, 2단계에서 프로젝트 선택을 잊었는지 확인</li>
+        <li>무료 한도 → 하루 10,000 단위 · 채널 조회 한 번 = 1 단위라 개인 실습엔 넉넉</li>
+        <li>(선택) 키를 더 안전하게 → 사용자 인증정보에서 키 클릭 → <b>API 제한</b> → YouTube Data API v3만 허용</li>
       </ul>
     </div>
   </details>
@@ -873,13 +876,13 @@ if user_input:
       <ul>
         <li><b>발급</b> → <a href="https://aistudio.google.com" target="_blank" rel="noopener"><code>aistudio.google.com</code></a> 로그인 → <b>Get API key</b> → 새 키 만들기 · 무료 한도 넉넉(카드 불필요)</li>
         <li><b>금고</b> → <code>GEMINI_API_KEY = "발급키"</code></li>
-        <li><b>프롬프트에서 바꿔 말하기</b> → "Solar API…" 문장을 이렇게: <i>"구글 Gemini API(모델 gemini-2.5-flash, 접속 주소 https://generativelanguage.googleapis.com/v1beta/openai/)를 openai 라이브러리로 사용해. API 키는 비밀 금고(secrets)의 GEMINI_API_KEY에서 불러와."</i> · "추론 강도" 줄은 빼기</li>
+        <li><b>프롬프트에서 바꿔 말하기</b> → "Solar API…" 문장을 이렇게: <i>"구글 Gemini API(모델 gemini-3.6-flash, 접속 주소 https://generativelanguage.googleapis.com/v1beta/openai/)를 openai 라이브러리로 사용해. API 키는 비밀 금고(secrets)의 GEMINI_API_KEY에서 불러와."</i> · "추론 강도" 줄은 빼기</li>
       </ul>
       <div class="codewrap code"><span class="label">코드에서 바뀌는 곳 (이 부분만 다름)</span><pre>client = OpenAI(
     api_key=st.secrets["GEMINI_API_KEY"],
     base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
 )
-# 모델 이름은 "gemini-2.5-flash", reasoning_effort 줄은 삭제</pre></div>
+# 모델 이름은 "gemini-3.6-flash", reasoning_effort 줄은 삭제</pre></div>
     </div>
     <div class="tabpane">
       <ul>
