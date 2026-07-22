@@ -951,8 +951,8 @@ if user_input:
   입력창의 기본값은 https://youtu.be/d95J8yzvjbQ?si=LfL5DLwCL8Pk077r 로 해줘.
 - 입력창 위에 예시 버튼 두 개를 나란히 넣어줘.
   '예시 1 · 딥마인드 다큐(영어 댓글)'를 누르면 기본값 링크가,
-  '예시 2 · 한국어 뉴스'를 누르면
-  https://youtu.be/Y8SJ32Q1iD0?si=wn3syLTUCsTBOL8W 링크가 입력창에 채워지게 해줘.
+  '예시 2 · 2002 월드컵 추억(한국어 댓글)'을 누르면
+  https://youtu.be/I9vK5EVTt0U?si=NEZ8L7MRuNvrzINa 링크가 입력창에 채워지게 해줘.
 - 링크에서 영상 ID를 뽑아줘. youtu.be 짧은 주소든 youtube.com/watch 주소든
   다 처리하고, si= 처럼 링크 뒤에 붙는 값은 무시해.
 - YouTube Data API v3의 commentThreads 창구에 requests로 요청해서
@@ -977,7 +977,7 @@ YOUTUBE_KEY = st.secrets["YOUTUBE_API_KEY"]
 
 # 예시 영상 두 개 (버튼으로 골라 넣기)
 DEFAULT_URL = "https://youtu.be/d95J8yzvjbQ?si=LfL5DLwCL8Pk077r"   # 딥마인드 다큐 (영어)
-KOREAN_URL = "https://youtu.be/Y8SJ32Q1iD0?si=wn3syLTUCsTBOL8W"    # 한국어 뉴스
+KOREAN_URL = "https://youtu.be/I9vK5EVTt0U?si=NEZ8L7MRuNvrzINa"    # 2002 월드컵 추억 (한국어)
 
 if "video_url" not in st.session_state:
     st.session_state.video_url = DEFAULT_URL
@@ -985,7 +985,7 @@ if "video_url" not in st.session_state:
 col1, col2 = st.columns(2)
 if col1.button("🎬 예시 1 · 딥마인드 다큐 (영어 댓글)"):
     st.session_state.video_url = DEFAULT_URL
-if col2.button("📰 예시 2 · 한국어 뉴스"):
+if col2.button("⚽ 예시 2 · 2002 월드컵 추억"):
     st.session_state.video_url = KOREAN_URL
 
 # 영상 링크 입력창 (예시 버튼을 누르면 자동으로 채워져요)
@@ -1035,7 +1035,7 @@ if "comments" in st.session_state:
     <div class="h">✔️ 1단계 성공 확인</div>
     <ul>
       <li>기본값 링크가 미리 들어 있으니 <b>버튼만 눌러도</b> 됩니다 · "가져온 댓글 수" 카드와 댓글 표가 뜨면 통과</li>
-      <li><b>예시 2(한국어 뉴스)</b>를 누르고 다시 가져오면 한국어 댓글로 바뀜 — 3단계 워드클라우드를 한글로 보고 싶을 때</li>
+      <li><b>예시 2(2002 월드컵)</b>를 누르고 다시 가져오면 한국어 댓글로 바뀜 — 3단계 워드클라우드를 한글로 보고 싶을 때</li>
       <li>다른 영상도 시험해 보기 — 공유 버튼으로 복사한 주소를 그대로 붙여넣으면 됨 (짧은 주소든 긴 주소든 OK)</li>
       <li>댓글이 안 오면 → 댓글이 막힌 영상인지 확인 · 에러 문구를 통째로 AI에게</li>
     </ul>
@@ -1111,7 +1111,7 @@ wordcloud</pre></div>
   <div class="callout check">
     <div class="h">✔️ 3단계 성공 확인</div>
     <ul>
-      <li>워드클라우드가 뜨면 완성 🎉 · <b>한글 워드클라우드</b>를 보려면 1단계에서 예시 2(한국어 뉴스)로 가져오기</li>
+      <li>워드클라우드가 뜨면 완성 🎉 · <b>한글 워드클라우드</b>를 보려면 1단계에서 예시 2(2002 월드컵)로 가져오기</li>
       <li>글자가 네모(□□)로 깨지면 → 폰트 주소 줄이 프롬프트에서 빠졌는지 확인</li>
       <li>2단계 그래프와 3단계 그림을 나란히 보기 — <b>같은 댓글</b>을 두 가지 방식으로 그린 것</li>
     </ul>
@@ -1126,7 +1126,8 @@ wordcloud</pre></div>
   키는 비밀 금고(secrets)의 SOLAR_API_KEY에서. 추론(생각) 강도는 최소로
   (reasoning_effort 값을 'low'로 주는 방식).
 - 요약에 긍정 반응과 부정 반응의 비율(대략적인 백분율)도 추정해서 붙이게 해줘.
-- 빈도 그래프에서 "너무", "정말" 같은 의미 없는 말은 빼줘.
+- 빼고 싶은 말(불용어)을 쉼표로 적는 입력창을 넣어줘(예: 너무, 정말).
+  거기 적은 말은 빈도 그래프와 워드클라우드에서 모두 빠지게 해줘.
 - requirements.txt에 openai를 추가해줘.</pre></div>
   <div class="callout tip">
     <div class="h">💡 이 앱이 오늘의 요약</div>
