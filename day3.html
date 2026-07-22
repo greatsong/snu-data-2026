@@ -594,9 +594,11 @@ st.bar_chart(top5.set_index("영화명")["관객수"])</pre></div>
   다 처리하고, si= 처럼 링크 뒤에 붙는 값은 무시해.
 - YouTube Data API v3의 commentThreads 창구에 requests로 요청해서
   댓글을 최대 100개 받아와. 요청변수 part는 snippet만,
-  댓글 원문은 textOriginal 필드를 써.
+  최신순 말고 좋아요가 많은 순으로 — 요청변수 order는 relevance로 줘.
+  댓글 원문은 textOriginal, 좋아요 수는 likeCount 필드를 써.
   API 키는 비밀 금고(secrets)의 YOUTUBE_API_KEY에서 불러와.
-- 가져온 댓글 개수를 지표 카드로 크게 보여주고, 댓글 목록을 표로 보여줘.
+- 받은 댓글을 좋아요가 많은 순으로 정렬해줘.
+- 가져온 댓글 개수를 지표 카드로 크게 보여주고, 댓글 목록을 좋아요 수와 함께 표로 보여줘.
 - 댓글을 못 가져오면(잘못된 링크, 댓글이 막힌 영상 등) 친절한 한국어 안내를 보여줘.
 - 필요한 라이브러리 목록(requirements.txt)도 같이 줘.
   버전 숫자 없이 이름만, 스트림릿·판다스·넘파이는 기본 설치라 빼고.
@@ -645,6 +647,7 @@ if st.button("댓글 가져오기 💬"):
             "part": "snippet",
             "videoId": video_id,
             "maxResults": 100,
+            "order": "relevance",   # 최신순이 아니라 인기(좋아요 많은) 댓글 위주로
             "key": YOUTUBE_KEY,
         }
         res = requests.get(api_url, params=params)
@@ -656,17 +659,22 @@ if st.button("댓글 가져오기 💬"):
             )
         else:
             items = res.json().get("items", [])
-            comments = [
-                it["snippet"]["topLevelComment"]["snippet"]["textOriginal"]
-                for it in items
-            ]
-            st.session_state.comments = comments  # 세션에 저장해 두기
+            rows = []
+            for it in items:
+                snip = it["snippet"]["topLevelComment"]["snippet"]
+                rows.append((snip["textOriginal"], snip.get("likeCount", 0)))
+            rows.sort(key=lambda r: r[1], reverse=True)   # 좋아요 많은 순 정렬
+            st.session_state.comments = [text for text, _ in rows]  # 단어 분석·워드클라우드에서 재사용
+            st.session_state.likes = [n for _, n in rows]
 
-# 댓글이 준비되면 개수와 목록 표시
+# 댓글이 준비되면 개수와 목록 표시 (좋아요 많은 순)
 if "comments" in st.session_state:
     comments = st.session_state.comments
     st.metric("가져온 댓글 수", f"{len(comments)}개")
-    st.dataframe({"댓글": comments}, use_container_width=True)</pre></div>
+    st.dataframe(
+        {"좋아요": st.session_state.likes, "댓글": comments},
+        use_container_width=True,
+    )</pre></div>
   <div class="codewrap code"><span class="label">requirements.txt (1단계)</span><pre>requests</pre></div>
   <div class="callout check">
     <div class="h">✔️ 1단계 성공 확인</div>
@@ -1002,9 +1010,11 @@ if user_input:
   다 처리하고, si= 처럼 링크 뒤에 붙는 값은 무시해.
 - YouTube Data API v3의 commentThreads 창구에 requests로 요청해서
   댓글을 최대 100개 받아와. 요청변수 part는 snippet만,
-  댓글 원문은 textOriginal 필드를 써.
+  최신순 말고 좋아요가 많은 순으로 — 요청변수 order는 relevance로 줘.
+  댓글 원문은 textOriginal, 좋아요 수는 likeCount 필드를 써.
   유튜브 키는 비밀 금고(secrets)의 YOUTUBE_API_KEY에서 불러와.
-- 가져온 댓글은 세션에 저장하고, 댓글 개수를 지표 카드로, 목록을 표로 보여줘.
+- 받은 댓글을 좋아요가 많은 순으로 정렬하고, 세션에 저장해줘.
+  댓글 개수를 지표 카드로, 목록을 좋아요 수와 함께 표로 보여줘.
 - 'AI 세 줄 요약' 버튼을 넣어줘. 누르면 가져온 댓글 전체를
   Solar API(모델 solar-open2, 접속 주소 https://api.upstage.ai/v1)를
   openai 라이브러리로 불러서 '전체 반응을 한국어 세 줄로 요약'하게 해줘.
@@ -1061,7 +1071,7 @@ if st.button("댓글 가져오기 💬"):
         st.error("링크에서 영상 ID를 찾지 못했어요. 유튜브 영상 링크가 맞는지 확인해 주세요.")
     else:
         api_url = "https://www.googleapis.com/youtube/v3/commentThreads"
-        params = {"part": "snippet", "videoId": video_id, "maxResults": 100, "key": YOUTUBE_KEY}
+        params = {"part": "snippet", "videoId": video_id, "maxResults": 100, "order": "relevance", "key": YOUTUBE_KEY}
         res = requests.get(api_url, params=params)
         if res.status_code != 200:
             st.error(
@@ -1070,10 +1080,13 @@ if st.button("댓글 가져오기 💬"):
             )
         else:
             items = res.json().get("items", [])
-            st.session_state.comments = [
-                it["snippet"]["topLevelComment"]["snippet"]["textOriginal"]
-                for it in items
-            ]
+            rows = []
+            for it in items:
+                snip = it["snippet"]["topLevelComment"]["snippet"]
+                rows.append((snip["textOriginal"], snip.get("likeCount", 0)))
+            rows.sort(key=lambda r: r[1], reverse=True)   # 좋아요 많은 순 정렬
+            st.session_state.comments = [text for text, _ in rows]
+            st.session_state.likes = [n for _, n in rows]
 
 # 댓글이 준비되면 요약 버튼과 목록 표시
 if "comments" in st.session_state:
@@ -1097,7 +1110,7 @@ if "comments" in st.session_state:
             except Exception:
                 st.error("요약을 받지 못했어요 😢 잠시 후 다시 시도해 주세요.")
 
-    st.dataframe({"댓글": comments}, use_container_width=True)</pre></div>
+    st.dataframe({"좋아요": st.session_state.likes, "댓글": comments}, use_container_width=True)</pre></div>
   <div class="codewrap code"><span class="label">requirements.txt (1단계)</span><pre>requests
 openai</pre></div>
   <div class="callout check">
@@ -1233,7 +1246,7 @@ openai</pre></div>
     <ul>
       <li>내일은 데이터를 <b>진짜 저장소(DB)</b>에 쌓습니다 · 가입과 프로젝트 생성만 미리 하면 수업이 한결 가벼워요</li>
       <li><a href="https://supabase.com" target="_blank" rel="noopener"><code>supabase.com</code></a> 가입(카드 없음·무료) → 처음이면 <b>조직(organization) 만들기</b>가 먼저 나옴 · 아무 이름이나 정하고 통과 → <b>New project</b> → 이름과 DB 비밀번호를 정해 생성까지만 (리전은 기본값 그대로 · 준비에 1~2분 걸림)</li>
-      <li>비밀번호는 기억할 곳에 적어 두기 · 못 해도 괜찮아요, 내일 같이 합니다</li>
+      <li>비밀번호는 기억할 곳에 적어 두기</li>
     </ul>
   </div>
 
