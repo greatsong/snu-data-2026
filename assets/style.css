@@ -236,3 +236,12 @@ table.glossary-table td.dayn { white-space: nowrap; font-weight: 800; color: var
 
 /* API 비유 애니메이션 (3일차 더 알아보기 · 2026-vibe-pico ch5에서 이식) */
 .api-svg { width: 100%; height: auto; background: #fffdf9; border: 1px solid var(--border); border-radius: 14px; padding: 8px; }
+
+/* ── 탭 (3일차 회사별 AI 세트) ── */
+.tabs { margin: 14px 0; border: 1px solid var(--border); border-radius: var(--radius-sm); background: #fff; overflow: hidden; }
+.tabs .tabbar { display: flex; flex-wrap: wrap; background: #fffaee; border-bottom: 1px solid var(--border); }
+.tabs .tabbar button { border: 0; background: transparent; padding: 10px 16px; font-weight: 800; font-size: 0.9rem; color: var(--muted); cursor: pointer; border-bottom: 3px solid transparent; font-family: var(--font); }
+.tabs .tabbar button:hover { color: var(--text-soft); }
+.tabs .tabbar button.on { color: var(--accent); border-bottom-color: var(--accent); background: #fff; }
+.tabs .tabpane { display: none; padding: 4px 16px 14px; }
+.tabs .tabpane.on { display: block; }

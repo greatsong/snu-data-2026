@@ -29,8 +29,10 @@
   <div class="make-banner">
     <div class="t">🎯 오늘 만드는 것</div>
     <ul>
+      <li><b>박스오피스 대시보드</b> — 진짜 공공 API(KOBIS)를 문서부터 읽고 직접 연결</li>
       <li><b>유튜브 채널 대시보드</b> — 구독자·조회수를 API로 불러와 카드로</li>
       <li><b>나만의 AI 채팅앱</b> — 말을 걸면 대답하는 AI를 내 앱 안에</li>
+      <li><b>유튜브 댓글 분석 앱</b> — 댓글 워드클라우드 + AI 세 줄 요약</li>
     </ul>
   </div>
 
@@ -45,6 +47,19 @@
     <li>지금까지 → <b>파일에 담긴 데이터</b></li>
     <li>오늘 → <b>지금 이 순간의 데이터</b>를 인터넷에서 직접 받아오기</li>
   </ul>
+
+  <h2>🗺️ 오늘의 지도 — API 사용 5단계</h2>
+  <ul>
+    <li>오늘의 진짜 목표는 앱 완성이 아니라 <b>처음 보는 API를 혼자 붙이는 순서</b>를 익히는 것</li>
+    <li>오늘 이 5단계를 KOBIS(영화 데이터)로 한 바퀴 돌고, 유튜브·AI에 다시 적용합니다</li>
+  </ul>
+  <ol class="steps">
+    <li><span class="st">1단계 · 문서 확인</span><br>API 문서에서 <b>요청 주소 · 요청변수 · 응답 예시</b> 세 가지 찾기</li>
+    <li><span class="st">2단계 · 키 발급</span><br>키를 발급받아 <b>비밀 금고(secrets)</b>에 넣기</li>
+    <li><span class="st">3단계 · 원본 확인</span><br>브라우저와 기본 코드로 <b>원본 JSON</b>을 그대로 확인</li>
+    <li><span class="st">4단계 · 값 꺼내기</span><br>JSON에서 원하는 값만 골라 화면에 놓기</li>
+    <li><span class="st">5단계 · 바이브 코딩</span><br>API 문서를 복사해 프롬프트에 붙여 <b>앱 완성</b></li>
+  </ol>
 
   <h2>1. API란 무엇일까 — 관공서 민원창구</h2>
   <ul>
@@ -149,148 +164,367 @@
     <li><code>200</code> 성공 · <code>404</code> 없음(주소 오류) · <code>429</code> 과다요청(잠깐 쉬기)</li>
   </ul>
 
-  <h3>키 없이 몸풀기 — 고양이 상식과 랜덤 유저</h3>
+  <h3>JSON — 라벨 붙은 상자</h3>
   <ul>
-    <li>신분증(키) 필요 없는 창구로 연습</li>
-    <li><code>requests</code>로 요청 → JSON에서 원하는 값 꺼내기</li>
+    <li>JSON = <code>{"라벨": 값}</code> 짝으로 이루어진 <b>상자</b> · 상자 안에 상자를 넣을 수 있음</li>
+    <li>오늘 쓸 진짜 창구, <b>KOBIS(영화진흥위원회) 일별 박스오피스 API</b>의 실제 응답으로 봅니다</li>
   </ul>
-  <div class="codewrap prompt"><span class="label">① 샘플 프롬프트</span><pre>스트림릿 앱 하나(main.py)를 만들어줘. API 첫 연습용이야. 스트림릿 클라우드에 올릴 거야.
+  <div class="codewrap code"><span class="label">실제 KOBIS 응답 (일부만 발췌)</span><pre>{
+  "boxOfficeResult": {
+    "boxofficeType": "일별 박스오피스",
+    "showRange": "20260721~20260721",
+    "dailyBoxOfficeList": [
+      {
+        "rank": "1",
+        "movieNm": "영화 제목",
+        "openDt": "2026-07-15",
+        "audiCnt": "820653",
+        "audiAcc": "3410211",
+        "scrnCnt": "1943"
+      },
+      { "rank": "2", "movieNm": "다음 영화", ... }
+    ]
+  }
+}</pre></div>
+  <ul>
+    <li>겉상자 <code>boxOfficeResult</code> 안에 → 목록 상자 <code>dailyBoxOfficeList</code> → 그 안에 <b>영화 한 편 = 상자 하나</b></li>
+    <li>값 꺼내기 = 라벨을 따라 들어가기 · "boxOfficeResult 상자에서 dailyBoxOfficeList 목록을 꺼내라"처럼</li>
+    <li><code>rank</code> 순위 · <code>movieNm</code> 영화명 · <code>audiCnt</code> 그날 관객수 · <code>audiAcc</code> 누적 관객수 · <code>scrnCnt</code> 스크린수</li>
+  </ul>
+  <div class="callout warn">
+    <div class="h">👀 눈여겨볼 것 — 숫자가 따옴표에 싸여 있다</div>
+    <ul>
+      <li><code>"audiCnt": "820653"</code> — 관객수가 숫자가 아니라 <b>따옴표 친 글자</b>로 옴</li>
+      <li>글자인 채로는 크기 비교·정렬·그래프가 엉망 → 나중에 <b>숫자로 바꾸는 한 단계</b>가 꼭 필요</li>
+      <li>오늘 오후에 이 함정을 직접 밟고 넘어갑니다 · 미리 기억만</li>
+    </ul>
+  </div>
 
-- 버튼을 누르면 https://catfact.ninja/fact 주소에 requests로 요청을 보내고,
-  돌아온 JSON에서 'fact' 값(고양이 상식)을 꺼내 화면에 크게 보여줘.
-- 아래에는 https://randomuser.me/api/ 로 요청해서 랜덤 인물 한 명의
-  이름과 사는 나라를 화면에 보여주는 버튼도 하나 넣어줘.
-- 요청이 성공(상태코드 200)인지 확인하고, 실패하면 친절한 한국어 메시지를 보여줘.
-- 필요한 라이브러리 목록(requirements.txt)도 같이 줘.
-  버전 숫자 없이 이름만, 스트림릿·판다스·넘파이는 기본 설치라 빼고.
-- 초보자용으로 주석을 한국어로 달고, main.py 전체 코드를 한 번에 줘.</pre></div>
+  <h2>2. KOBIS 키 발급과 API 문서 확인 <span class="a">(1·2단계)</span></h2>
   <ul>
-    <li>누를 때마다 다른 값 → 파일이 아니라 그 순간 창구에서 받아옴 = "살아있는 데이터"</li>
-    <li>AI가 아래 <b>모습</b>의 코드를 줌 (똑같지 않아도 OK)</li>
+    <li>KOBIS = 영화진흥위원회의 공공 데이터 창구 · 가입·발급이 무료이고 <b>즉시</b> 나옴</li>
+    <li>오늘은 전원이 직접 발급합니다 · 이 경험이 다른 모든 API의 예행연습</li>
   </ul>
-  <div class="codewrap code"><span class="label">② AI가 준 코드 (예시)</span><pre>import streamlit as st
+  <ol class="steps">
+    <li><span class="st">가입</span><br>영화진흥위원회 오픈API <a href="https://www.kobis.or.kr/kobisopenapi" target="_blank" rel="noopener"><code>kobis.or.kr/kobisopenapi</code></a> 접속 → 회원가입 (이메일 인증)</li>
+    <li><span class="st">키 발급</span><br>로그인 → 상단 <b>[키 발급/관리]</b> → 키 발급 신청 → 발급된 키 복사 (바로 나옴)</li>
+    <li><span class="st">문서 열어 두기</span><br>상단 <b>[제공 서비스] → 일별 박스오피스</b> 문서 열기 → 아래 세 곳 찾기</li>
+  </ol>
+
+  <h3>API 문서, 다 읽지 않아도 됩니다 — 볼 곳은 세 곳</h3>
+  <table class="daymap">
+    <thead><tr><th>문서에서 찾을 것</th><th>KOBIS의 경우</th><th>왜 필요한가</th></tr></thead>
+    <tbody>
+      <tr><td>① 요청 주소</td><td><code>…/searchDailyBoxOfficeList.json</code></td><td>어느 창구에 물어볼지</td></tr>
+      <tr><td>② 요청변수</td><td><code>key</code>(발급키) · <code>targetDt</code>(조회 날짜, 여덟 자리)</td><td>신청서에 무엇을 적을지</td></tr>
+      <tr><td>③ 응답 예시</td><td>1절에서 본 JSON (필드 이름 표 포함)</td><td>돌아올 상자의 생김새</td></tr>
+    </tbody>
+  </table>
+  <div class="callout tip">
+    <div class="h">💡 이 세 곳이 전부인 이유</div>
+    <ul>
+      <li>어떤 API든 문서의 나머지는 대부분 세부 옵션 · <b>주소 · 요청변수 · 응답 예시</b>만 있으면 요청 가능</li>
+      <li>이 세 곳을 복사해 두면 → 오늘 오후의 바이브 코딩 재료가 됩니다 (5단계에서 사용)</li>
+    </ul>
+  </div>
+
+  <h2>3. 프롬프트 없이 첫 요청 <span class="a">(3단계)</span></h2>
+  <ul>
+    <li>이번 절에는 <b>AI가 없습니다</b> · 브라우저와 기본 코드만으로 API를 직접 두드려 봅니다</li>
+    <li>"요청이 이렇게 가고, JSON이 이렇게 오는구나"를 맨눈으로 확인하는 시간</li>
+  </ul>
+
+  <h3>3-1. 브라우저 주소창이 곧 요청이다</h3>
+  <ul>
+    <li>KOBIS는 키를 주소에 붙여 보내는 방식 → <b>브라우저 주소창</b>만으로 요청 가능</li>
+    <li>아래 주소를 붙여넣고, <code>발급받은키</code> 자리에 내 키를, 날짜는 <b>어제 날짜</b>(예: <code>20260721</code>처럼 여덟 자리)로 바꿔 엔터</li>
+  </ul>
+  <div class="codewrap code"><span class="label">주소창에 붙여넣기 (키·날짜만 바꾸기)</span><pre>http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key=발급받은키&amp;targetDt=20260721</pre></div>
+  <ul>
+    <li>화면 가득 <b>글자 덩어리(JSON)</b>가 뜨면 성공 · 한 줄로 뭉쳐 보여도 정상</li>
+    <li>덩어리 속에서 <code>movieNm</code>을 눈으로 찾아보기 → 어제 1위 영화가 정말 있음</li>
+    <li>API 요청 = 특별한 마법이 아니라 <b>정해진 주소를 여는 일</b>이라는 것, 이게 오늘의 첫 발견</li>
+  </ul>
+  <div class="callout warn">
+    <div class="h">⚠️ 키가 틀리면 — 상태코드만 믿지 말 것</div>
+    <ul>
+      <li>KOBIS는 키가 틀려도 상태코드는 <code>200</code> · 대신 응답에 <code>faultInfo</code>(오류 상자)가 옴</li>
+      <li><code>{"faultInfo": {"message": "유효하지않은 키값입니다"…}}</code>가 보이면 → 키 복사가 잘못된 것</li>
+      <li>교훈: <b>번호표(상태코드)와 서류 내용(응답)을 둘 다 확인</b></li>
+    </ul>
+  </div>
+
+  <h3>3-2. 같은 요청을 스트림릿 앱으로</h3>
+  <ul>
+    <li>이제 같은 일을 <b>내 앱</b>이 하게 합니다 · 1·2일차와 같은 순서로 새 저장소부터</li>
+  </ul>
+  <ol class="steps">
+    <li><span class="st">빈 앱 배포</span><br><code>my-movie-app</code> Public 저장소 + <code>main.py</code> → 스트림릿 클라우드 연결</li>
+    <li><span class="st">열쇠를 금고에</span><br>앱 <b>Settings → Secrets</b>에 아래 한 줄 저장 (키는 코드가 아니라 여기에만)</li>
+    <li><span class="st">기본 코드 붙여넣기</span><br>아래 <b>함께 읽는 코드</b>를 <code>main.py</code>에 그대로 → 저장 → 앱 확인</li>
+  </ol>
+  <div class="codewrap code"><span class="label">Settings → Secrets (비밀 금고)</span><pre>KOBIS_KEY = "발급받은_키_붙여넣기"</pre></div>
+  <div class="codewrap code"><span class="label">🔍 함께 읽는 코드 — 프롬프트 없이 그대로 사용</span><pre>import streamlit as st
 import requests
+from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
 
-# 페이지 기본 설정
-st.set_page_config(page_title="API 연습용 앱", page_icon="🐱")
-st.title("🐱 API 연습용 스트림릿 앱")
-st.write("버튼을 눌러서 외부 API를 호출해 보는 연습용 앱이에요.")
+st.title("🎬 박스오피스 원본 JSON 보기")
 
-st.divider()
+KOBIS_KEY = st.secrets["KOBIS_KEY"]      # 금고에서 열쇠 꺼내기
 
-# ── 1. 고양이 상식 가져오기 ──────────────────────
-st.header("1️⃣ 랜덤 고양이 상식")
+# 한국 시간 기준 어제 날짜를 여덟 자리(예: 20260721)로 만들기
+# (배포 서버의 시계는 외국 기준이라, 한국 시간을 콕 집어 줘야 함)
+yesterday = (datetime.now(ZoneInfo("Asia/Seoul")) - timedelta(days=1)).strftime("%Y%m%d")
 
-if st.button("고양이 상식 가져오기"):
-    # catfact.ninja 창구에 요청 보내기
-    response = requests.get("https://catfact.ninja/fact")
+url = "http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json"
+response = requests.get(url, params={"key": KOBIS_KEY, "targetDt": yesterday})
 
-    # 상태코드가 200(성공)인지 확인
-    if response.status_code == 200:
-        data = response.json()   # 응답을 JSON으로 바꾸고
-        fact = data["fact"]      # 'fact' 라벨의 값 꺼내기
-        st.markdown(f"### 🐾 {fact}")
-    else:
-        st.error(f"요청이 실패했어요 😢 (상태코드: {response.status_code})")
-
-st.divider()
-
-# ── 2. 랜덤 인물 정보 가져오기 ────────────────────
-st.header("2️⃣ 랜덤 인물 정보")
-
-if st.button("랜덤 인물 가져오기"):
-    response = requests.get("https://randomuser.me/api/")
-
-    if response.status_code == 200:
-        data = response.json()
-        person = data["results"][0]          # 목록의 첫 번째 인물
-        first = person["name"]["first"]
-        last = person["name"]["last"]
-        country = person["location"]["country"]
-
-        st.markdown(f"### 👤 이름: {first} {last}")
-        st.markdown(f"### 🌍 사는 나라: {country}")
-    else:
-        st.error(f"요청이 실패했어요 😢 (상태코드: {response.status_code})")</pre></div>
+st.write("상태코드:", response.status_code)
+st.json(response.json())                 # 응답 JSON을 접었다 펼 수 있게 표시</pre></div>
   <div class="codewrap code"><span class="label">requirements.txt</span><pre>requests</pre></div>
+  <ul>
+    <li>이 짧은 코드가 하는 일 = ①금고에서 키 꺼내기 ②어제 날짜 만들기 ③창구에 요청 ④받은 JSON 보여주기 · 끝</li>
+    <li>브라우저에서 본 글자 덩어리가 <b>접었다 펼치는 상자</b>로 정리되어 보임 → 라벨 구조가 한눈에</li>
+  </ul>
   <div class="callout check">
     <div class="h">✔️ 여기까지 성공 확인</div>
     <ul>
-      <li>버튼을 누를 때마다 <b>다른 고양이 상식</b>이 뜨면 성공</li>
-      <li>같은 값만 나오면 → 새로고침 말고 버튼을 다시</li>
-      <li>연타하다 429가 뜨면 고장 아님 · "잠깐 쉬었다 다시"라는 뜻</li>
-    </ul>
-  </div>
-  <div class="codewrap improve"><span class="label">③ 프롬프트 개선 (예시)</span><pre>좋아! 여기서 이어서 고쳐줘.
-- 받아온 JSON 원본도 접었다 펼 수 있게 보여줘. 어떻게 생겼는지 궁금해.
-- 고양이 상식을 한국어로 번역해서 함께 보여주면 더 좋겠어.
-- 버튼과 결과 영역을 따뜻한 노란 톤으로 예쁘게 꾸며줘.</pre></div>
-  <div class="callout tip">
-    <div class="h">💡 JSON = 라벨 붙은 상자</div>
-    <ul>
-      <li><code>{"이름": "값"}</code> — 라벨과 값이 짝</li>
-      <li><code>data["fact"]</code> = data 상자에서 fact 라벨 값 꺼내기</li>
-      <li>어떤 라벨 있는지 → 응답 한번 펼쳐 보면 확인</li>
+      <li>앱 화면에 상태코드 <code>200</code>과 <b>펼쳐지는 JSON</b>이 보이면 성공</li>
+      <li><code>faultInfo</code>가 보이면 → Secrets의 키 값 다시 확인 (복사할 때 앞뒤 공백 주의)</li>
+      <li><code>KeyError: 'KOBIS_KEY'</code>가 뜨면 → 아래 <b>이름 맞추기 표</b> 확인</li>
     </ul>
   </div>
 
-  <h2>2. 유튜브 채널 대시보드 만들기</h2>
+  <h3>비밀 금고(secrets) 제대로 알기 — 이름 세 곳이 한 글자도 다르면 안 됨</h3>
   <ul>
-    <li>신분증(키) 필요한 진짜 창구 = <b>YouTube Data API v3</b></li>
+    <li>금고의 원리: 키를 <b>코드 밖</b>에 두고, 코드는 금고에서 <b>이름으로</b> 꺼내 씀</li>
+    <li>그래서 <b>금고의 라벨 · 코드가 부르는 이름 · 프롬프트에서 말하는 이름</b>이 정확히 일치해야 합니다</li>
+  </ul>
+  <table class="daymap">
+    <thead><tr><th>어디에서</th><th>어떻게 쓰나</th></tr></thead>
+    <tbody>
+      <tr><td>① 금고 (Settings → Secrets)</td><td><code>KOBIS_KEY = "발급받은 키"</code></td></tr>
+      <tr><td>② 코드</td><td><code>st.secrets["KOBIS_KEY"]</code></td></tr>
+      <tr><td>③ 프롬프트</td><td>"인증키는 <b>비밀 금고(secrets)의 KOBIS_KEY</b>에서 불러와"</td></tr>
+    </tbody>
+  </table>
+  <ul>
+    <li>셋 중 하나라도 <code>kobis_key</code>·<code>KOBIS-KEY</code>처럼 다르면 → 앱이 금고에서 못 찾음 (<code>KeyError</code>)</li>
+    <li>바이브 코딩에서도 마찬가지 · ③처럼 <b>이름을 콕 집어</b> 말해야 AI가 같은 이름으로 코드를 씀</li>
+  </ul>
+  <div class="callout tip">
+    <div class="h">💡 금고는 두 곳 — 내 컴퓨터와 클라우드</div>
+    <ul>
+      <li>내 컴퓨터에서 실행 = <code>.streamlit/secrets.toml</code> 파일 · 스트림릿 클라우드 = 앱 <b>Settings → Secrets</b> 화면</li>
+      <li>내용은 같은 형식 · 배포한 앱이 키를 못 찾으면 → 클라우드 쪽 금고에 안 넣은 경우가 대부분</li>
+    </ul>
+  </div>
+  <div class="callout warn">
+    <div class="h">🔒 열쇠, 코드에 그냥 쓰면 안 되는 이유</div>
+    <ul>
+      <li>API 키 = 내 신분증 · 코드에 직접 적어 GitHub에 올리면 <b>전 세계에 공개</b> → 봇이 몇 분 안에 주워 감</li>
+      <li>클라우드 Secrets 화면에 넣으면 저장소에 파일이 없으니 안전</li>
+      <li>내 컴퓨터에서 <code>secrets.toml</code> 파일을 쓴다면 → <code>.gitignore</code>에 <code>.streamlit/secrets.toml</code> 한 줄 추가 ("GitHub에 올리지 마"라는 표시)</li>
+    </ul>
+  </div>
+
+  <h2>4. 같은 JSON을 대시보드로 <span class="a">(4단계)</span></h2>
+  <ul>
+    <li>이번에도 아직 프롬프트가 없습니다 · 아래 코드로 <code>main.py</code>를 <b>통째로 바꿔치기</b></li>
+    <li>방금 그 볼품없는 글자 덩어리가 어떻게 변하는지 직접 확인</li>
+  </ul>
+  <div class="codewrap code"><span class="label">🔍 함께 읽는 코드 — main.py 전체 교체</span><pre>import streamlit as st
+import pandas as pd
+import requests
+from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
+
+st.set_page_config(page_title="박스오피스 대시보드", layout="wide")
+st.title("🎬 어제의 박스오피스")
+
+KOBIS_KEY = st.secrets["KOBIS_KEY"]
+# 한국 시간 기준 어제 (서버 시계가 외국 기준이어도 정확)
+yesterday = (datetime.now(ZoneInfo("Asia/Seoul")) - timedelta(days=1)).strftime("%Y%m%d")
+
+url = "http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json"
+response = requests.get(url, params={"key": KOBIS_KEY, "targetDt": yesterday})
+
+# JSON 상자에서 영화 목록 꺼내기: boxOfficeResult → dailyBoxOfficeList
+movies = response.json()["boxOfficeResult"]["dailyBoxOfficeList"]
+df = pd.DataFrame(movies)
+
+# 따옴표에 싸여 온 숫자들을 진짜 숫자로 바꾸기 (1절에서 본 함정!)
+for col in ["rank", "audiCnt", "audiAcc", "scrnCnt"]:
+    df[col] = pd.to_numeric(df[col])
+
+# 1위 영화를 지표 카드 세 장으로
+top = df.sort_values("rank").iloc[0]
+col1, col2, col3 = st.columns(3)
+col1.metric("어제 1위", top["movieNm"])
+col2.metric("어제 관객수", f"{top['audiCnt']:,}명")
+col3.metric("누적 관객", f"{top['audiAcc']:,}명")
+
+# TOP 10 관객수 막대그래프
+st.subheader("📊 TOP 10 관객수")
+st.bar_chart(df.set_index("movieNm")["audiCnt"])</pre></div>
+  <ul>
+    <li>코드가 새로 한 일은 셋뿐 · ①목록 꺼내기 ②글자 숫자 → 진짜 숫자 ③카드와 그래프에 놓기</li>
+    <li>즉 화려한 대시보드의 정체 = <b>JSON에서 값을 꺼내 자리에 놓는 것</b> · 마법이 아님</li>
+  </ul>
+  <div class="callout check">
+    <div class="h">✔️ 여기까지 성공 확인</div>
+    <ul>
+      <li>카드 세 장에 <b>어제 1위 영화와 관객수</b>가 차고, 아래에 막대그래프가 뜨면 성공</li>
+      <li>3절 화면(글자 덩어리)과 지금 화면을 나란히 떠올려 보기 · <b>같은 데이터</b>입니다</li>
+      <li>숫자 바꾸는 넉 줄을 지워 보면? → 그래프가 이상해짐 · 궁금하면 나중에 실험</li>
+    </ul>
+  </div>
+
+  <h2>5. 문서를 통째로 AI에게 — 박스오피스 앱 완성 <span class="a">(5단계)</span></h2>
+  <ul>
+    <li>이제 드디어 바이브 코딩 · 오늘의 요령 = <b>API 문서를 복사해 프롬프트에 붙이기</b></li>
+    <li>2절에서 찾은 세 곳(주소·요청변수·응답 예시)을 붙이면 AI가 헤매지 않음</li>
+    <li>3·4절을 거친 여러분은 이제 AI가 준 코드에서 <b>무슨 일이 일어나는지 읽을 수 있는 사람</b></li>
+  </ul>
+  <div class="codewrap prompt"><span class="label">① 샘플 프롬프트</span><pre>스트림릿 앱 하나(main.py)를 만들어줘. 어제의 박스오피스 분석 대시보드야.
+스트림릿 클라우드에 올릴 거야. 아래에 공식 API 문서에서 복사한 내용을 붙였어.
+
+- 인증키는 비밀 금고(secrets)의 KOBIS_KEY에서 불러와. 코드에는 절대 쓰지 마.
+- 날짜(targetDt)는 고정하지 말고 '어제'를 자동 계산해서 써 (오늘 건 아직 집계 전).
+  '어제'는 반드시 한국 시간(Asia/Seoul) 기준으로 계산해.
+  배포 서버의 시계는 외국 기준일 수 있거든.
+- 순위·영화명·개봉일·관객수·누적관객·스크린수를 표로 보여줘.
+- 관객수 상위 5편은 막대그래프로, 1위 영화는 지표 카드로 크게.
+- 숫자가 문자열로 오니 숫자로 바꿔서 정렬과 그래프에 써줘.
+- 요청이 실패하거나 응답에 faultInfo가 오면 친절한 한국어 안내를 보여줘.
+- 필요한 라이브러리 목록(requirements.txt)도 같이 줘.
+  버전 숫자 없이 이름만, 스트림릿·판다스·넘파이는 기본 설치라 빼고.
+- 초보자용 한국어 주석을 달고 main.py 전체 코드를 한 번에 줘.
+
+──── 아래는 KOBIS 공식 문서에서 복사한 부분 ────
+요청 주소: http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json
+요청변수: key(발급받은 인증키) · targetDt(조회 날짜, yyyymmdd 여덟 자리)
+응답 구조: boxOfficeResult 안의 dailyBoxOfficeList 목록에 영화별로
+  rank(순위) · movieNm(영화명) · openDt(개봉일) · audiCnt(그날 관객수) ·
+  audiAcc(누적 관객수) · scrnCnt(스크린수) · showCnt(상영횟수)
+  ※ 숫자 값이 전부 문자열로 온다.</pre></div>
+  <ul><li>완성된 코드 한 덩어리 도착 · 내 것과 똑같지 않아도 이런 <b>모습</b>이면 성공</li></ul>
+  <div class="codewrap code"><span class="label">② AI가 준 코드 (예시)</span><pre>import streamlit as st
+import pandas as pd
+import requests
+from datetime import datetime, timedelta
+from zoneinfo import ZoneInfo
+
+# 기본 설정
+st.set_page_config(page_title="KOBIS 일별 박스오피스", layout="wide")
+st.title("🎬 어제의 박스오피스 대시보드")
+
+# 한국 시간 기준 어제 날짜 자동 계산 (KOBIS는 YYYYMMDD 형식)
+yesterday = datetime.now(ZoneInfo("Asia/Seoul")) - timedelta(days=1)
+target_dt = yesterday.strftime("%Y%m%d")
+st.caption(f"조회 기준일(어제): {yesterday.strftime('%Y-%m-%d')}")
+
+# 비밀 금고에서 인증키 불러오기
+KOBIS_KEY = st.secrets["KOBIS_KEY"]
+
+# API 호출
+url = "http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json"
+res = requests.get(url, params={"key": KOBIS_KEY, "targetDt": target_dt})
+
+if res.status_code != 200:
+    st.error(f"요청이 실패했어요 (상태코드: {res.status_code})")
+    st.stop()
+
+data = res.json()
+
+# 키가 틀리면 faultInfo 상자가 온다
+if "faultInfo" in data:
+    st.error("인증키가 올바르지 않아요. Secrets의 KOBIS_KEY를 확인해 주세요.")
+    st.stop()
+
+box_list = data.get("boxOfficeResult", {}).get("dailyBoxOfficeList", [])
+if not box_list:
+    st.error("데이터가 없어요. 날짜 형식(YYYYMMDD)을 확인해 주세요.")
+    st.stop()
+
+df = pd.DataFrame(box_list)
+
+# 문자열로 오는 숫자들을 진짜 숫자로 변환
+for col in ["rank", "audiCnt", "audiAcc", "scrnCnt", "showCnt"]:
+    df[col] = pd.to_numeric(df[col])
+
+# 1위 영화 지표 카드
+top = df.sort_values("rank").iloc[0]
+c1, c2, c3 = st.columns(3)
+c1.metric("어제 1위", top["movieNm"])
+c2.metric("어제 관객수", f"{top['audiCnt']:,}명")
+c3.metric("누적 관객", f"{top['audiAcc']:,}명")
+
+# 보기 좋게 한국어 열 이름으로 정리
+표 = df[["rank", "movieNm", "openDt", "audiCnt", "audiAcc", "scrnCnt"]].copy()
+표.columns = ["순위", "영화명", "개봉일", "관객수", "누적관객", "스크린수"]
+표 = 표.sort_values("순위").reset_index(drop=True)
+
+st.subheader("📋 박스오피스 TOP 10")
+st.dataframe(표, use_container_width=True)
+
+# 관객수 상위 5편 막대그래프
+st.subheader("📈 관객수 상위 5편")
+top5 = 표.sort_values("관객수", ascending=False).head(5)
+st.bar_chart(top5.set_index("영화명")["관객수"])</pre></div>
+  <div class="codewrap code"><span class="label">requirements.txt</span><pre>requests</pre></div>
+  <ul><li>마음에 안 들면 → 대화로 고치기</li></ul>
+  <div class="codewrap improve"><span class="label">③ 프롬프트 개선 (예시)</span><pre>좋아! 여기서 이어서 고쳐줘.
+- 날짜를 어제로 고정하지 말고, 달력에서 골라 그날의 박스오피스를 볼 수 있게 해줘.
+  (고를 수 있는 가장 늦은 날짜는 어제까지. 오늘 건 아직 집계 전이니까)
+- 표에 전날 대비 순위가 올랐으면 빨간 위 화살표, 내렸으면 파란 아래 화살표를 붙여줘.
+  문서를 보니 rankInten이라는 값이 전날 대비 순위 증감인데,
+  양수면 순위가 오른 것(예: 5위에서 3위로), 음수면 내린 것이래.
+- 누적관객이 100만 명을 넘은 영화는 영화명 옆에 🏆 이모지를 붙여줘.</pre></div>
+  <div class="callout check">
+    <div class="h">✔️ 여기까지 성공 확인</div>
+    <ul>
+      <li>표와 그래프에 <b>진짜 어제 영화들</b>이 차면 성공 · 오늘 저녁 뉴스와 비교 가능</li>
+      <li>빈 화면이면 → 인증키·날짜 형식(<code>YYYYMMDD</code>) 확인 · 오늘 날짜는 아직 집계 전이라 데이터 없음</li>
+      <li>막히면 에러 메시지를 통째로 복사해 AI에게 붙여넣기</li>
+    </ul>
+  </div>
+  <div class="callout tip">
+    <div class="h">💡 오늘 배운 요령 정리 — 문서 붙여넣기</div>
+    <ul>
+      <li>새 API를 만나면 → 문서에서 <b>주소·요청변수·응답 예시</b>를 복사해 프롬프트 끝에 붙이기</li>
+      <li>AI가 필드 이름을 지어내지 않게 되어 정확도가 크게 오름 · 모든 API에 통하는 요령</li>
+    </ul>
+  </div>
+  <div class="callout warn">
+    <div class="h">⏳ 시간이 부족하면 (무른 경계)</div>
+    <ul>
+      <li>오늘 완성 기준 = <b>표와 그래프에 숫자가 찬다</b> · ③ 개선은 선택</li>
+      <li>여기까지가 오늘의 몸통 · 못 끝냈으면 다음 절로 넘어가지 말고 여기를 먼저</li>
+    </ul>
+  </div>
+
+  <h2>6. 유튜브 채널 대시보드 — 두 번째 창구에 적용</h2>
+  <ul>
+    <li>방금 익힌 5단계를 <b>다른 창구</b>에 그대로 적용 · 이번엔 <b>YouTube Data API v3</b></li>
     <li>받아올 값 → 구독자 수 · 총 조회수 · 영상 수</li>
   </ul>
   <div class="callout tip">
-    <div class="h">🗝️ 오늘 열쇠는 강사가 나눠 줍니다</div>
+    <div class="h">🗝️ 이번 열쇠는 강사가 나눠 줍니다</div>
     <ul>
-      <li>수업에선 <b>강사가 준비한 실습용 키</b>를 채팅으로 받아 씁니다 (발급 과정 생략)</li>
-      <li>오늘의 연습 = 발급이 아니라 <b>키를 안전하게 쓰는 습관</b> (금고에 넣고, 코드엔 안 쓰기)</li>
-      <li>내 키는 집에서 5분이면 만들 수 있어요 → 이 절 끝의 <b>(참고) 집에서 내 키 만들기</b></li>
+      <li>유튜브 키는 구글 클라우드에서 발급받는데 단계가 많아, 수업에선 <b>강사가 준비한 실습용 키</b>를 받아 씁니다</li>
+      <li>발급(2단계)만 건너뛸 뿐 나머지 단계는 똑같음 · 내 키는 집에서 5분이면 → 이 절 끝 <b>(참고) 집에서 내 키 만들기</b></li>
     </ul>
   </div>
-  <ul>
-    <li>2일차처럼 <b>워크숍식 레벨업</b> · 한 계단씩 · 계단마다 성공 확인</li>
-  </ul>
   <ol class="steps">
-    <li><span class="st">LV1 · 빈 앱 먼저 배포</span><br><code>my-youtube-app</code> Public 저장소 + 빈 <code>main.py</code> → 스트림릿 켜기 · "Hello"만 떠도 성공</li>
-    <li><span class="st">LV2 · 열쇠를 금고에</span><br>받은 실습용 키를 <b>비밀 금고(secrets)</b>에 넣기 (아래 안내) · 키가 코드에 안 보이면 성공</li>
+    <li><span class="st">LV1 · 빈 앱 배포</span><br><code>my-youtube-app</code> Public 저장소 + <code>main.py</code> → 스트림릿 연결</li>
+    <li><span class="st">LV2 · 열쇠를 금고에</span><br>받은 키를 Secrets에 <b>추가</b> (아래처럼 한 파일에 여러 줄) · 키가 코드에 안 보이면 통과</li>
     <li><span class="st">LV3 · 대시보드 완성</span><br>① 프롬프트로 주문 → <b>카드 4개에 숫자가 차면 성공</b></li>
     <li><span class="st">LV4 · 대화로 개선</span><br>③으로 프로필 이미지·즐겨찾기까지 (여유 있는 분만)</li>
   </ol>
-  <div class="callout warn">
-    <div class="h">🔒 열쇠, 코드에 그냥 쓰면 안 됨</div>
-    <ul>
-      <li>API 키 = 내 신분증</li>
-      <li>코드에 직접 적어 GitHub 업로드 → 남이 주워 씀</li>
-      <li>따라서 키는 <b>코드와 따로</b> 보관 (아래 방법)</li>
-    </ul>
-  </div>
-
-  <h3>키를 안전하게 보관하기 — secrets</h3>
-  <ul>
-    <li>스트림릿 비밀 금고 → <code>.streamlit/secrets.toml</code></li>
-    <li>키는 이 파일에만 · 코드에서는 <code>st.secrets</code>로 꺼내기</li>
-  </ul>
-  <div class="codewrap code"><span class="label">.streamlit/secrets.toml</span><pre>YOUTUBE_API_KEY = "여기에_받은_실습용_키를_붙여넣기"</pre></div>
-  <div class="callout tip">
-    <div class="h">💡 배포한 앱에서는 금고가 따로</div>
-    <ul>
-      <li>내 컴퓨터 = <code>.streamlit/secrets.toml</code> 파일 · 스트림릿 클라우드 = 앱 <b>Settings → Secrets</b> 화면</li>
-      <li>배포한 앱이 키를 못 찾으면 → Settings → Secrets에 같은 내용을 붙여넣었는지 확인</li>
-    </ul>
-  </div>
-  <div class="callout warn">
-    <div class="h">🧯 그리고 .gitignore에 꼭 추가</div>
-    <ul>
-      <li><code>.gitignore</code>에 <code>.streamlit/secrets.toml</code> 한 줄 추가 → "GitHub에 올리지 마"</li>
-      <li>AI에게 "<b>.gitignore에 secrets.toml 넣어줘</b>"라고 부탁</li>
-    </ul>
-  </div>
-
-  <h3>대시보드 만들기</h3>
-  <ul>
-    <li>채널 입력 → 구독자·총조회수·영상수 + 영상당 평균 조회수(총조회수 ÷ 영상수)</li>
-    <li>표시 → <code>st.metric</code> 카드</li>
-  </ul>
+  <div class="codewrap code"><span class="label">Settings → Secrets (금고 하나에 열쇠 여러 개)</span><pre>KOBIS_KEY = "아까_발급받은_키"
+YOUTUBE_API_KEY = "강사에게_받은_실습용_키"</pre></div>
   <div class="codewrap prompt"><span class="label">① 샘플 프롬프트</span><pre>스트림릿 앱 하나(main.py)를 만들어줘. 유튜브 채널 통계 대시보드야. 스트림릿 클라우드에 올릴 거야.
 
 - 사용자가 유튜브 채널 ID(예: UC_x5XG1OV2P6uZZ5FSM9Ttw)를 입력하면,
@@ -299,10 +533,19 @@ if st.button("랜덤 인물 가져오기"):
 - API 키는 코드에 절대 쓰지 말고, 비밀 금고(secrets)의 YOUTUBE_API_KEY에서 불러와.
 - 상단에 지표 카드 4개로 보여줘: 구독자, 총 조회수, 영상 수,
   그리고 '영상당 평균 조회수'(총 조회수 ÷ 영상 수, 정수로 반올림).
+  영상 수가 0인 채널이면 평균은 0으로 보여줘.
 - 상태코드가 200이 아니거나 채널을 못 찾으면 친절한 한국어 안내를 보여줘.
 - 필요한 라이브러리 목록(requirements.txt)도 같이 줘.
   버전 숫자 없이 이름만, 스트림릿·판다스·넘파이는 기본 설치라 빼고.
-- 한국어 라벨, 따뜻한 톤, 초보자용 한국어 주석. main.py 전체 코드를 한 번에 줘.</pre></div>
+- 한국어 라벨, 따뜻한 톤, 초보자용 한국어 주석. main.py 전체 코드를 한 번에 줘.
+
+──── 아래는 유튜브 공식 문서에서 복사한 부분 ────
+요청 주소: https://www.googleapis.com/youtube/v3/channels
+요청변수: part(snippet과 statistics를 함께) · id(채널 ID) · key(API 키)
+응답 구조: items 목록의 첫 항목에서
+  snippet.title(채널명) · snippet.thumbnails(프로필 이미지) ·
+  statistics.subscriberCount(구독자) · statistics.viewCount(총 조회수) ·
+  statistics.videoCount(영상 수) — 숫자 값이 문자열로 온다.</pre></div>
 
   <ul><li>완성된 코드 한 덩어리 도착 · 내 것과 똑같지 않아도 OK, 이런 <b>모습</b>이면 성공</li></ul>
   <div class="codewrap code"><span class="label">② AI가 준 코드 (예시)</span><pre>import streamlit as st
@@ -396,12 +639,10 @@ if search_btn:
                 col3.metric("영상 수", f"{video_count:,}개")
                 col4.metric("영상당 평균 조회수", f"{avg_view_per_video:,}회")</pre></div>
   <div class="codewrap code"><span class="label">requirements.txt</span><pre>requests</pre></div>
-  <ul><li>requirements.txt엔 <code>requests</code> 한 줄이면 충분 · 스트림릿·판다스·넘파이는 기본 설치, 버전 없이</li></ul>
 
   <ul><li>마음에 안 들면 → 대화로 고치기</li></ul>
   <div class="codewrap improve"><span class="label">③ 프롬프트 개선 (예시)</span><pre>좋아! 여기서 이어서 고쳐줘.
-- 지금은 채널 이름이 알림 문구에만 나오니,
-  프로필 이미지와 함께 맨 위에 크게 올려줘(snippet 정보 사용).
+- 채널 이름과 프로필 이미지를 맨 위에 크게 보여줘(snippet 정보 사용).
 - 좋아하는 채널 3개를 미리 버튼으로 넣어서, 누르면 바로 통계가 뜨게.
 - 영상당 평균 조회수가 100만이 넘으면 카드 옆에 🔥 이모지를 붙여줘.</pre></div>
 
@@ -417,15 +658,8 @@ if search_btn:
     <div class="h">✔️ 여기까지 성공 확인 — 빈 화면은 대부분 이 둘</div>
     <ul>
       <li><b>카드 4개에 숫자가 차면 성공</b> (LV3 통과)</li>
-      <li>에러도 없이 <b>빈 화면</b>이면 → ① 채널 ID가 <code>UC…</code>인지 (핸들 넣으면 못 찾음) ② 배포 앱이면 Settings → Secrets에 키를 넣었는지</li>
+      <li>에러도 없이 <b>빈 화면</b>이면 → ① 채널 ID가 <code>UC…</code>인지 (핸들 넣으면 못 찾음) ② Settings → Secrets에 키를 넣었는지</li>
       <li>모르겠으면 에러·화면 상태를 통째로 복사해 AI에게 붙여넣기</li>
-    </ul>
-  </div>
-  <div class="callout warn">
-    <div class="h">⏳ 시간이 부족하면 (무른 경계)</div>
-    <ul>
-      <li>오늘 완성 기준 = <b>카드 4개에 숫자 (LV3)</b> · LV4 꾸미기는 선택</li>
-      <li>막히면 여기서 멈추고 다음 절(AI 채팅앱)로 · 못 끝낸 부분은 4일차 시작에 이어서</li>
     </ul>
   </div>
   <details class="glossary">
@@ -446,35 +680,23 @@ if search_btn:
     </div>
   </details>
 
-  <h2>3. 나만의 AI 채팅앱 만들기</h2>
+  <h2>7. 나만의 AI 채팅앱 만들기</h2>
   <ul>
-    <li>유튜브·고양이 API = 물어보면 정해진 답 (같은 채널 → 늘 같은 통계)</li>
+    <li>KOBIS·유튜브 API = 물어보면 정해진 답 (같은 날짜 → 늘 같은 순위)</li>
     <li>AI(LLM) API = 매번 새로운 답을 <b>생성</b> → 나만의 챗봇</li>
+    <li>창구가 달라도 순서는 같음 · 주소 · 열쇠 · 요청 · 응답</li>
   </ul>
 
   <h3>AI 열쇠 준비하기</h3>
   <ul>
     <li>오늘 쓰는 AI → <b>Solar</b>(솔라) — 우리나라 AI 회사 <b>업스테이지</b>의 모델 (한국어 강함 · 무료 키)</li>
-    <li>이 키도 <b>강사가 나눠 줍니다</b> → 받아서 secrets에 유튜브 키와 <b>나란히</b> 추가 (아래)</li>
-    <li>내 키 만들기 (집에서 3분) → 업스테이지 콘솔 (<a href="https://console.upstage.ai" target="_blank" rel="noopener">console.upstage.ai</a>) → 로그인 → <b>API Keys</b> → <b>Create API key</b> · <b>카드 등록 없이</b> 무료</li>
-    <li>모델 → <code>solar-open2</code> · 다른 회사도 발급 경로는 비슷(요금 방식은 다름 · 아래 표)</li>
+    <li>이 키도 <b>강사가 나눠 줍니다</b> → 받아서 금고에 세 번째 줄로 추가</li>
+    <li>내 키 만들기 (집에서 3분) → 업스테이지 콘솔 (<a href="https://console.upstage.ai" target="_blank" rel="noopener">console.upstage.ai</a>) → 로그인 → <b>API Keys</b> → <b>Create New Key</b> · <b>카드 등록 없이</b> 무료</li>
+    <li>모델 → <code>solar-open2</code> · 다른 회사 AI를 쓰고 싶다면 → 이 절 끝의 <b>회사별 탭</b> 참고</li>
   </ul>
-  <div class="callout tip">
-    <div class="h">🗝️ 제미나이·챗지피티·클로드 열쇠도 방법은 비슷 (핵심만)</div>
-    <table class="daymap">
-      <thead><tr><th>AI</th><th>발급처</th><th>경로</th><th>비용</th></tr></thead>
-      <tbody>
-        <tr><td><b>Gemini</b>(구글)</td><td><a href="https://aistudio.google.com" target="_blank" rel="noopener">aistudio.google.com</a></td><td>로그인 → <b>Get API key</b> → 새 키 만들기</td><td>무료 한도 넉넉(카드 불필요)</td></tr>
-        <tr><td><b>ChatGPT</b>(OpenAI)</td><td><a href="https://platform.openai.com" target="_blank" rel="noopener">platform.openai.com</a></td><td>로그인 → <b>API keys</b> → <b>Create new secret key</b></td><td>카드 등록 + 크레딧 충전(선불)</td></tr>
-        <tr><td><b>Claude</b>(Anthropic)</td><td><a href="https://platform.claude.com" target="_blank" rel="noopener">platform.claude.com</a></td><td>로그인 → <b>API Keys</b> → <b>Create Key</b></td><td>크레딧 충전(선불, 소액 가능)</td></tr>
-      </tbody>
-    </table>
-    <ul>
-      <li>키는 <b>발급 순간 한 번만</b> 보여줌 → 바로 복사해 <code>secrets.toml</code>에 보관</li>
-      <li>챗지피티·클로드 <b>웹사이트 구독과 API 크레딧은 별개</b> — 구독 중이어도 API는 따로 충전</li>
-      <li>채팅앱 프롬프트에서 "Solar API" 부분만 <b>"구글 Gemini API"</b> 또는 <b>"Claude API(Anthropic)"</b>로 바꿔 말하면 AI가 코드를 알아서 고쳐 줌</li>
-    </ul>
-  </div>
+  <div class="codewrap code"><span class="label">Settings → Secrets (오늘의 열쇠 세 개)</span><pre>KOBIS_KEY = "아침에_발급받은_키"
+YOUTUBE_API_KEY = "강사에게_받은_키"
+SOLAR_API_KEY = "강사에게_받은_키"</pre></div>
   <div class="callout warn">
     <div class="h">💸 과금 폭탄 주의 — 두 가지만 지키면 안전</div>
     <ul>
@@ -483,15 +705,6 @@ if search_btn:
       <li>유료 결제 시 콘솔에서 <b>월 사용 한도(예산)</b>를 꼭 설정 — 실수해도 한도에서 멈춤</li>
     </ul>
   </div>
-  <div class="callout warn">
-    <div class="h">🔒 이 키도 똑같이 secrets에</div>
-    <ul>
-      <li>AI 키도 신분증 → <code>.streamlit/secrets.toml</code>에만</li>
-      <li>코드에 직접 쓰지 않기 · GitHub에 올리지 않기 = 오늘의 핵심 습관</li>
-    </ul>
-  </div>
-  <div class="codewrap code"><span class="label">.streamlit/secrets.toml (한 파일에 여러 키)</span><pre>YOUTUBE_API_KEY = "유튜브_키"
-SOLAR_API_KEY = "업스테이지_콘솔에서_받은_키"</pre></div>
 
   <h3>대화가 이어지는 채팅앱</h3>
   <ul>
@@ -510,6 +723,8 @@ SOLAR_API_KEY = "업스테이지_콘솔에서_받은_키"</pre></div>
 - 대화 기록을 세션에 저장해서, 이전 대화를 기억하며 이어서 답하게 해줘.
 - 시스템 프롬프트로 '너는 따뜻하고 친절한 데이터 분석 선생님이야.
   반드시 순수 한국어로만 답해'라는 성격을 줘.
+- 요청이 실패하면 에러 화면을 그대로 보여주지 말고,
+  한국어로 친절한 안내 메시지를 보여줘.
 - 필요한 라이브러리 목록(requirements.txt)도 같이 줘.
   버전 숫자 없이 이름만, 스트림릿·판다스·넘파이는 기본 설치라 빼고.
   이 앱은 openai 하나만 적으면 돼.
@@ -570,9 +785,8 @@ if user_input:
   <div class="codewrap improve"><span class="label">③ 프롬프트 개선 (예시)</span><pre>좋아! 여기서 이어서 고쳐줘.
 - 사이드바에 '말투 고르기'를 넣어줘(친절한 선생님 / 시크한 전문가 / 귀여운 친구).
   고른 말투가 시스템 프롬프트에 반영되게 해줘.
-- '대화 지우기' 버튼을 넣어서 세션에 쌓인 대화 기록을 비울 수 있게 해줘.
-- (도전) 유튜브 영상의 댓글 목록을 붙여넣으면, 그 댓글들을 맥락으로 넣어
-  '전체 반응을 3줄로 요약해줘'라고 AI에게 시킬 수 있게 해줘.</pre></div>
+  말투를 바꾸면 이미 진행 중인 대화에도 다음 답부터 바로 적용되게 해줘.
+- '대화 지우기' 버튼을 넣어서 세션에 쌓인 대화 기록을 비울 수 있게 해줘.</pre></div>
   <div class="callout check">
     <div class="h">✔️ 여기까지 성공 확인 — 조용해도 고장 아님</div>
     <ul>
@@ -581,41 +795,233 @@ if user_input:
       <li>기다리는 동안 버튼·전송 연타 금지 (429로 이어짐)</li>
     </ul>
   </div>
+
+  <h3>다른 회사 AI로 바꾸고 싶다면 — 회사별 세트</h3>
+  <ul>
+    <li>좋은 소식: 네 회사 모두 <b>같은 openai 라이브러리</b>로 접속 가능 · 바뀌는 건 <b>접속 주소 · 모델 이름 · 열쇠</b> 셋뿐</li>
+    <li>수업은 Solar 기준 · 아래 탭에서 원하는 회사를 골라 <b>발급 → 금고 → 프롬프트 수정</b> 세트를 그대로 따라 하면 됩니다</li>
+  </ul>
+  <div class="tabs">
+    <div class="tabbar">
+      <button class="on">Solar (기본)</button>
+      <button>Gemini (구글)</button>
+      <button>ChatGPT (OpenAI)</button>
+      <button>Claude (Anthropic)</button>
+    </div>
+    <div class="tabpane on">
+      <ul>
+        <li><b>발급</b> → <a href="https://console.upstage.ai" target="_blank" rel="noopener"><code>console.upstage.ai</code></a> 로그인 → <b>API Keys → Create New Key</b> · 카드 등록 없이 무료(베타)</li>
+        <li><b>금고</b> → <code>SOLAR_API_KEY = "발급키"</code></li>
+        <li><b>프롬프트</b> → 위 ① 그대로 (이 페이지의 기본)</li>
+        <li><b>코드에서 바뀌는 곳</b> → 없음 · 위 ②가 그대로 Solar 버전</li>
+      </ul>
+    </div>
+    <div class="tabpane">
+      <ul>
+        <li><b>발급</b> → <a href="https://aistudio.google.com" target="_blank" rel="noopener"><code>aistudio.google.com</code></a> 로그인 → <b>Get API key</b> → 새 키 만들기 · 무료 한도 넉넉(카드 불필요)</li>
+        <li><b>금고</b> → <code>GEMINI_API_KEY = "발급키"</code></li>
+        <li><b>프롬프트에서 바꿔 말하기</b> → "Solar API…" 문장을 이렇게: <i>"구글 Gemini API(모델 gemini-2.5-flash, 접속 주소 https://generativelanguage.googleapis.com/v1beta/openai/)를 openai 라이브러리로 사용해. API 키는 비밀 금고(secrets)의 GEMINI_API_KEY에서 불러와."</i> · "추론 강도" 줄은 빼기</li>
+      </ul>
+      <div class="codewrap code"><span class="label">코드에서 바뀌는 곳 (이 부분만 다름)</span><pre>client = OpenAI(
+    api_key=st.secrets["GEMINI_API_KEY"],
+    base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
+)
+# 모델 이름은 "gemini-2.5-flash", reasoning_effort 줄은 삭제</pre></div>
+    </div>
+    <div class="tabpane">
+      <ul>
+        <li><b>발급</b> → <a href="https://platform.openai.com" target="_blank" rel="noopener"><code>platform.openai.com</code></a> 로그인 → <b>API keys → Create new secret key</b> · 카드 등록 + 크레딧 충전(선불) 필요</li>
+        <li><b>금고</b> → <code>OPENAI_API_KEY = "발급키"</code></li>
+        <li><b>프롬프트에서 바꿔 말하기</b> → <i>"OpenAI API(모델 gpt-5-mini)를 openai 라이브러리로 사용해. 접속 주소는 기본값 그대로. API 키는 비밀 금고(secrets)의 OPENAI_API_KEY에서 불러와."</i> · "추론 강도" 줄은 빼기</li>
+        <li>주의: <b>챗지피티 웹사이트 구독(Plus)과 API 크레딧은 별개</b> — 구독 중이어도 API는 따로 충전</li>
+      </ul>
+      <div class="codewrap code"><span class="label">코드에서 바뀌는 곳 (이 부분만 다름)</span><pre>client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+# base_url 줄 자체가 필요 없음 (기본 주소 사용)
+# 모델 이름은 "gpt-5-mini", reasoning_effort 줄은 삭제</pre></div>
+    </div>
+    <div class="tabpane">
+      <ul>
+        <li><b>발급</b> → <a href="https://platform.claude.com" target="_blank" rel="noopener"><code>platform.claude.com</code></a> 로그인 → <b>Settings → API keys → Create API Key</b> · 크레딧 충전(선불, 소액 가능)</li>
+        <li><b>금고</b> → <code>ANTHROPIC_API_KEY = "발급키"</code></li>
+        <li><b>프롬프트에서 바꿔 말하기</b> → <i>"Claude API(모델 claude-haiku-4-5, 접속 주소 https://api.anthropic.com/v1/)를 openai 라이브러리로 사용해. API 키는 비밀 금고(secrets)의 ANTHROPIC_API_KEY에서 불러와."</i> · "추론 강도" 줄은 빼기</li>
+        <li>주의: <b>클로드 웹사이트 구독과 API 크레딧도 별개</b></li>
+      </ul>
+      <div class="codewrap code"><span class="label">코드에서 바뀌는 곳 (이 부분만 다름)</span><pre>client = OpenAI(
+    api_key=st.secrets["ANTHROPIC_API_KEY"],
+    base_url="https://api.anthropic.com/v1/",
+)
+# 모델 이름은 "claude-haiku-4-5", reasoning_effort 줄은 삭제</pre></div>
+    </div>
+  </div>
+  <div class="callout tip">
+    <div class="h">💡 탭 공통 — 세 가지만 기억</div>
+    <ul>
+      <li>키는 <b>발급 순간 한 번만</b> 보여줌 → 바로 복사해 금고에</li>
+      <li>모델 이름은 회사가 수시로 바꿈 · 오류가 나면 AI에게 "이 회사의 현재 저렴한 모델 이름 알려줘"</li>
+      <li>이 표의 전 과정 실습 검증은 <b>Solar 기준</b> · 다른 회사 탭은 발급 경로와 바꿔 말할 부분 안내</li>
+    </ul>
+  </div>
   <div class="callout warn">
     <div class="h">⏳ 시간이 부족하면 (무른 경계)</div>
     <ul>
-      <li>오늘 완성 기준 = <b>AI와 대화 한 번</b> · 말투 고르기·댓글 요약은 선택</li>
+      <li>오늘 완성 기준 = <b>AI와 대화 한 번</b> · 말투 고르기·회사 바꾸기는 선택</li>
       <li>막히면 그대로 두어도 됩니다 · 4일차 시작 전에 이어서 완성</li>
     </ul>
   </div>
 
+  <h2>8. 마지막 앱 — 유튜브 댓글 분석 <span class="a">(데이터 API × AI API)</span></h2>
+  <ul>
+    <li>오늘의 마무리 · <b>두 세계를 합칩니다</b> — 유튜브 창구에서 <b>사실(댓글)</b>을 가져오고, AI 창구가 <b>해석</b></li>
+    <li>흐름 = 댓글 100개 받아오기 → <b>한글 워드클라우드</b> → AI에게 세 줄 요약 시키기</li>
+    <li>볼품없는 댓글 목록이 그림 한 장으로 변하는 순간이 오늘의 하이라이트</li>
+  </ul>
+  <div class="codewrap prompt"><span class="label">① 샘플 프롬프트</span><pre>스트림릿 앱 하나(main.py)를 만들어줘. 유튜브 영상 댓글 분석 앱이야. 스트림릿 클라우드에 올릴 거야.
+
+- 사용자가 유튜브 영상 ID를 입력하면, YouTube Data API v3의
+  commentThreads 창구에 requests로 요청해서 댓글을 최대 100개 받아와.
+  요청변수 part는 snippet만 쓰면 돼. 댓글 원문은 textOriginal 필드를 써.
+  API 키는 비밀 금고(secrets)의 YOUTUBE_API_KEY에서 불러와.
+- 받아온 댓글 전체로 wordcloud 라이브러리를 써서 워드클라우드 그림을 만들어줘.
+  배경은 흰색으로. 한글이 깨지지 않게, 폰트 파일을 아래 주소에서 내려받아 사용해:
+  https://raw.githubusercontent.com/google/fonts/main/ofl/nanumgothic/NanumGothic-Regular.ttf
+  그림은 이미지 형태로 바로 화면에 띄워줘.
+  matplotlib 같은 그래프 라이브러리는 절대 쓰지 마.
+- 그 아래에 'AI 세 줄 요약' 버튼을 넣어줘. 누르면 댓글 전체를
+  Solar API(모델 solar-open2, 접속 주소 https://api.upstage.ai/v1, openai 라이브러리)에
+  보내서 '전체 반응을 한국어 세 줄로 요약'하게 해줘.
+  키는 비밀 금고(secrets)의 SOLAR_API_KEY에서. 추론(생각) 강도는 최소로
+  (reasoning_effort 값을 'low'로 주는 방식).
+- 댓글을 못 가져오면(댓글이 막힌 영상 등) 친절한 한국어 안내를 보여줘.
+- 필요한 라이브러리 목록(requirements.txt)도 같이 줘.
+  버전 숫자 없이 이름만, 스트림릿·판다스·넘파이는 기본 설치라 빼고.
+  이 앱은 requests, wordcloud, openai 세 개면 돼.
+- 초보자용 한국어 주석을 달고 main.py 전체 코드를 한 번에 줘.</pre></div>
+  <ul><li>혼자 볼 때를 위해 예시 코드도 붙여 둡니다 · 이런 <b>모습</b>이면 성공</li></ul>
+  <div class="codewrap code"><span class="label">② AI가 준 코드 (예시)</span><pre>import os
+import streamlit as st
+import requests
+from openai import OpenAI
+from wordcloud import WordCloud
+
+# 기본 설정
+st.set_page_config(page_title="유튜브 댓글 분석", page_icon="💬")
+st.title("💬 유튜브 댓글 분석")
+
+YOUTUBE_KEY = st.secrets["YOUTUBE_API_KEY"]
+
+# 한글 폰트 준비 (없으면 한 번만 내려받기)
+FONT_URL = "https://raw.githubusercontent.com/google/fonts/main/ofl/nanumgothic/NanumGothic-Regular.ttf"
+FONT_PATH = "NanumGothic.ttf"
+if not os.path.exists(FONT_PATH):
+    with open(FONT_PATH, "wb") as f:
+        f.write(requests.get(FONT_URL).content)
+
+video_id = st.text_input("유튜브 영상 ID를 입력하세요", placeholder="예: 9bZkp7q19f0")
+
+if st.button("댓글 가져오기 💬") and video_id.strip():
+    url = "https://www.googleapis.com/youtube/v3/commentThreads"
+    params = {
+        "part": "snippet",
+        "videoId": video_id.strip(),
+        "maxResults": 100,
+        "key": YOUTUBE_KEY,
+    }
+    res = requests.get(url, params=params)
+
+    if res.status_code != 200:
+        st.error(
+            "댓글을 가져오지 못했어요 😢 영상 ID가 맞는지, "
+            "댓글이 막힌 영상은 아닌지 확인해 주세요. "
+            f"(상태코드: {res.status_code})"
+        )
+    else:
+        items = res.json().get("items", [])
+        comments = [
+            it["snippet"]["topLevelComment"]["snippet"]["textOriginal"]
+            for it in items
+        ]
+        st.session_state.comments = comments  # 세션에 저장해 두기
+
+# 댓글이 준비되면 워드클라우드와 요약 버튼 표시
+if "comments" in st.session_state and st.session_state.comments:
+    comments = st.session_state.comments
+    st.success(f"댓글 {len(comments)}개를 가져왔어요!")
+
+    # 한글 워드클라우드 만들기
+    wc = WordCloud(
+        font_path=FONT_PATH, width=800, height=400,
+        background_color="white",
+    ).generate(" ".join(comments))
+    st.image(wc.to_array())
+
+    # AI 세 줄 요약
+    if st.button("AI 세 줄 요약 🤖"):
+        client = OpenAI(
+            api_key=st.secrets["SOLAR_API_KEY"],
+            base_url="https://api.upstage.ai/v1",
+        )
+        joined = "\n".join(comments)
+        response = client.chat.completions.create(
+            model="solar-open2",
+            messages=[
+                {"role": "system", "content": "너는 여론 분석가야. 반드시 순수 한국어로만 답해."},
+                {"role": "user", "content": f"다음 유튜브 댓글들의 전체 반응을 세 줄로 요약해줘.\n\n{joined}"},
+            ],
+            reasoning_effort="low",
+        )
+        st.markdown(response.choices[0].message.content)</pre></div>
+  <div class="codewrap code"><span class="label">requirements.txt</span><pre>requests
+wordcloud
+openai</pre></div>
   <div class="callout tip">
-    <div class="h">💡 데이터 API vs AI API</div>
+    <div class="h">💡 영상 ID는 어디서?</div>
     <ul>
-      <li>유튜브 API = 사실을 꺼내는 창구 (같은 질문 → 같은 답)</li>
-      <li>AI API = 문장을 생성하는 창구 (같은 질문 → 매번 조금 다름)</li>
-      <li>둘을 합치면 강력 → 유튜브 데이터 가져와 AI에게 해석시키기 = 오늘의 마지막 도전</li>
+      <li>영상 주소 <code>youtube.com/watch?v=</code> <b>뒤의 11글자</b>가 영상 ID</li>
+      <li>예: <code>youtube.com/watch?v=9bZkp7q19f0</code> → ID는 <code>9bZkp7q19f0</code></li>
+    </ul>
+  </div>
+  <ul><li>잘 되면 → 분석을 더 깊게</li></ul>
+  <div class="codewrap improve"><span class="label">③ 프롬프트 개선 (예시)</span><pre>좋아! 여기서 이어서 고쳐줘.
+- 자주 나온 단어 상위 10개를 횟수와 함께 표로도 보여줘.
+- AI 요약에 긍정 반응과 부정 반응의 비율(대략적인 백분율)도 추정해서 붙이게 해줘.
+- 워드클라우드 배경을 흰색 말고 밤하늘 느낌의 어두운 색으로 바꿔줘.</pre></div>
+  <div class="callout check">
+    <div class="h">✔️ 여기까지 성공 확인</div>
+    <ul>
+      <li>한글 댓글이 <b>깨지지 않은 워드클라우드</b>로 뜨면 성공 · 요약 버튼까지 누르면 만점</li>
+      <li>글자가 네모(□□)로 깨지면 → 폰트 주소 줄이 프롬프트에서 빠졌는지 확인</li>
+      <li>댓글이 안 오면 → 영상 ID 11글자 확인 · 댓글 막힌 영상이면 다른 영상으로</li>
+    </ul>
+  </div>
+  <div class="callout warn">
+    <div class="h">⏳ 시간이 부족하면 (무른 경계)</div>
+    <ul>
+      <li>오늘 완성 기준 = <b>워드클라우드 한 장</b> · AI 요약은 집에서 이어서도 충분</li>
+      <li>이 앱은 프롬프트가 기니, 수업에서 못 끝내면 저장만 해 두고 내일 이어서</li>
     </ul>
   </div>
 
-  <h2>4. 실시간 API가 ‘애니메이션’이 되는 순간 (하이라이트 · 강사 데모)</h2>
+  <h2>9. 프로젝트 맛보기 — 서울 혼잡도 실시간 지도 (강사 시연)</h2>
   <ul>
-    <li>이 절은 <b>강사 화면으로 감상하는 구간</b> · 따라 만들기는 선택 (여유 있는 분이 집에서) · 아래 프롬프트는 그때 쓰라고 남겨 둔 것</li>
+    <li>이 절은 <b>강사 화면으로 감상하는 구간</b> · 오늘 배운 것들이 모이면 어디까지 가는지 보여주는 예고편</li>
     <li>API 한 번 호출 = <b>딱 지금 이 순간</b>의 스냅샷 (서울 어디가 <b>지금</b> 붐비나)</li>
-    <li>그걸 <b>매시간 자동으로 쌓으면</b> → 시간축이 생김 → <b>하루 애니메이션</b></li>
-    <li>서울 <b>실시간 도시데이터 API</b>(주요 명소 23곳 혼잡도·유동인구)를 우리가 매시간 모아 둠</li>
+    <li>그 스냅샷을 <b>시각마다 모아 두면</b> → 시간축이 생김 → <b>하루 애니메이션</b></li>
+    <li>서울 <b>실시간 도시데이터 API</b>(주요 명소 23곳 혼잡도·유동인구)를 매시간 모아 둔 기록을 사용합니다</li>
   </ul>
   <div class="callout tip">
-    <div class="h">🔑 핵심 발상 — 스냅샷을 쌓으면 영상이 된다</div>
+    <div class="h">🔑 핵심 발상 — 스냅샷을 모으면 영상이 된다</div>
     <ul>
       <li>사진 한 장(스냅샷) × 여러 시각 = <b>플립북(애니메이션)</b></li>
-      <li>날씨·주가·혼잡도… <b>실시간 데이터는 쌓는 순간 시계열</b>이 됨</li>
-      <li>매시간 수집(크론)이 대신 해 줌 → 우리는 <b>결과만</b></li>
+      <li>날씨·주가·혼잡도… <b>실시간 데이터는 모으는 순간 시계열</b>이 됨</li>
+      <li>5일차 자유 프로젝트에서 "내 주제 + API"를 붙일 때 좋은 본보기</li>
     </ul>
   </div>
-  <div class="codewrap prompt"><span class="label">① 샘플 프롬프트</span><pre>스트림릿 앱에 '서울 하루 혼잡 애니메이션 지도'를 만들어줘. 스트림릿 클라우드에 올릴 거야.
+  <ul>
+    <li>따라 만들기는 선택 (여유 있는 분이 집에서) · 아래 프롬프트는 그때 쓰라고 남겨 둔 것</li>
+  </ul>
+  <div class="codewrap prompt"><span class="label">① 샘플 프롬프트 (집에서 도전용)</span><pre>스트림릿 앱에 '서울 하루 혼잡 애니메이션 지도'를 만들어줘. 스트림릿 클라우드에 올릴 거야.
 
-- 실시간 혼잡 로그(매시간 자동 수집된 CSV):
+- 실시간 혼잡 기록(매시간 모아 둔 CSV):
   https://raw.githubusercontent.com/greatsong/modudata/main/data/seoul_congestion_log.csv
   열: 시각·코드·지역명·혼잡도·인구min·인구max·위도·경도 (서울 명소 23곳)
 - '시각' 값은 '2026-06-30 23:00'처럼 분까지만 있는 문자열이야.
@@ -643,10 +1049,12 @@ if user_input:
   '계_' 전체 열의 합으로 나눠. 이 표는 한 행이 동 하나라서 따로 묶지 않아도 되고,
   동 이름은 표의 '동' 열에 이미 있어(인구 표에 '구'라는 열은 없으니 쓰지 마).
   경계와는 '코드'로 짝지어(혼잡 데이터의 '코드'가 아니라 인구 표의 '코드', 문자열로).
+- 각 명소가 어느 행정동 안에 있는지는 shapely 라이브러리로
+  점이 폴리곤 안에 드는지 판정해서 짝지어줘. requirements.txt에 shapely도 추가하고.
 - 호버에 지역명·유동인구·혼잡도·그 동네 고령비율이 뜨게.
 → "가산·강남은 밤엔 텅 비고 낮엔 폭발, 고덕·구로는 낮밤이 비슷"이 눈에 보이게.</pre></div>
   <div class="callout warn">
-    <div class="h">⏳ 오늘은 ‘감탄’이 핵심 (강사 데모 중심)</div>
+    <div class="h">⏳ 오늘은 ‘감상’이 핵심 (강사 시연 중심)</div>
     <ul>
       <li>완성 목표 아님 · <b>재생 버튼 한 번</b>으로 “실시간이 영상이 된다” 체감</li>
       <li>수업 <b>그 시각</b> 실제 붐빔과 대조 = 종이 데이터가 못 주는 감동</li>
@@ -654,111 +1062,44 @@ if user_input:
     </ul>
   </div>
 
+  <h2>🖼️ 오늘의 마무리 — 갤러리에 올리기</h2>
+  <ol class="steps">
+    <li><span class="st">자랑할 앱 고르기</span><br>오늘 만든 앱(박스오피스·유튜브·채팅·댓글 분석) 중 하나 이상</li>
+    <li><span class="st">갤러리에 게시</span><br><a href="gallery/index.html">🖼️ 작품 갤러리</a>에 이름·앱 URL 올리기</li>
+    <li><span class="st">서로 구경하기</span><br>다른 분 앱을 눌러 보고 좋아요 · "어제 1위 영화가 정말 맞나?"도 한번 의심해 보기</li>
+  </ol>
+
   <h2>📡 키 없이 쓰는 흥미로운 API (부록)</h2>
   <ul>
-    <li>키 없이도 쓰는 흥미로운 창구 많음 · 부록 참고 · 5일차 프로젝트·자율 실습에 활용</li>
+    <li>키 없이도 쓰는 흥미로운 창구 많음 · 오늘 밤 숙제와 5일차 프로젝트·자율 실습에 활용</li>
     <li><b>GBIF</b> (<a href="https://www.gbif.org" target="_blank" rel="noopener">gbif.org</a>) — 전 세계 생물 관찰 기록 → 지도에 찍기 (2일차 지도와 찰떡)</li>
     <li><b>NASA</b> (<a href="https://api.nasa.gov" target="_blank" rel="noopener">api.nasa.gov</a>) — 오늘 지구 근처 지나는 소행성·오늘의 우주 사진</li>
     <li><b>USGS</b> (<a href="https://earthquake.usgs.gov" target="_blank" rel="noopener">earthquake.usgs.gov</a>) — 실시간 전 세계 지진 기록</li>
+    <li><b>catfact.ninja</b> · <b>randomuser.me</b> — 고양이 상식·가상 인물 (연습용으로 가벼움)</li>
   </ul>
   <div class="callout tip">
     <div class="h">💡 API 한 줄 요령</div>
     <ul>
-      <li>"요청 → 응답(JSON) → 값 꺼내기" 흐름 = 거의 모든 API에 통용</li>
-      <li>창구 하나 골라 → "이 API로 스트림릿 앱 만들어줘"</li>
+      <li>"문서 세 곳 확인 → (키) → 맨눈으로 JSON → 값 꺼내기 → 문서 붙여 바이브 코딩" = 오늘의 5단계 그대로</li>
+      <li>창구 하나 골라 → 문서를 붙여넣으며 "이 API로 스트림릿 앱 만들어줘"</li>
     </ul>
   </div>
 
   <h2>🎒 오늘의 체크 & 링크</h2>
   <ul class="checklist">
-    <li>API가 '민원창구'라는 걸 이해했다 (요청 → 응답 JSON)</li>
-    <li>유튜브 채널 통계를 metric 카드로 띄워 봤다</li>
+    <li>API 문서에서 볼 세 곳(요청 주소·요청변수·응답 예시)을 안다</li>
+    <li>KOBIS 키를 직접 발급받아 <b>금고(secrets)에만</b> 넣었다</li>
+    <li>프롬프트 없이 기본 코드로 원본 JSON을 받아 봤다</li>
+    <li>문서를 붙여넣는 바이브 코딩으로 박스오피스 앱을 완성했다</li>
     <li>말을 걸면 답하는 나만의 AI 채팅앱을 켜 봤다</li>
-    <li>API 키는 <b>secrets에만</b> 두고, GitHub엔 <b>안 올린다</b>는 걸 안다</li>
+    <li>금고 라벨·코드·프롬프트의 <b>이름이 일치</b>해야 한다는 걸 안다</li>
   </ul>
 
   <div class="callout mini">
-    <div class="h">🎡 오늘의 숙제 — 실시간 박스오피스 영화 데이터 분석 (도전 · 선택)</div>
+    <div class="h">🎡 오늘의 숙제 — 새 창구를 스스로 열어 보기</div>
     <ul>
-      <li>수업에서 배운 <b>키 발급 → secrets → 스트림릿</b>을 진짜 공공데이터에 적용</li>
-      <li>주제 = <b>지금 극장가</b> · KOBIS로 <b>어제 박스오피스</b>를 받아 순위·관객수 분석·시각화</li>
-      <li>핵심 요령 = API <b>문서(요청변수·샘플 응답)를 복사해 프롬프트에 그대로 붙이기</b></li>
-    </ul>
-  </div>
-  <ol class="steps">
-    <li><span class="st">KOBIS 가입 + 키 발급</span><br>영화진흥위원회 오픈API <a href="https://www.kobis.or.kr/kobisopenapi" target="_blank" rel="noopener">kobis.or.kr/kobisopenapi</a> 가입 → [키 발급/관리] → 발급 (무료·즉시, 유튜브보다 쉬움)</li>
-    <li><span class="st">키 → secrets에</span><br>스트림릿 <b>Settings → Secrets</b>에 <code>KOBIS_KEY = "발급키"</code> (키는 코드에 X!)</li>
-    <li><span class="st">아래 프롬프트로 바이브 코딩</span><br>API 문서(요청변수·샘플 응답)를 함께 붙이면 정확도↑ → 완성·배포</li>
-  </ol>
-  <div class="codewrap prompt"><span class="label">🗣 예제 프롬프트 (KOBIS · 항상 최신 날짜)</span><pre>KOBIS 일별 박스오피스 API로 '가장 최근(어제)' 박스오피스 TOP 10을 받아
-스트림릿으로 분석해 줘. 인증키는 비밀 금고(secrets)의 KOBIS_KEY에 있어.
-- 요청 주소: http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json?key={KOBIS_KEY}&amp;targetDt={날짜}
-- 날짜(targetDt)는 고정하지 말고 '어제'를 자동 계산해서 써 (오늘 건 아직 집계 전).
-- 순위·영화명·관객수·누적관객·스크린수를 표로, 관객수 상위 5편은 막대그래프로.
-- 숫자가 문자열로 오니 숫자로 바꿔서 정렬·그래프.
-- 필요한 라이브러리 목록(requirements.txt)도 같이 줘.
-  버전 숫자 없이 이름만, 스트림릿·판다스·넘파이는 기본 설치라 빼고.</pre></div>
-  <ul><li>혼자 하는 숙제라 예시 코드도 붙여 둡니다 · 내 것과 똑같지 않아도 이런 <b>모습</b>이면 성공</li></ul>
-  <div class="codewrap code"><span class="label">② AI가 준 코드 (예시)</span><pre>import streamlit as st
-import pandas as pd
-import requests
-from datetime import datetime, timedelta
-
-# 기본 설정
-st.set_page_config(page_title="KOBIS 일별 박스오피스", layout="wide")
-st.title("🎬 KOBIS 일별 박스오피스 TOP 10")
-
-# 어제 날짜 자동 계산 (KOBIS는 YYYYMMDD 형식)
-yesterday = datetime.now() - timedelta(days=1)
-target_dt = yesterday.strftime("%Y%m%d")
-st.caption(f"조회 기준일(어제): {yesterday.strftime('%Y-%m-%d')}")
-
-# 비밀 금고에서 인증키 불러오기
-KOBIS_KEY = st.secrets["KOBIS_KEY"]
-
-# API 호출
-url = "http://www.kobis.or.kr/kobisopenapi/webservice/rest/boxoffice/searchDailyBoxOfficeList.json"
-params = {"key": KOBIS_KEY, "targetDt": target_dt}
-res = requests.get(url, params=params)
-
-if res.status_code != 200:
-    st.error(f"요청이 실패했어요 (상태코드: {res.status_code})")
-    st.stop()
-
-data = res.json()
-box_list = data.get("boxOfficeResult", {}).get("dailyBoxOfficeList", [])
-
-if not box_list:
-    st.error("데이터가 없어요. 인증키와 날짜를 확인해 주세요.")
-    st.stop()
-
-df = pd.DataFrame(box_list)
-
-# 문자열로 오는 숫자들을 진짜 숫자로 변환
-for col in ["rank", "audiCnt", "audiAcc", "scrnCnt"]:
-    df[col] = pd.to_numeric(df[col])
-
-# 보기 좋게 한국어 열 이름으로 정리
-표 = df[["rank", "movieNm", "audiCnt", "audiAcc", "scrnCnt"]].copy()
-표.columns = ["순위", "영화명", "관객수", "누적관객", "스크린수"]
-표 = 표.sort_values("순위").reset_index(drop=True)
-
-st.subheader("📋 박스오피스 TOP 10")
-st.dataframe(표, use_container_width=True)
-
-# 관객수 상위 5편 막대그래프
-st.subheader("📈 관객수 상위 5편")
-top5 = 표.sort_values("관객수", ascending=False).head(5)
-st.bar_chart(top5.set_index("영화명")["관객수"])</pre></div>
-  <div class="codewrap code"><span class="label">requirements.txt</span><pre>requests</pre></div>
-  <ul>
-    <li>다른 창구도 같은 방식 · 예: 서울 실시간 인구(유동인구) <a href="https://data.seoul.go.kr" target="_blank" rel="noopener">data.seoul.go.kr</a> · 공공데이터포털 <a href="https://www.data.go.kr" target="_blank" rel="noopener">data.go.kr</a></li>
-  </ul>
-  <div class="callout tip">
-    <div class="h">💡 검증 & 자주 막히는 곳</div>
-    <ul>
-      <li>표·그래프에 진짜 숫자가 차면 성공 · 빈 화면이면 인증키·날짜 형식(<code>YYYYMMDD</code>) 확인</li>
-      <li>KOBIS 숫자는 <b>문자열</b>('820653')로 옴 → 숫자 변환 필수 · <b>오늘 날짜는 데이터 없음</b>(어제 사용)</li>
+      <li><b>① 5단계 복습 (도전)</b> — 부록의 키 없는 API 하나를 골라, 오늘 배운 5단계 순서 그대로 앱 만들기 (키가 없으니 2단계는 건너뛰기)</li>
+      <li><b>② 내 프로젝트 재료 찾기</b> — 공공데이터포털 <a href="https://www.data.go.kr" target="_blank" rel="noopener">data.go.kr</a>과 서울 열린데이터광장 <a href="https://data.seoul.go.kr" target="_blank" rel="noopener">data.seoul.go.kr</a>을 구경하며 관심 주제의 API 하나 찾기 → 문서에서 <b>세 곳(주소·요청변수·응답 예시)</b>만 훑어 두기 · 만들 필요 없음, 5일차 프로젝트의 재료</li>
     </ul>
   </div>
   <div class="callout mini">
@@ -769,20 +1110,23 @@ st.bar_chart(top5.set_index("영화명")["관객수"])</pre></div>
       <li>비밀번호는 기억할 곳에 적어 두기 · 못 해도 괜찮아요, 내일 같이 합니다</li>
     </ul>
   </div>
+
   <h2>📚 오늘의 용어</h2>
   <details class="glossary">
-    <summary>오늘 나온 낱말 8개 — 외울 필요 없습니다 · 잊으면 여기로</summary>
+    <summary>오늘 나온 낱말 10개 — 외울 필요 없습니다 · 잊으면 여기로</summary>
     <div class="gin">
     <table class="glossary-table">
       <tr><th>용어</th><th>뜻</th></tr>
       <tr><td class="term">requests</td><td>파이썬에서 인터넷에 요청을 보내는 라이브러리</td></tr>
-      <tr><td class="term">JSON</td><td>프로그램끼리 데이터를 주고받는 표준 형식 — 중괄호 상자</td></tr>
+      <tr><td class="term">JSON</td><td>프로그램끼리 데이터를 주고받는 표준 형식 — 라벨 붙은 상자</td></tr>
+      <tr><td class="term">요청변수(파라미터)</td><td>요청 주소에 붙여 보내는 조건 — key, targetDt 등</td></tr>
+      <tr><td class="term">API 문서</td><td>창구 사용 설명서 — 요청 주소·요청변수·응답 예시 세 곳만 보면 됨</td></tr>
       <tr><td class="term">상태코드(200)</td><td>요청 결과 번호 — 200은 성공, 404는 없음</td></tr>
       <tr><td class="term">비밀 금고(secrets)</td><td>API 키를 코드 밖에 안전하게 보관하는 곳</td></tr>
       <tr><td class="term">세션</td><td>앱이 켜져 있는 동안 기억을 유지하는 공간 — 대화 기록 등</td></tr>
       <tr><td class="term">시스템 프롬프트</td><td>AI에게 미리 심어 주는 성격·규칙 — “너는 친절한 선생님이야”</td></tr>
       <tr><td class="term">추론(생각) 강도</td><td>AI가 답하기 전에 생각하는 깊이 — 깊으면 꼼꼼, 얕으면 빠름</td></tr>
-      <tr><td class="term">호버</td><td>마우스를 올리면 뜨는 정보</td></tr>
+      <tr><td class="term">워드클라우드</td><td>자주 나온 낱말일수록 크게 그리는 그림 — 글 뭉치를 한눈에</td></tr>
     </table>
     <p class="glossary-more"><a href="glossary.html">📚 전체 용어사전 보기 →</a></p>
     </div>
@@ -799,5 +1143,19 @@ st.bar_chart(top5.set_index("영화명")["관객수"])</pre></div>
 <script src="assets/release.js"></script>
 <script src="assets/gate.js"></script>
 <script src="assets/copy.js"></script>
+<script>
+document.querySelectorAll(".tabs").forEach(function (box) {
+  var btns = box.querySelectorAll(".tabbar button");
+  var panes = box.querySelectorAll(".tabpane");
+  btns.forEach(function (btn, i) {
+    btn.addEventListener("click", function () {
+      btns.forEach(function (b) { b.classList.remove("on"); });
+      panes.forEach(function (p) { p.classList.remove("on"); });
+      btn.classList.add("on");
+      panes[i].classList.add("on");
+    });
+  });
+});
+</script>
 </body>
 </html>
