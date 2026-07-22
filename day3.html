@@ -32,7 +32,7 @@
       <li><b>박스오피스 대시보드</b> — 진짜 공공 API(KOBIS)를 문서부터 읽고 직접 연결</li>
       <li><b>유튜브 채널 대시보드</b> — 구독자·조회수를 API로 불러와 카드로</li>
       <li><b>나만의 AI 채팅앱</b> — 말을 걸면 대답하는 AI를 내 앱 안에</li>
-      <li><b>유튜브 댓글 분석 앱</b> — 댓글 워드클라우드 + AI 세 줄 요약</li>
+      <li><b>유튜브 댓글 분석 앱</b> — 링크만 붙여넣으면 단어 빈도 그래프와 워드클라우드까지</li>
     </ul>
   </div>
 
@@ -925,39 +925,33 @@ if user_input:
     </ul>
   </div>
 
-  <h2>8. 마지막 앱 — 유튜브 댓글 분석 <span class="a">(데이터 API × AI API)</span></h2>
+  <h2>8. 마지막 앱 — 유튜브 댓글 분석 <span class="a">(3단계 완성)</span></h2>
   <ul>
-    <li>오늘의 마무리 · <b>두 세계를 합칩니다</b> — 유튜브 창구에서 <b>사실(댓글)</b>을 가져오고, AI 창구가 <b>해석</b></li>
-    <li>흐름 = 댓글 100개 받아오기 → <b>한글 워드클라우드</b> → AI에게 세 줄 요약 시키기</li>
-    <li>볼품없는 댓글 목록이 그림 한 장으로 변하는 순간이 오늘의 하이라이트</li>
+    <li>오늘의 마무리 · 유튜브 창구에서 <b>댓글</b>을 가져와 분석까지</li>
+    <li>이번엔 한 번에 만들지 않고 <b>세 단계로 키워 갑니다</b> — 댓글 불러오기 → 단어 빈도 그래프 → 워드클라우드</li>
+    <li>단계마다 "이어서 고쳐줘"로 프롬프트를 쌓는 연습 · 실전 바이브 코딩의 기본 리듬</li>
   </ul>
-  <div class="codewrap prompt"><span class="label">① 샘플 프롬프트</span><pre>스트림릿 앱 하나(main.py)를 만들어줘. 유튜브 영상 댓글 분석 앱이야. 스트림릿 클라우드에 올릴 거야.
 
-- 사용자가 유튜브 영상 ID를 입력하면, YouTube Data API v3의
-  commentThreads 창구에 requests로 요청해서 댓글을 최대 100개 받아와.
-  요청변수 part는 snippet만 쓰면 돼. 댓글 원문은 textOriginal 필드를 써.
+  <h3>1단계 · 링크를 붙여넣으면 댓글 불러오기</h3>
+  <div class="codewrap prompt"><span class="label">① 샘플 프롬프트 — 1단계</span><pre>스트림릿 앱 하나(main.py)를 만들어줘. 유튜브 댓글 분석 앱의 1단계야. 스트림릿 클라우드에 올릴 거야.
+
+- 사용자가 유튜브 영상 링크를 붙여넣는 입력창을 만들어줘.
+  입력창의 기본값은 https://youtu.be/d95J8yzvjbQ?si=LfL5DLwCL8Pk077r 로 해줘.
+- 링크에서 영상 ID를 뽑아줘. youtu.be 짧은 주소든 youtube.com/watch 주소든
+  다 처리하고, si= 처럼 링크 뒤에 붙는 값은 무시해.
+- YouTube Data API v3의 commentThreads 창구에 requests로 요청해서
+  댓글을 최대 100개 받아와. 요청변수 part는 snippet만,
+  댓글 원문은 textOriginal 필드를 써.
   API 키는 비밀 금고(secrets)의 YOUTUBE_API_KEY에서 불러와.
-- 받아온 댓글 전체로 wordcloud 라이브러리를 써서 워드클라우드 그림을 만들어줘.
-  배경은 흰색으로. 한글이 깨지지 않게, 폰트 파일을 아래 주소에서 내려받아 사용해:
-  https://raw.githubusercontent.com/google/fonts/main/ofl/nanumgothic/NanumGothic-Regular.ttf
-  그림은 이미지 형태로 바로 화면에 띄워줘.
-  matplotlib 같은 그래프 라이브러리는 절대 쓰지 마.
-- 그 아래에 'AI 세 줄 요약' 버튼을 넣어줘. 누르면 댓글 전체를
-  Solar API(모델 solar-open2, 접속 주소 https://api.upstage.ai/v1, openai 라이브러리)에
-  보내서 '전체 반응을 한국어 세 줄로 요약'하게 해줘.
-  키는 비밀 금고(secrets)의 SOLAR_API_KEY에서. 추론(생각) 강도는 최소로
-  (reasoning_effort 값을 'low'로 주는 방식).
-- 댓글을 못 가져오면(댓글이 막힌 영상 등) 친절한 한국어 안내를 보여줘.
+- 가져온 댓글 개수를 지표 카드로 크게 보여주고, 댓글 목록을 표로 보여줘.
+- 댓글을 못 가져오면(잘못된 링크, 댓글이 막힌 영상 등) 친절한 한국어 안내를 보여줘.
 - 필요한 라이브러리 목록(requirements.txt)도 같이 줘.
   버전 숫자 없이 이름만, 스트림릿·판다스·넘파이는 기본 설치라 빼고.
-  이 앱은 requests, wordcloud, openai 세 개면 돼.
+  이 단계는 requests 하나면 돼.
 - 초보자용 한국어 주석을 달고 main.py 전체 코드를 한 번에 줘.</pre></div>
-  <ul><li>혼자 볼 때를 위해 예시 코드도 붙여 둡니다 · 이런 <b>모습</b>이면 성공</li></ul>
-  <div class="codewrap code"><span class="label">② AI가 준 코드 (예시)</span><pre>import os
+  <div class="codewrap code"><span class="label">② AI가 준 코드 (예시 · 1단계)</span><pre>import re
 import streamlit as st
 import requests
-from openai import OpenAI
-from wordcloud import WordCloud
 
 # 기본 설정
 st.set_page_config(page_title="유튜브 댓글 분석", page_icon="💬")
@@ -965,95 +959,157 @@ st.title("💬 유튜브 댓글 분석")
 
 YOUTUBE_KEY = st.secrets["YOUTUBE_API_KEY"]
 
+# 영상 링크 입력창 (기본값이 미리 들어 있어요)
+DEFAULT_URL = "https://youtu.be/d95J8yzvjbQ?si=LfL5DLwCL8Pk077r"
+video_url = st.text_input("유튜브 영상 링크를 붙여넣으세요", value=DEFAULT_URL)
+
+
+def extract_video_id(url):
+    """youtu.be 짧은 주소, watch 주소에서 영상 ID(11글자)를 뽑는다."""
+    match = re.search(r"(?:youtu\.be/|v=|shorts/)([A-Za-z0-9_-]{11})", url)
+    return match.group(1) if match else None
+
+
+if st.button("댓글 가져오기 💬"):
+    video_id = extract_video_id(video_url.strip())
+    if not video_id:
+        st.error("링크에서 영상 ID를 찾지 못했어요. 유튜브 영상 링크가 맞는지 확인해 주세요.")
+    else:
+        api_url = "https://www.googleapis.com/youtube/v3/commentThreads"
+        params = {
+            "part": "snippet",
+            "videoId": video_id,
+            "maxResults": 100,
+            "key": YOUTUBE_KEY,
+        }
+        res = requests.get(api_url, params=params)
+
+        if res.status_code != 200:
+            st.error(
+                "댓글을 가져오지 못했어요 😢 댓글이 막힌 영상은 아닌지 확인해 주세요. "
+                f"(상태코드: {res.status_code})"
+            )
+        else:
+            items = res.json().get("items", [])
+            comments = [
+                it["snippet"]["topLevelComment"]["snippet"]["textOriginal"]
+                for it in items
+            ]
+            st.session_state.comments = comments  # 세션에 저장해 두기
+
+# 댓글이 준비되면 개수와 목록 표시
+if "comments" in st.session_state:
+    comments = st.session_state.comments
+    st.metric("가져온 댓글 수", f"{len(comments)}개")
+    st.dataframe({"댓글": comments}, use_container_width=True)</pre></div>
+  <div class="codewrap code"><span class="label">requirements.txt (1단계)</span><pre>requests</pre></div>
+  <div class="callout check">
+    <div class="h">✔️ 1단계 성공 확인</div>
+    <ul>
+      <li>기본값 링크가 미리 들어 있으니 <b>버튼만 눌러도</b> 됩니다 · "가져온 댓글 수" 카드와 댓글 표가 뜨면 통과</li>
+      <li>다른 영상도 시험해 보기 — 공유 버튼으로 복사한 주소를 그대로 붙여넣으면 됨 (짧은 주소든 긴 주소든 OK)</li>
+      <li>댓글이 안 오면 → 댓글이 막힌 영상인지 확인 · 에러 문구를 통째로 AI에게</li>
+    </ul>
+  </div>
+
+  <h3>2단계 · 어떤 단어가 많이 나올까 — 빈도 그래프</h3>
+  <div class="codewrap prompt"><span class="label">① 샘플 프롬프트 — 2단계 (이어서)</span><pre>좋아! 여기서 이어서 고쳐줘. 2단계야.
+- 받아온 댓글 전체를 단어로 나눠서, 자주 나온 단어 상위 20개를 세어줘.
+  한 글자짜리 단어는 빼줘.
+- 상위 20개를 plotly 가로 막대그래프로 보여줘. 많이 나온 단어가 위에 오게.
+- requirements.txt에 plotly를 추가해줘.</pre></div>
+  <div class="codewrap code"><span class="label">② AI가 준 코드 (예시 · 2단계에서 추가된 부분)</span><pre>from collections import Counter
+import plotly.express as px
+
+# ...1단계 코드는 그대로, 댓글 표시 아래에 추가...
+
+    # ── 2단계: 단어 빈도 분석 ──────────────────
+    words = " ".join(comments).split()          # 댓글 전체를 단어로 나누기
+    words = [w for w in words if len(w) &gt; 1]    # 한 글자 단어 제외
+    top20 = Counter(words).most_common(20)      # 많이 나온 순서로 20개
+
+    st.subheader("📊 자주 나온 단어 TOP 20")
+    freq = {"단어": [w for w, _ in top20], "횟수": [n for _, n in top20]}
+    fig = px.bar(freq, x="횟수", y="단어", orientation="h")
+    fig.update_layout(yaxis={"categoryorder": "total ascending"})
+    st.plotly_chart(fig, use_container_width=True)</pre></div>
+  <div class="codewrap code"><span class="label">requirements.txt (2단계)</span><pre>requests
+plotly</pre></div>
+  <div class="callout check">
+    <div class="h">✔️ 2단계 성공 확인</div>
+    <ul>
+      <li>댓글 아래에 <b>가로 막대그래프</b>가 뜨고, 제일 많이 나온 단어가 맨 위면 통과</li>
+      <li>"정말 그런가?" 한 번 — 그래프의 1위 단어가 댓글 표에도 정말 많이 보이는지 눈으로 대조</li>
+      <li>"너무", "정말" 같은 말만 크게 나와도 정상 · 다음 단계 ③ 개선에서 다듬을 수 있음</li>
+    </ul>
+  </div>
+
+  <h3>3단계 · 워드클라우드로 마무리</h3>
+  <div class="codewrap prompt"><span class="label">① 샘플 프롬프트 — 3단계 (이어서)</span><pre>좋아! 마지막 3단계야. 이어서 고쳐줘.
+- 댓글 전체로 wordcloud 라이브러리를 써서 워드클라우드 그림을 만들어줘. 배경은 흰색.
+  여기서도 2단계처럼 한 글자짜리 단어는 빼고 그려줘.
+- 한글이 깨지지 않게, 폰트 파일을 아래 주소에서 내려받아 사용해:
+  https://raw.githubusercontent.com/google/fonts/main/ofl/nanumgothic/NanumGothic-Regular.ttf
+- 그림은 이미지 형태로 바로 화면에 띄워줘.
+  matplotlib 같은 그래프 라이브러리는 절대 쓰지 마.
+- 폰트를 내려받지 못하면 한국어 안내 메시지를 보여줘.
+- requirements.txt에 wordcloud를 추가해줘.</pre></div>
+  <div class="codewrap code"><span class="label">② AI가 준 코드 (예시 · 3단계에서 추가된 부분)</span><pre>import os
+from wordcloud import WordCloud
+
 # 한글 폰트 준비 (없으면 한 번만 내려받기)
 FONT_URL = "https://raw.githubusercontent.com/google/fonts/main/ofl/nanumgothic/NanumGothic-Regular.ttf"
 FONT_PATH = "NanumGothic.ttf"
 if not os.path.exists(FONT_PATH):
-    with open(FONT_PATH, "wb") as f:
-        f.write(requests.get(FONT_URL).content)
+    try:
+        with open(FONT_PATH, "wb") as f:
+            f.write(requests.get(FONT_URL).content)
+    except Exception:
+        st.error("한글 폰트를 내려받지 못했어요. 잠시 후 새로고침해 주세요.")
 
-video_id = st.text_input("유튜브 영상 ID를 입력하세요", placeholder="예: 9bZkp7q19f0")
+# ...빈도 그래프 아래에 추가...
 
-if st.button("댓글 가져오기 💬") and video_id.strip():
-    url = "https://www.googleapis.com/youtube/v3/commentThreads"
-    params = {
-        "part": "snippet",
-        "videoId": video_id.strip(),
-        "maxResults": 100,
-        "key": YOUTUBE_KEY,
-    }
-    res = requests.get(url, params=params)
-
-    if res.status_code != 200:
-        st.error(
-            "댓글을 가져오지 못했어요 😢 영상 ID가 맞는지, "
-            "댓글이 막힌 영상은 아닌지 확인해 주세요. "
-            f"(상태코드: {res.status_code})"
-        )
-    else:
-        items = res.json().get("items", [])
-        comments = [
-            it["snippet"]["topLevelComment"]["snippet"]["textOriginal"]
-            for it in items
-        ]
-        st.session_state.comments = comments  # 세션에 저장해 두기
-
-# 댓글이 준비되면 워드클라우드와 요약 버튼 표시
-if "comments" in st.session_state and st.session_state.comments:
-    comments = st.session_state.comments
-    st.success(f"댓글 {len(comments)}개를 가져왔어요!")
-
-    # 한글 워드클라우드 만들기
+    # ── 3단계: 워드클라우드 ──────────────────
+    st.subheader("☁️ 댓글 워드클라우드")
     wc = WordCloud(
         font_path=FONT_PATH, width=800, height=400,
         background_color="white",
-    ).generate(" ".join(comments))
-    st.image(wc.to_array())
-
-    # AI 세 줄 요약
-    if st.button("AI 세 줄 요약 🤖"):
-        client = OpenAI(
-            api_key=st.secrets["SOLAR_API_KEY"],
-            base_url="https://api.upstage.ai/v1",
-        )
-        joined = "\n".join(comments)
-        response = client.chat.completions.create(
-            model="solar-open2",
-            messages=[
-                {"role": "system", "content": "너는 여론 분석가야. 반드시 순수 한국어로만 답해."},
-                {"role": "user", "content": f"다음 유튜브 댓글들의 전체 반응을 세 줄로 요약해줘.\n\n{joined}"},
-            ],
-            reasoning_effort="low",
-        )
-        st.markdown(response.choices[0].message.content)</pre></div>
-  <div class="codewrap code"><span class="label">requirements.txt</span><pre>requests
-wordcloud
-openai</pre></div>
-  <div class="callout tip">
-    <div class="h">💡 영상 ID는 어디서?</div>
+    ).generate(" ".join(words))   # 2단계에서 걸러낸 단어 재사용 (한 글자 조사 제외)
+    st.image(wc.to_array())</pre></div>
+  <div class="codewrap code"><span class="label">requirements.txt (3단계 · 최종)</span><pre>requests
+plotly
+wordcloud</pre></div>
+  <div class="callout check">
+    <div class="h">✔️ 3단계 성공 확인</div>
     <ul>
-      <li>영상 주소 <code>youtube.com/watch?v=</code> <b>뒤의 11글자</b>가 영상 ID</li>
-      <li>예: <code>youtube.com/watch?v=9bZkp7q19f0</code> → ID는 <code>9bZkp7q19f0</code></li>
+      <li>한글 댓글이 <b>깨지지 않은 워드클라우드</b>로 뜨면 완성 🎉</li>
+      <li>글자가 네모(□□)로 깨지면 → 폰트 주소 줄이 프롬프트에서 빠졌는지 확인</li>
+      <li>2단계 그래프와 3단계 그림을 나란히 보기 — <b>같은 댓글</b>을 두 가지 방식으로 그린 것</li>
     </ul>
   </div>
-  <ul><li>잘 되면 → 분석을 더 깊게</li></ul>
-  <div class="codewrap improve"><span class="label">③ 프롬프트 개선 (예시)</span><pre>좋아! 여기서 이어서 고쳐줘.
-- 자주 나온 단어 상위 10개를 횟수와 함께 표로도 보여줘.
-- AI 요약에 긍정 반응과 부정 반응의 비율(대략적인 백분율)도 추정해서 붙이게 해줘.
-- 워드클라우드 배경을 흰색 말고 밤하늘 느낌의 어두운 색으로 바꿔줘.</pre></div>
-  <div class="callout check">
-    <div class="h">✔️ 여기까지 성공 확인</div>
+
+  <ul><li>여기까지가 오늘의 완성 · 더 나아가고 싶다면 AI 창구까지 붙여 봅니다</li></ul>
+  <div class="codewrap improve"><span class="label">③ 프롬프트 개선 (선택 · 데이터 API × AI API)</span><pre>좋아! 여기서 더 고쳐줘.
+- 'AI 세 줄 요약' 버튼을 넣어줘. 누르면 댓글 전체를
+  Solar API(모델 solar-open2, 접속 주소 https://api.upstage.ai/v1, openai 라이브러리)에
+  보내서 '전체 반응을 한국어 세 줄로 요약'하게 해줘.
+  키는 비밀 금고(secrets)의 SOLAR_API_KEY에서. 추론(생각) 강도는 최소로
+  (reasoning_effort 값을 'low'로 주는 방식).
+- 요약에 긍정 반응과 부정 반응의 비율(대략적인 백분율)도 추정해서 붙이게 해줘.
+- 빈도 그래프에서 "너무", "정말" 같은 의미 없는 말은 빼줘.
+- requirements.txt에 openai를 추가해줘.</pre></div>
+  <div class="callout tip">
+    <div class="h">💡 이 앱이 오늘의 요약</div>
     <ul>
-      <li>한글 댓글이 <b>깨지지 않은 워드클라우드</b>로 뜨면 성공 · 요약 버튼까지 누르면 만점</li>
-      <li>글자가 네모(□□)로 깨지면 → 폰트 주소 줄이 프롬프트에서 빠졌는지 확인</li>
-      <li>댓글이 안 오면 → 영상 ID 11글자 확인 · 댓글 막힌 영상이면 다른 영상으로</li>
+      <li>데이터 API(유튜브)가 <b>사실</b>을 가져오고, AI API(Solar)가 <b>해석</b> — 오늘 배운 두 창구의 결합</li>
+      <li>단계를 쌓는 리듬(만들고 → 확인하고 → 이어서 고치기)은 5일차 프로젝트에서 그대로 씁니다</li>
     </ul>
   </div>
   <div class="callout warn">
     <div class="h">⏳ 시간이 부족하면 (무른 경계)</div>
     <ul>
-      <li>오늘 완성 기준 = <b>워드클라우드 한 장</b> · AI 요약은 집에서 이어서도 충분</li>
-      <li>이 앱은 프롬프트가 기니, 수업에서 못 끝내면 저장만 해 두고 내일 이어서</li>
+      <li>오늘 완성 기준 = <b>3단계 워드클라우드</b> · 최소 기준 = <b>1단계 댓글 불러오기</b></li>
+      <li>못 끝낸 단계는 프롬프트가 다 남아 있으니 집에서 이어서 · ③ AI 요약은 선택</li>
     </ul>
   </div>
 
