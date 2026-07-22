@@ -832,18 +832,20 @@ if user_input:
     with st.chat_message("user"):
         st.markdown(user_input)
 
-    # AI 답변 받아오기
+    # AI 답변 받아오기 (실패하면 에러 화면 대신 친절한 안내)
     with st.chat_message("assistant"):
-        response = client.chat.completions.create(
-            model="solar-open2",              # 모델 이름은 그대로 유지
-            messages=st.session_state.messages,  # 이전 대화 전체를 함께 전달 (기억 유지)
-            reasoning_effort="low",           # 추론 강도 최소 -&gt; 빠른 응답
-        )
-        answer = response.choices[0].message.content
-        st.markdown(answer)
-
-    # AI 답변도 기록에 저장 (다음 질문에 이어서 사용)
-    st.session_state.messages.append({"role": "assistant", "content": answer})</pre></div>
+        try:
+            response = client.chat.completions.create(
+                model="solar-open2",              # 모델 이름은 그대로 유지
+                messages=st.session_state.messages,  # 이전 대화 전체를 함께 전달 (기억 유지)
+                reasoning_effort="low",           # 추론 강도 최소 -&gt; 빠른 응답
+            )
+            answer = response.choices[0].message.content
+            st.markdown(answer)
+            # AI 답변도 기록에 저장 (다음 질문에 이어서 사용)
+            st.session_state.messages.append({"role": "assistant", "content": answer})
+        except Exception:
+            st.error("응답을 받지 못했어요 😢 잠시 후 다시 보내 주세요.")</pre></div>
   <div class="codewrap code"><span class="label">requirements.txt</span><pre>openai</pre></div>
   <ul><li>requirements.txt엔 <code>openai</code> 한 줄이면 충분 · 스트림릿·판다스·넘파이는 기본 설치, 버전 없이</li></ul>
 
@@ -947,6 +949,10 @@ if user_input:
 
 - 사용자가 유튜브 영상 링크를 붙여넣는 입력창을 만들어줘.
   입력창의 기본값은 https://youtu.be/d95J8yzvjbQ?si=LfL5DLwCL8Pk077r 로 해줘.
+- 입력창 위에 예시 버튼 두 개를 나란히 넣어줘.
+  '예시 1 · 딥마인드 다큐(영어 댓글)'를 누르면 기본값 링크가,
+  '예시 2 · 한국어 뉴스'를 누르면
+  https://youtu.be/Y8SJ32Q1iD0?si=wn3syLTUCsTBOL8W 링크가 입력창에 채워지게 해줘.
 - 링크에서 영상 ID를 뽑아줘. youtu.be 짧은 주소든 youtube.com/watch 주소든
   다 처리하고, si= 처럼 링크 뒤에 붙는 값은 무시해.
 - YouTube Data API v3의 commentThreads 창구에 requests로 요청해서
@@ -969,9 +975,21 @@ st.title("💬 유튜브 댓글 분석")
 
 YOUTUBE_KEY = st.secrets["YOUTUBE_API_KEY"]
 
-# 영상 링크 입력창 (기본값이 미리 들어 있어요)
-DEFAULT_URL = "https://youtu.be/d95J8yzvjbQ?si=LfL5DLwCL8Pk077r"
-video_url = st.text_input("유튜브 영상 링크를 붙여넣으세요", value=DEFAULT_URL)
+# 예시 영상 두 개 (버튼으로 골라 넣기)
+DEFAULT_URL = "https://youtu.be/d95J8yzvjbQ?si=LfL5DLwCL8Pk077r"   # 딥마인드 다큐 (영어)
+KOREAN_URL = "https://youtu.be/Y8SJ32Q1iD0?si=wn3syLTUCsTBOL8W"    # 한국어 뉴스
+
+if "video_url" not in st.session_state:
+    st.session_state.video_url = DEFAULT_URL
+
+col1, col2 = st.columns(2)
+if col1.button("🎬 예시 1 · 딥마인드 다큐 (영어 댓글)"):
+    st.session_state.video_url = DEFAULT_URL
+if col2.button("📰 예시 2 · 한국어 뉴스"):
+    st.session_state.video_url = KOREAN_URL
+
+# 영상 링크 입력창 (예시 버튼을 누르면 자동으로 채워져요)
+video_url = st.text_input("유튜브 영상 링크를 붙여넣으세요", key="video_url")
 
 
 def extract_video_id(url):
@@ -1017,6 +1035,7 @@ if "comments" in st.session_state:
     <div class="h">✔️ 1단계 성공 확인</div>
     <ul>
       <li>기본값 링크가 미리 들어 있으니 <b>버튼만 눌러도</b> 됩니다 · "가져온 댓글 수" 카드와 댓글 표가 뜨면 통과</li>
+      <li><b>예시 2(한국어 뉴스)</b>를 누르고 다시 가져오면 한국어 댓글로 바뀜 — 3단계 워드클라우드를 한글로 보고 싶을 때</li>
       <li>다른 영상도 시험해 보기 — 공유 버튼으로 복사한 주소를 그대로 붙여넣으면 됨 (짧은 주소든 긴 주소든 OK)</li>
       <li>댓글이 안 오면 → 댓글이 막힌 영상인지 확인 · 에러 문구를 통째로 AI에게</li>
     </ul>
@@ -1092,7 +1111,7 @@ wordcloud</pre></div>
   <div class="callout check">
     <div class="h">✔️ 3단계 성공 확인</div>
     <ul>
-      <li>한글 댓글이 <b>깨지지 않은 워드클라우드</b>로 뜨면 완성 🎉</li>
+      <li>워드클라우드가 뜨면 완성 🎉 · <b>한글 워드클라우드</b>를 보려면 1단계에서 예시 2(한국어 뉴스)로 가져오기</li>
       <li>글자가 네모(□□)로 깨지면 → 폰트 주소 줄이 프롬프트에서 빠졌는지 확인</li>
       <li>2단계 그래프와 3단계 그림을 나란히 보기 — <b>같은 댓글</b>을 두 가지 방식으로 그린 것</li>
     </ul>
