@@ -42,7 +42,7 @@
     <tr><td>70~100′</td><td>🎤 하이라이트 발표(화면 공유)</td><td>자원+투표로 <b>N명</b>(시간 보고 조절, 보통 6~8명) 각 2~3분</td></tr>
     <tr><td>100~105′</td><td>🎤 강사 총평</td><td>공통 성장 지점 + 칭찬 (5분)</td></tr>
     <tr><td>105~115′</td><td>☕ 휴식</td><td></td></tr>
-    <tr><td>115~170′</td><td>유연 블록 — 프로젝트 이어가기</td><td>발표에서 받은 피드백 반영 + 순회 코칭 · 여유·희망자는 <a href="../extra.html">심화 자료</a>를 함께 보기</td></tr>
+    <tr><td>115~170′</td><td>유연 블록 — 프로젝트 이어가기</td><td>발표에서 받은 피드백 반영 + 순회 코칭 · 여유·희망자는 <a href="../extra.html">심화 자료</a>를 함께 보기 · 보안 데이터 다루는 분께 <b>로컬 실행</b> 1:1 안내</td></tr>
     <tr><td>170~180′</td><td>마무리</td><td>심화 자료 소개(“꼭 도전해 보세요”) · 비용/키 안내 · 수료 인사</td></tr>
   </table>
   <div class="callout say">
@@ -122,9 +122,35 @@
     <div class="h">🎙️ 하이라이트 시연 — Actions 탭 두 개를 순서대로</div>
     <p><b>1탄(깨우기):</b> <a href="https://github.com/greatsong/app-caretaker/actions" target="_blank" rel="noopener">app-caretaker의 Actions 탭</a>을 띄우고 — “오늘 아침에도 이 로봇이 여러분보다 먼저 앱에 다녀갔어요. 매일 07시 23분·19시 23분, 시간표(cron) 두 줄이 전부입니다.” apps.txt를 열어 <b>‘주소 한 줄 추가가 끝’</b>이라는 것까지 보여주면 자동화의 문턱이 확 낮아집니다. <b>2탄(수집):</b> 이어서 <a href="https://github.com/greatsong/modudata/actions" target="_blank" rel="noopener">modudata의 Actions 탭</a> — “같은 원리로 시간표에 ‘수집’을 적으면? 수업에서 쓴 기온(4일차)·인구(2일차) 데이터가 사실 이 로봇들이 알아서 갱신하고 있었어요.” 커밋 목록의 🤖 커밋들을 보여주면 각인 효과가 큽니다. 공감(내 앱이 잠듦) → 개념(cron) → 실물 2탄(깨우기·수집) 순서로 7분이면 충분합니다. 심화 자료를 못 다루더라도 <b>이 시연만은</b> 마무리 때 보여줄 가치가 있습니다.</p>
   </div>
+  <div class="callout ask">
+    <div class="h">🙋 예상 질문 (자동화)</div>
+    <p><b>“앱을 몽땅 깨워 두면 안 되나요?”</b> → 무료 자원은 모두가 나눠 씁니다. <b>지금 쓰는 앱만</b> 돌보미에 올리고, 안 쓰게 된 앱은 apps.txt에서 지우는 게 예의이자 실속입니다. 발표처럼 확실해야 하는 순간엔 <b>직전에 한 번 열어 깨워 두는 것</b>이 가장 확실합니다.</p>
+  </div>
   <div class="callout err">
     <div class="h">🧯 예상 오류 (자동화/API)</div>
     <p><b>cron이 한국시간인 줄 알고 9시간 어긋남</b> → UTC 기준임을 강조(KST = UTC+9). · <b>Actions가 안 도는 것 같음</b> → 무료 러너는 지연이 흔함. 급하면 <code>workflow_dispatch</code> 수동 버튼으로 즉시 테스트. · <b>data.go.kr 인증키 오류</b> → serviceKey의 <b>인코딩/디코딩</b> 두 형태 중 맞는 걸로 교체, 응답 포맷은 <code>_type=json</code>. · <b>키가 코드에 노출</b> → 반드시 <b>GitHub Secrets</b>/<code>st.secrets</code>로. 카카오는 요청 <b>헤더</b> <code>Authorization: KakaoAK</code> 형식 지키기.</p>
+  </div>
+
+  <h3>보안이 중요한 데이터 — 로컬 실행 안내 (선택 · 주로 1:1)</h3>
+  <div class="callout say">
+    <div class="h">🎙️ 누구에게, 언제</div>
+    <p>“성적·상담 기록·개인정보·병원 자료처럼 <b>남에게 보이면 안 되는 데이터</b>를 다루시는 분 있나요?” 손 드는 분이 있으면(교사·상담·의료·인사 직군에서 자주 나옵니다) 수강생용 <a href="../day5.html">§3(로컬 실행)</a>을 함께 엽니다. 전체를 붙잡고 길게 설명하기보다 <b>순회 코칭 중 1:1</b>로 짚는 편이 낫습니다 — 필요한 사람만 정확히 가져가면 됩니다.</p>
+  </div>
+  <div class="callout say">
+    <div class="h">🎙️ 핵심 한 문장 — 배포와 로컬의 갈림</div>
+    <p>“지금까지 한 <b>클라우드 배포</b>는 데이터를 인터넷에 올리는 방식이에요. 민감한 데이터는 그러면 안 되죠. 대신 <b>내 컴퓨터에서만 앱을 켜면</b>(로컬 실행) 데이터가 이 컴퓨터 밖으로 안 나갑니다. 명령은 <code>streamlit run app.py</code> 한 줄, 막히는 곳은 에러를 <b>그대로 복사해 AI에게</b> 물어보면 돼요 — 강의 내내 한 방식 그대로예요.”</p>
+  </div>
+  <div class="callout theory">
+    <div class="h">📖 이론 심화 — localhost와 Network URL</div>
+    <p><code>streamlit run</code>을 실행하면 터미널에 두 주소가 뜹니다. <b>Local URL</b>(<code>localhost:8501</code>)은 <b>그 컴퓨터에서만</b> 열리고, <b>Network URL</b>은 <b>같은 와이파이의 다른 기기</b>에서 접속할 수 있는 주소입니다. 민감 데이터를 다룰 때 강조할 점: <b>Network URL을 공유하면 같은 망의 타인이 데이터를 볼 수 있습니다.</b> localhost만 쓰도록 안내하세요. 로컬 실행이 안전한 이유는 데이터와 API 키(<code>.streamlit/secrets.toml</code>)가 <b>그 컴퓨터에만</b> 있고 어디에도 업로드되지 않기 때문입니다.</p>
+  </div>
+  <div class="callout ask">
+    <div class="h">🙋 예상 질문 (로컬)</div>
+    <p><b>“그럼 남들은 제 앱 못 봐요?”</b> → 네, 그게 목적입니다. 나만 쓰거나 민감 데이터일 때의 방식이에요. 공유가 필요하면 그때 <b>공개해도 되는 데이터</b>로 클라우드 배포. · <b>“파이썬 꼭 깔아야 해요?”</b> → 로컬은 내 컴퓨터가 앱을 돌리므로 파이썬이 필요합니다(클라우드 배포는 스트림릿 서버가 대신 돌려 줬던 것). 설치는 <a href="https://www.python.org/downloads/" target="_blank" rel="noopener">python.org</a>에서 한 번만.</p>
+  </div>
+  <div class="callout err">
+    <div class="h">🧯 예상 오류 (로컬 실행)</div>
+    <p><b>“streamlit 명령을 못 찾음”</b> → 앞에 <code>python -m</code>(윈도우)·<code>python3 -m</code>(맥)을 붙여 실행. · <b>윈도우 <code>python</code>이 안 먹힘</b> → 설치 때 <b>Add Python to PATH</b> 체크 누락 → 그 체크를 켜고 재설치. · <b>“app.py를 못 찾음”</b> → <code>cd</code>로 이동한 폴더에 코드·데이터가 같이 있는지 확인(폴더를 터미널로 드래그하면 경로가 붙음). · <b>보안 사고 예방</b> → 민감 데이터 파일을 <b>깃허브에 커밋</b>하거나 <b>Network URL을 공유</b>하지 않도록 마지막에 한 번 더 각인.</p>
   </div>
 
   <h3>마무리 — 심화 자료 안내 + 수료 인사 (170~180′)</h3>
@@ -143,6 +169,7 @@
     <li>갤러리 워크에서 좋아요·피드백이 오갔는가(전원 참여 확인)</li>
     <li>하이라이트 N명 무대 + 강사 총평으로 성공 체험을 남겼는가</li>
     <li>심화 자료 페이지를 소개하고 “꼭 도전해 보라”고 안내했는가(강박 없이)</li>
+    <li>보안 데이터를 다루는 수강생에게 로컬 실행을 안내했는가(해당자만)</li>
     <li>키 관리·비용 안내로 안전하게 배웅했는가</li>
   </ul>
 
