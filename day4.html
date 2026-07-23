@@ -482,7 +482,7 @@ else:
     <li>계단마다 <b>성공을 확인하고</b> 다음으로 넘어가세요</li>
   </ul>
   <ol class="steps">
-    <li><span class="st">가입 + 새 프로젝트</span><br>GitHub/이메일로 가입(카드 X) → 처음이면 <b>조직(organization) 만들기</b>가 먼저 나옴 · 아무 이름이나 정하고 통과 → <b>New project</b> → 이름 + DB 비밀번호 정하고 생성(리전은 기본값 그대로). 준비 1~2분 — 기다리는 동안 새로고침·재클릭 금지, 진행 표시가 끝나고 <b>대시보드가 열리면 성공</b></li>
+    <li><span class="st">가입 + 새 프로젝트</span><br>GitHub/이메일로 가입(카드 X) → 처음이면 <b>조직(organization) 만들기</b>가 먼저 나옴 · 아무 이름이나 정하고 통과 → <b>New project</b> → 이름 + DB 비밀번호 정하고 생성(리전은 기본값 그대로). 준비 2분 내외(길면 3분) — 기다리는 동안 새로고침·재클릭 금지, 진행 표시가 끝나고 <b>대시보드가 열리면 성공</b></li>
     <li><span class="st">테이블 만들기 + 잠금(RLS) 풀기 — SQL 복붙(오타 방지)</span><br>왼쪽 <b>SQL Editor → New query</b>에 아래를 <b>그대로 붙여넣고 Run</b>. 열 이름을 손으로 치지 않으니 <code>name</code>을 <code>names</code>로 잘못 쓰는 실수가 없어요:<div class="codewrap code" style="margin:6px 0"><pre>create table votes (
   id bigint generated always as identity primary key,
   name text,
@@ -490,13 +490,13 @@ else:
   created_at timestamptz default now()
 );
 alter table votes disable row level security;</pre></div><code>Success. No rows returned</code>가 나오면 성공 — 테이블 <code>votes</code>(열 <code>name</code>·<code>times</code>)가 생기고 <b>잠금(RLS)까지 꺼집니다</b>. 이름은 꼭 <code>votes</code>처럼 글자로(<code>260722</code> 같은 숫자만 X) · (클릭으로 만들고 싶으면 <b>Table Editor → New table</b>도 되지만 <b>열 이름 오타에 주의</b> — 프롬프트와 정확히 <code>name</code>·<code>times</code>)</li>
-    <li><span class="st">URL·키 복사</span><br><b>Settings → API Keys</b>에서 <b>publishable 키</b>(예전 이름: anon public)를, <b>Settings → Data API</b>에서 <b>API URL</b>을 복사. 문자열 2개, 이게 전부! <b>URL은 반드시 <code>.supabase.co</code>에서 끝나야 함</b> — 혹시 뒤에 <code>/rest/v1</code> 같은 게 붙어 있으면 그 부분은 지우고 <code>https://xxxx.supabase.co</code>까지만 붙여넣기 (안 지우면 나중에 <code>PGRST125 Invalid path</code> 에러) · (화면 구성은 조금씩 바뀔 수 있어요 — 못 찾으면 AI에게 물어보기)</li>
+    <li><span class="st">URL·키 복사</span><br><b>Settings → API Keys</b>에서 <b>publishable 키</b>(예전 이름: anon public · 2025년 11월 이전에 만든 옛 프로젝트라면 legacy <b>anon</b> 키가 보일 수 있는데 그걸 쓰면 됩니다)를, <b>Settings → Data API</b>에서 <b>API URL</b>을 복사. 문자열 2개, 이게 전부! <b>URL은 반드시 <code>.supabase.co</code>에서 끝나야 함</b> — 혹시 뒤에 <code>/rest/v1</code> 같은 게 붙어 있으면 그 부분은 지우고 <code>https://xxxx.supabase.co</code>까지만 붙여넣기 (안 지우면 나중에 <code>PGRST125 Invalid path</code> 에러) · (화면 구성은 조금씩 바뀔 수 있어요 — 못 찾으면 AI에게 물어보기)</li>
   </ol>
   <div class="callout check">
     <div class="h">✔️ 잠금이 풀렸는지 30초 확인 (막히기 전에 미리 잡기)</div>
     <ul>
-      <li><b>Table Editor</b>에서 <code>votes</code> 테이블을 열어 이름 근처의 상태 표시 확인 → 빨간 <b>RLS disabled</b> 배지가 <b>보이면 성공</b> · 경고처럼 생겼지만 연습용 기준으론 이게 정답</li>
-      <li><b>RLS enabled</b>로 보이면 → 2단계 SQL의 <code>alter table votes disable row level security;</code>를 다시 실행 · 이건 고장이 아니라 잠금</li>
+      <li><b>Table Editor</b>에서 <code>votes</code> 테이블을 열어 이름 근처의 상태 표시 확인 → 빨간 <b>Unrestricted</b> 배지가 <b>보이면 성공</b>(잠금 풀림) · 경고처럼 생겼지만 연습용 기준으론 이게 정답</li>
+      <li>배지가 <b>안 보이면</b>(잠금이 켜진 상태) → 2단계 SQL의 <code>alter table votes disable row level security;</code>를 다시 실행 · 이건 고장이 아니라 잠금</li>
       <li>주의: Table Editor에서 직접 줄을 넣어 보는 건 확인이 안 됨 · 관리자 화면은 잠금(RLS)을 무시하고 통과하기 때문</li>
       <li>RLS가 켜진 채 앱을 돌리면 → <b>저장</b>은 <code>row-level security</code> 문구가 든 빨간 에러, <b>읽기</b>는 에러 없이 빈 목록</li>
     </ul>

@@ -97,7 +97,7 @@
   <h3>3. Supabase 연동 앱 (85~115′)</h3>
   <div class="callout say">
     <div class="h">🎙️ 멘트 — 카드도 서비스계정도 없이</div>
-    <p>“오전엔 시트, 이번엔 <b>진짜 데이터베이스</b>예요. 원리는 아까와 똑같아요(앱↔저장소). <b>Supabase</b>는 카드 등록도, 복잡한 로봇 계정도 없이 <b>URL·키 두 줄</b>이면 끝나요.” <b>가입은 이 시간에 다 함께</b> 합니다(숙제 아님) — 화면 미러링으로 한 계단씩: 가입(처음이면 조직 만들기가 먼저 나옴 · 아무 이름이나 · 이미 계정 있으면 로그인만) → New project(생성 대기 1~2분은 다음 설명을 들으며) → 수강생 교재의 <b>SQL 복붙 한 번</b>으로 <code>votes</code> 테이블(name·times) 생성 + <b>RLS 끄기</b>를 동시에 → <b>✔️ 30초 확인(빨간 RLS disabled 배지가 보이는지)</b>을 전원 통과시키고 → Settings→API Keys에서 <b>publishable 키</b>, Settings→Data API에서 <b>API URL</b> 복사(<code>.supabase.co</code>까지만, 뒤 <code>/rest/v1</code> 있으면 지우기). 주의: Insert row로 한 줄 넣어 보는 방식은 확인이 안 됩니다 — 대시보드는 관리자 권한이라 RLS를 무시하고 통과하므로, 반드시 <b>배지</b>로 확인시키세요.</p>
+    <p>“오전엔 시트, 이번엔 <b>진짜 데이터베이스</b>예요. 원리는 아까와 똑같아요(앱↔저장소). <b>Supabase</b>는 카드 등록도, 복잡한 로봇 계정도 없이 <b>URL·키 두 줄</b>이면 끝나요.” <b>가입은 이 시간에 다 함께</b> 합니다(숙제 아님) — 화면 미러링으로 한 계단씩: 가입(처음이면 조직 만들기가 먼저 나옴 · 아무 이름이나 · 이미 계정 있으면 로그인만) → New project(생성 대기 2분 내외는 다음 설명을 들으며) → 수강생 교재의 <b>SQL 복붙 한 번</b>으로 <code>votes</code> 테이블(name·times) 생성 + <b>RLS 끄기</b>를 동시에 → <b>✔️ 30초 확인(빨간 Unrestricted 배지가 보이는지)</b>을 전원 통과시키고 → Settings→API Keys에서 <b>publishable 키</b>, Settings→Data API에서 <b>API URL</b> 복사(<code>.supabase.co</code>까지만, 뒤 <code>/rest/v1</code> 있으면 지우기). 주의: Insert row로 한 줄 넣어 보는 방식은 확인이 안 됩니다 — 대시보드는 관리자 권한이라 RLS를 무시하고 통과하므로, 반드시 <b>배지</b>로 확인시키세요.</p>
   </div>
   <div class="callout theory">
     <div class="h">📖 딱 하나의 관문 — RLS</div>
