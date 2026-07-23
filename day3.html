@@ -32,7 +32,7 @@
       <li><b>박스오피스 대시보드</b> — 진짜 공공 API(KOBIS)를 문서부터 읽고 직접 연결</li>
       <li><b>유튜브 댓글 분석 앱</b> — 링크만 붙여넣으면 단어 빈도 그래프와 워드클라우드까지</li>
       <li><b>나만의 AI 채팅앱</b> — 말을 걸면 대답하는 AI를 내 앱 안에</li>
-      <li><b>유튜브 댓글 AI앱</b> — 외국어 댓글도 한국어로 옮기고, 세 줄 요약과 질문답변까지</li>
+      <li><b>유튜브 댓글 AI앱</b> — 댓글 100개를 세 줄로 요약하고, 무엇이든 물어보는 질문답변까지</li>
     </ul>
   </div>
 
@@ -992,8 +992,8 @@ if user_input:
   <h2>8. 마지막 앱 — 유튜브 댓글 AI앱 <span class="a">(데이터 API × AI API)</span></h2>
   <ul>
     <li>오늘의 마무리 · 6절에서 익힌 <b>댓글 불러오기</b>에 7절의 <b>AI</b>를 붙입니다</li>
-    <li>데이터 API(유튜브)가 <b>사실</b>(댓글)을 가져오고, AI API(Solar)가 <b>요약·번역·질문답변</b>으로 <b>해석</b></li>
-    <li>이번에도 세 단계로 키워 갑니다 — 세 줄 요약 → 외국어 번역 → 질문답변 · 단계마다 "이어서 고쳐줘"</li>
+    <li>데이터 API(유튜브)가 <b>사실</b>(댓글)을 가져오고, AI API(Solar)가 <b>요약·질문답변</b>으로 <b>해석</b></li>
+    <li>이번에도 단계를 키워 갑니다 — 세 줄 요약 → 질문답변 · 단계마다 "이어서 고쳐줘"</li>
     <li>열쇠는 이미 금고에 다 있음(<code>YOUTUBE_API_KEY</code>·<code>SOLAR_API_KEY</code>) · 새 저장소 하나만 새로 만들면 됨</li>
   </ul>
 
@@ -1122,53 +1122,15 @@ openai</pre></div>
     </ul>
   </div>
 
-  <h3>2단계 · 외국어 댓글도 한국어로</h3>
-  <div class="codewrap prompt"><span class="label">① 샘플 프롬프트 — 2단계 (이어서)</span><pre>좋아! 여기서 이어서 고쳐줘. 2단계야.
-- 'AI로 한국어 번역' 버튼을 넣어줘. 누르면 가져온 댓글 전체를
-  같은 Solar API로 보내서 한 줄에 하나씩 한국어로 번역해서 보여줘.
-  이미 한국어인 댓글은 그대로 둬.
-- 번역도 추론(생각) 기능은 꺼서(reasoning_effort 값을 'none') 빠르게 받아.
-- 번역에 실패하면 친절한 한국어 안내를 보여줘.
-- requirements.txt는 그대로 requests와 openai면 돼.</pre></div>
-  <div class="codewrap code"><span class="label">② AI가 준 코드 (예시 · 2단계에서 추가된 부분)</span><pre># ...1단계 코드는 그대로, 요약 버튼 아래에 번역 버튼 추가...
-
-    # ── 외국어 댓글 한국어로 번역 ──────────────────
-    if st.button("🌐 AI로 한국어 번역"):
-        joined = "\n".join(comments)
-        with st.spinner("번역 중이에요..."):
-            try:
-                resp = client.chat.completions.create(
-                    model="solar-open2",
-                    messages=[
-                        {"role": "system", "content": "너는 번역가야. 받은 댓글을 한 줄에 하나씩 한국어로 번역해. 이미 한국어인 댓글은 그대로 둬. 반드시 순수 한국어로만 답해."},
-                        {"role": "user", "content": joined},
-                    ],
-                    reasoning_effort="none",
-                )
-                st.subheader("🌐 한국어로 옮긴 댓글")
-                st.write(resp.choices[0].message.content)
-            except Exception:
-                st.error("번역을 받지 못했어요 😢 잠시 후 다시 시도해 주세요.")</pre></div>
-  <div class="codewrap code"><span class="label">requirements.txt (2단계 · 그대로)</span><pre>requests
-openai</pre></div>
-  <div class="callout check">
-    <div class="h">✔️ 2단계 성공 확인</div>
-    <ul>
-      <li>예시 1(딥마인드 다큐)의 영어 댓글이 <b>한국어로</b> 바뀌어 보이면 통과</li>
-      <li>번역과 요약은 <b>같은 AI 창구</b> — 7절에서 만든 채팅앱과 부르는 방식이 똑같음(주소·열쇠·요청·응답)</li>
-      <li>이미 한국어인 예시 2로 눌러 보면 거의 그대로 나옴 · 정상</li>
-    </ul>
-  </div>
-
-  <h3>3단계 · 댓글에게 무엇이든 물어보기</h3>
-  <div class="codewrap prompt"><span class="label">① 샘플 프롬프트 — 3단계 (이어서)</span><pre>좋아! 마지막 3단계야. 이어서 고쳐줘.
+  <h3>2단계 · 댓글에게 무엇이든 물어보기</h3>
+  <div class="codewrap prompt"><span class="label">① 샘플 프롬프트 — 2단계 (이어서)</span><pre>좋아! 마지막 2단계야. 이어서 고쳐줘.
 - 댓글을 근거로 무엇이든 물어볼 수 있는 질문 입력창을 맨 아래에 넣어줘.
   (예: '이 영상 반응이 어때?', '가장 많이 나온 불만은?')
 - 질문하기 버튼을 누르면, 가져온 댓글 전체를 근거로 Solar API가 한국어로 답하게 해줘.
   댓글에 없는 내용은 지어내지 말라고 시켜줘.
 - 여기서도 추론(생각) 기능은 꺼줘(reasoning_effort 값을 'none').
 - 답을 받지 못하면 친절한 한국어 안내를 보여줘.</pre></div>
-  <div class="codewrap code"><span class="label">② AI가 준 코드 (예시 · 3단계에서 추가된 부분)</span><pre># ...번역 버튼 아래에 질문답변 추가...
+  <div class="codewrap code"><span class="label">② AI가 준 코드 (예시 · 2단계에서 추가된 부분)</span><pre># ...요약 버튼 아래에 질문답변 추가...
 
     # ── 댓글을 근거로 질문답변 ──────────────────
     st.subheader("💬 댓글에게 물어보기")
@@ -1191,10 +1153,10 @@ openai</pre></div>
                 st.info(resp.choices[0].message.content)
             except Exception:
                 st.error("답을 받지 못했어요 😢 잠시 후 다시 시도해 주세요.")</pre></div>
-  <div class="codewrap code"><span class="label">requirements.txt (3단계 · 최종)</span><pre>requests
+  <div class="codewrap code"><span class="label">requirements.txt (2단계 · 최종)</span><pre>requests
 openai</pre></div>
   <div class="callout check">
-    <div class="h">✔️ 3단계 성공 확인</div>
+    <div class="h">✔️ 2단계 성공 확인</div>
     <ul>
       <li>"이 영상 반응 어때?"라고 물어 <b>댓글에 근거한 한국어 답</b>이 오면 완성 🎉</li>
       <li>"정말 그런가?" 한 번 — 답이 실제 댓글 표의 내용과 맞는지 눈으로 대조</li>
@@ -1202,7 +1164,7 @@ openai</pre></div>
     </ul>
   </div>
 
-  <ul><li>여기까지가 마지막 앱 · 세 기능을 한 번에 붙여 보고 싶다면 아래로</li></ul>
+  <ul><li>여기까지가 마지막 앱 · 두 기능을 한 번에 붙여 보고 싶다면 아래로</li></ul>
   <div class="codewrap improve"><span class="label">③ 프롬프트 개선 (선택)</span><pre>좋아! 여기서 더 고쳐줘.
 - 세 줄 요약 결과를 화면 맨 위에 항상 보이게 고정해줘(다른 버튼을 눌러도 사라지지 않게).
 - 질문답변 아래에, 그 답의 근거가 된 것 같은 댓글 3개를 함께 골라 보여줘.
@@ -1219,7 +1181,7 @@ openai</pre></div>
   <div class="callout warn">
     <div class="h">⏳ 시간이 부족하면 (무른 경계)</div>
     <ul>
-      <li>오늘 완성 기준 = <b>1단계 세 줄 요약</b>(댓글 100개가 세 줄로!) · 번역·질문답변은 선택</li>
+      <li>오늘 완성 기준 = <b>1단계 세 줄 요약</b>(댓글 100개가 세 줄로!) · 질문답변은 선택</li>
       <li>못 끝낸 단계는 프롬프트가 다 남아 있으니 집에서 이어서</li>
     </ul>
   </div>
@@ -1239,6 +1201,7 @@ openai</pre></div>
     <ul>
       <li><b>① 5단계 복습 (도전)</b> — 부록의 키 없는 API 하나를 골라, 오늘 배운 5단계 순서 그대로 앱 만들기 (키가 없으니 2단계는 건너뛰기)</li>
       <li><b>② 내 프로젝트 재료 찾기</b> — 공공데이터포털 <a href="https://www.data.go.kr" target="_blank" rel="noopener">data.go.kr</a>과 서울 열린데이터광장 <a href="https://data.seoul.go.kr" target="_blank" rel="noopener">data.seoul.go.kr</a>을 구경하며 관심 주제의 API 하나 찾기 → 문서에서 <b>세 곳(주소·요청변수·응답 예시)</b>만 훑어 두기 · 만들 필요 없음, 5일차 프로젝트의 재료</li>
+      <li><b>🌙 내일 준비</b> — 4일차 첫 실습은 <b>구글 시트에 저장하는 앱</b>이에요. <b>개인 구글 계정(@gmail.com)</b>으로 로그인되는지만 확인해 오세요 (직장·학교 계정은 배포 단계가 막힐 수 있어요)</li>
     </ul>
   </div>
 
