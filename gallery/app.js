@@ -134,11 +134,8 @@
   async function insertApp(payload) {
     if (!useSupabase) {
       const newApp = {
+        ...payload,
         id: nextDemoId(),
-        assignment: payload.assignment,
-        nickname: payload.nickname,
-        url: payload.url,
-        description: payload.description,
         likes: 0,
         feedback: [],
       };
@@ -255,6 +252,10 @@
       node.querySelector(".card-nickname").textContent = app.nickname;
       node.querySelector(".card-desc").textContent = app.description;
 
+      // 최종 프로젝트 상세 항목 (값이 있는 게시물에만 표시)
+      const infoEl = buildProjectInfo(app);
+      if (infoEl) node.querySelector(".card-desc").after(infoEl);
+
       const goBtn = node.querySelector(".btn-go");
       goBtn.href = app.url;
 
@@ -344,6 +345,58 @@
     });
   }
 
+  // 최종 프로젝트 상세 블록 — 값이 하나도 없으면 null 반환
+  function buildProjectInfo(app) {
+    const rows = [
+      ["📌 주제", app.project_topic],
+      ["📊 데이터", app.data_used],
+    ];
+    const hasAny = app.project_topic || app.data_used || app.data_source_url || app.project_intro;
+    if (!hasAny) return null;
+
+    const wrap = document.createElement("div");
+    wrap.className = "project-info";
+
+    rows.forEach(([label, value]) => {
+      if (!value) return;
+      const div = document.createElement("div");
+      const labelSpan = document.createElement("span");
+      labelSpan.className = "pi-label";
+      labelSpan.textContent = label;
+      div.appendChild(labelSpan);
+      div.appendChild(document.createTextNode(value));
+      wrap.appendChild(div);
+    });
+
+    // 출처 링크는 https 로 시작할 때만 링크로 렌더링 (그 외에는 일반 텍스트)
+    if (app.data_source_url) {
+      const div = document.createElement("div");
+      const labelSpan = document.createElement("span");
+      labelSpan.className = "pi-label";
+      labelSpan.textContent = "🔗 출처";
+      div.appendChild(labelSpan);
+      if (/^https:\/\//.test(app.data_source_url)) {
+        const a = document.createElement("a");
+        a.href = app.data_source_url;
+        a.target = "_blank";
+        a.rel = "noopener noreferrer";
+        a.textContent = app.data_source_url;
+        div.appendChild(a);
+      } else {
+        div.appendChild(document.createTextNode(app.data_source_url));
+      }
+      wrap.appendChild(div);
+    }
+
+    if (app.project_intro) {
+      const p = document.createElement("p");
+      p.className = "pi-intro";
+      p.textContent = app.project_intro;
+      wrap.appendChild(p);
+    }
+    return wrap;
+  }
+
   function showFbMsg(el, text, type) {
     el.textContent = text;
     el.hidden = false;
@@ -399,9 +452,17 @@
   // ---------------------------------------------------------
   // 9. 제출 폼
   // ---------------------------------------------------------
+  const FINAL_ASSIGNMENT = "5일차 최종 프로젝트";
+
   function initSubmitForm() {
     const form = $("#submitForm");
     const msgEl = $("#formMsg");
+    const finalFieldsEl = $("#finalFields");
+
+    // 5일차 최종 프로젝트를 고르면 상세 항목 입력칸을 펼친다
+    $("#f-assignment").addEventListener("change", () => {
+      finalFieldsEl.hidden = $("#f-assignment").value !== FINAL_ASSIGNMENT;
+    });
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -428,16 +489,43 @@
         return showFormMsg("닉네임·소개 중 부적절한 표현이 포함되어 있어요. 확인 후 다시 제출해주세요.", "error");
       }
 
+      // 최종 프로젝트 상세 항목 검증
+      const isFinal = assignment === FINAL_ASSIGNMENT;
+      const projectTopic = $("#f-topic").value.trim();
+      const dataUsed = $("#f-data").value.trim();
+      const dataSourceUrl = $("#f-datasrc").value.trim();
+      const projectIntro = $("#f-intro").value.trim();
+
+      if (isFinal) {
+        if (!projectTopic || !dataUsed || !dataSourceUrl || !projectIntro) {
+          return showFormMsg("최종 프로젝트는 주제·사용한 데이터·데이터 출처·소개를 모두 입력해주세요.", "error");
+        }
+        if (!isHttpsUrl(dataSourceUrl)) {
+          return showFormMsg("데이터 출처 링크는 https:// 로 시작하는 올바른 주소여야 해요.", "error");
+        }
+        if (projectTopic.length > 60 || dataUsed.length > 120 || dataSourceUrl.length > 300 || projectIntro.length > 300) {
+          return showFormMsg("입력 길이가 너무 길어요. 조금 줄여주세요.", "error");
+        }
+        const finalBanned = findBannedWord(projectTopic) || findBannedWord(dataUsed) || findBannedWord(projectIntro);
+        if (finalBanned) {
+          return showFormMsg("입력 내용 중 부적절한 표현이 포함되어 있어요. 확인 후 다시 제출해주세요.", "error");
+        }
+      }
+
+      const payload = { assignment, nickname, url, description };
+      if (isFinal) {
+        payload.project_topic = projectTopic;
+        payload.data_used = dataUsed;
+        payload.data_source_url = dataSourceUrl;
+        payload.project_intro = projectIntro;
+      }
+
       const submitBtn = form.querySelector(".btn-primary");
       submitBtn.disabled = true;
       try {
-        await insertApp({
-          assignment,
-          nickname,
-          url,
-          description,
-        });
+        await insertApp(payload);
         form.reset();
+        finalFieldsEl.hidden = true;
         showFormMsg("게시 완료! 갤러리 탭에서 확인해보세요.", "ok");
         renderGallery();
       } catch (err) {

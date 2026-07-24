@@ -177,6 +177,18 @@ h1 .a { color: var(--accent); }
   border: 1px solid var(--border); background: #fffdf7; color: var(--text);
 }
 .field input:focus, .field select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(232,147,12,0.15); }
+.field textarea {
+  font-family: var(--font); font-size: 0.95rem; padding: 11px 13px; border-radius: var(--radius-sm);
+  border: 1px solid var(--border); background: #fffdf7; color: var(--text); resize: vertical;
+}
+.field textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(232,147,12,0.15); }
+.final-fields { display: flex; flex-direction: column; gap: 16px; border-top: 1px dashed var(--border); padding-top: 16px; }
+
+/* 카드의 최종 프로젝트 상세 정보 (2026-07-24) */
+.project-info { display: flex; flex-direction: column; gap: 4px; font-size: 0.85rem; border-top: 1px dashed var(--border-soft); padding-top: 8px; }
+.project-info .pi-label { font-weight: 800; color: var(--accent); margin-right: 5px; }
+.project-info .pi-intro { color: var(--text-soft); margin: 2px 0 0; white-space: pre-wrap; }
+.project-info a { color: var(--teal); word-break: break-all; }
 
 .form-msg { padding: 10px 14px; border-radius: var(--radius-sm); font-size: 0.86rem; font-weight: 700; }
 .form-msg.error { background: var(--red-soft); color: #c23b3a; border: 1px solid #f6c9c9; }

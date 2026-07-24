@@ -19,7 +19,13 @@ create table if not exists public.apps (
   nickname     text not null check (char_length(nickname) between 1 and 20),
   url          text not null check (url ~ '^https://'),
   description  text not null check (char_length(description) between 1 and 100),
-  likes        integer not null default 0 check (likes >= 0)
+  likes        integer not null default 0 check (likes >= 0),
+
+  -- 최종 프로젝트 상세 항목 (2026-07-24 추가 · 모두 선택 입력)
+  project_topic   text check (project_topic   is null or char_length(project_topic)   between 1 and 60),
+  data_used       text check (data_used       is null or char_length(data_used)       between 1 and 120),
+  data_source_url text check (data_source_url is null or (data_source_url ~ '^https://' and char_length(data_source_url) <= 300)),
+  project_intro   text check (project_intro   is null or char_length(project_intro)   between 1 and 300)
 );
 
 create index if not exists apps_assignment_idx on public.apps (assignment);

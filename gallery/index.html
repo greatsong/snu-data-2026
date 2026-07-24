@@ -94,6 +94,26 @@
           <input id="f-desc" type="text" maxlength="80" placeholder="어떤 질문을 어떻게 풀었는지 한 줄로 소개해주세요" required>
         </div>
 
+        <!-- 5일차 최종 프로젝트 선택 시에만 표시되는 상세 항목 -->
+        <div id="finalFields" class="final-fields" hidden>
+          <div class="field">
+            <label for="f-topic">프로젝트 주제 *</label>
+            <input id="f-topic" type="text" maxlength="60" placeholder="예: 우리 동네 환경위반 시설 한눈에 보기">
+          </div>
+          <div class="field">
+            <label for="f-data">사용한 데이터 *</label>
+            <input id="f-data" type="text" maxlength="120" placeholder="예: 환경위반 시설 현황 CSV, 행정구역별 인구 API">
+          </div>
+          <div class="field">
+            <label for="f-datasrc">데이터 출처(링크) * <span class="hint">(https:// 로 시작)</span></label>
+            <input id="f-datasrc" type="text" maxlength="300" placeholder="https://www.data.go.kr/...">
+          </div>
+          <div class="field">
+            <label for="f-intro">프로젝트에 대한 소개 *</label>
+            <textarea id="f-intro" rows="4" maxlength="300" placeholder="어떤 질문에서 출발해 무엇을 만들었는지, 어떤 기능이 있는지 소개해주세요 (300자 이내)"></textarea>
+          </div>
+        </div>
+
         <div id="formMsg" class="form-msg" role="alert" hidden></div>
 
         <button type="submit" class="btn-primary">갤러리에 게시하기</button>
