@@ -112,51 +112,48 @@
   <div class="callout tip">
     <div class="h">📁 먼저 준비 — 폴더 하나에 다 모으기</div>
     <ul>
-      <li>3·4일차에 만든 앱 코드를 <code>app.py</code>로 저장 (원래 <code>main.py</code>면 그 이름 그대로 두어도 됩니다)</li>
+      <li>3·4일차에 만든 앱 코드 파일은 <code>main.py</code> 이름 그대로 둡니다</li>
       <li>같은 폴더에 <b>민감한 데이터 파일</b>(csv·엑셀)을 둡니다 → 앱은 이 폴더 안에서만 읽습니다</li>
-      <li>바탕화면에 <code>my-app</code> 같은 폴더 하나 만들어 그 안에 넣으면 깔끔합니다</li>
+      <li>아래 안내는 <code>main.py</code>와 데이터 파일이 <b>다운로드 폴더</b>에 있다고 가정합니다 — 다른 곳에 뒀다면 3번 명령의 경로만 바꾸면 됩니다</li>
     </ul>
   </div>
 
   <p>실행은 <b>세 걸음</b>입니다. 처음 한 번만 파이썬·스트림릿을 깔고, 그 뒤로는 명령 한 줄이면 됩니다.</p>
   <ol class="steps">
     <li><span class="st">파이썬 설치 (처음 한 번)</span><br>이미 있으면 넘어가도 됩니다. 없으면 <a href="https://www.python.org/downloads/" target="_blank" rel="noopener">python.org/downloads</a>에서 내려받아 설치하세요. <b>윈도우는 설치 첫 화면의 <code>Add Python to PATH</code>를 꼭 체크</b>해야 다음 명령이 먹힙니다.</li>
-    <li><span class="st">터미널 열고 스트림릿 설치 (처음 한 번)</span><br>맥은 <b>터미널</b>(⌘+Space → “터미널”), 윈도우는 <b>명령 프롬프트</b>(시작 → “cmd”)를 엽니다. 아래 순서대로 붙여넣으세요.</li>
-    <li><span class="st">앱 폴더에서 실행</span><br><code>streamlit run app.py</code>를 실행하면 브라우저가 저절로 열리고 <code>localhost:8501</code> 주소에 내 앱이 뜹니다. 이 주소는 <b>내 컴퓨터에서만</b> 열립니다.</li>
+    <li><span class="st">터미널 열고 스트림릿 설치 (처음 한 번)</span><br>맥은 <b>터미널</b>(⌘+Space → “터미널”), 윈도우는 <b>명령 프롬프트</b>(시작 → “cmd”)를 엽니다. 아래 명령을 <b>한 줄씩 복사해</b> 차례로 붙여넣고 Enter 하세요.</li>
+    <li><span class="st">앱 폴더에서 실행</span><br><code>streamlit run main.py</code>를 실행하면 브라우저가 저절로 열리고 <code>localhost:8501</code> 주소에 내 앱이 뜹니다. 이 주소는 <b>내 컴퓨터에서만</b> 열립니다.</li>
   </ol>
 
-  <div class="codewrap code"><span class="label">🍎 맥 — 터미널에 순서대로</span><pre># 1) 파이썬이 있는지 확인 (3.x 가 보이면 OK)
-python3 --version
+  <h3>🍎 맥 — 터미널에 한 줄씩</h3>
+  <div class="codewrap code"><span class="label">1️⃣ 파이썬 확인 — 3.x 가 보이면 성공</span><pre>python3 --version</pre></div>
+  <div class="codewrap code"><span class="label">2️⃣ 스트림릿 설치 — 처음 한 번만</span><pre>pip3 install streamlit</pre></div>
+  <div class="codewrap code"><span class="label">3️⃣ 다운로드 폴더로 이동</span><pre>cd ~/Downloads</pre></div>
+  <div class="codewrap code"><span class="label">4️⃣ 실행 — 브라우저가 저절로 열립니다</span><pre>streamlit run main.py</pre></div>
+  <div class="callout tip">
+    <div class="h">💡 파일을 다운로드 폴더가 아닌 곳에 뒀다면</div>
+    <ul>
+      <li>터미널에 <code>cd</code> 를 치고 <b>한 칸 띄운 뒤</b>, 그 폴더를 터미널 창으로 <b>끌어다 놓으면</b> 경로가 저절로 붙습니다 → Enter</li>
+    </ul>
+  </div>
 
-# 2) 스트림릿 설치 (처음 한 번만)
-pip3 install streamlit
-
-# 3) 앱 폴더로 이동 — 'cd ' 를 치고 한 칸 띄운 뒤,
-#    폴더를 터미널 창으로 끌어다 놓으면 경로가 저절로 붙습니다
-cd 여기에-폴더-경로
-
-# 4) 실행 (브라우저가 저절로 열립니다)
-streamlit run app.py</pre></div>
-
-  <div class="codewrap code"><span class="label">🪟 윈도우 — 명령 프롬프트에 순서대로</span><pre># 1) 파이썬이 있는지 확인 (3.x 가 보이면 OK)
-python --version
-
-# 2) 스트림릿 설치 (처음 한 번만)
-pip install streamlit
-
-# 3) 앱 폴더로 이동
-#    팁: 탐색기에서 폴더를 연 뒤 주소창에 cmd 를 치고 Enter 하면
-#        그 폴더에서 바로 명령 프롬프트가 열립니다
-cd 여기에-폴더-경로
-
-# 4) 실행 (브라우저가 저절로 열립니다)
-streamlit run app.py</pre></div>
+  <h3>🪟 윈도우 — 명령 프롬프트에 한 줄씩</h3>
+  <div class="codewrap code"><span class="label">1️⃣ 파이썬 확인 — 3.x 가 보이면 성공</span><pre>python --version</pre></div>
+  <div class="codewrap code"><span class="label">2️⃣ 스트림릿 설치 — 처음 한 번만</span><pre>pip install streamlit</pre></div>
+  <div class="codewrap code"><span class="label">3️⃣ 다운로드 폴더로 이동</span><pre>cd %USERPROFILE%\Downloads</pre></div>
+  <div class="codewrap code"><span class="label">4️⃣ 실행 — 브라우저가 저절로 열립니다</span><pre>streamlit run main.py</pre></div>
+  <div class="callout tip">
+    <div class="h">💡 파일을 다운로드 폴더가 아닌 곳에 뒀다면</div>
+    <ul>
+      <li>탐색기에서 그 폴더를 연 뒤 <b>주소창에 <code>cmd</code></b> 를 치고 Enter 하면, 그 폴더에서 바로 명령 프롬프트가 열립니다 → 3번은 건너뛰고 4번만 실행</li>
+    </ul>
+  </div>
 
   <div class="callout tip">
     <div class="h">💡 잘 깔렸는지 먼저 시험 — <code>streamlit hello</code></div>
     <ul>
       <li>내 앱을 돌리기 전에 <code>streamlit hello</code>를 실행해 보세요</li>
-      <li>알록달록한 예제 앱이 브라우저에 뜨면 설치 성공 → 이제 <code>streamlit run app.py</code></li>
+      <li>알록달록한 예제 앱이 브라우저에 뜨면 설치 성공 → 이제 <code>streamlit run main.py</code></li>
       <li>끝낼 때는 터미널에서 <b>Ctrl + C</b> (맥도 Ctrl, ⌘ 아님) 또는 터미널 창 닫기</li>
     </ul>
   </div>
@@ -164,9 +161,9 @@ streamlit run app.py</pre></div>
   <div class="callout warn">
     <div class="h">⚠️ 자주 막히는 곳 세 가지</div>
     <ul>
-      <li><b>“streamlit 명령을 못 찾음”</b>(command not found / 인식되지 않습니다) → 앞에 <code>python3 -m</code>(맥)·<code>python -m</code>(윈도우)를 붙여 <code>python -m streamlit run app.py</code>로 실행</li>
+      <li><b>“streamlit 명령을 못 찾음”</b>(command not found / 인식되지 않습니다) → 앞에 <code>python3 -m</code>(맥)·<code>python -m</code>(윈도우)를 붙여 <code>python -m streamlit run main.py</code>로 실행</li>
       <li><b>윈도우에서 <code>python</code>이 안 먹힘</b> → 설치할 때 “Add Python to PATH”를 안 눌렀을 때입니다. 파이썬을 지우고 그 체크를 켠 채 다시 설치</li>
-      <li><b>“app.py를 못 찾음”</b> → <code>cd</code>로 이동한 폴더에 <code>app.py</code>가 없는 경우. 코드 파일과 데이터 파일이 <b>같은 폴더</b>에 있는지 확인</li>
+      <li><b>“main.py를 못 찾음”</b> → <code>cd</code>로 이동한 폴더에 <code>main.py</code>가 없는 경우. 코드 파일과 데이터 파일이 <b>같은 폴더</b>(다운로드 폴더)에 있는지 확인</li>
     </ul>
   </div>
 
