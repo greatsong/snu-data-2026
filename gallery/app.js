@@ -250,6 +250,7 @@
     filtered.forEach((app) => {
       const node = cardTemplate.content.cloneNode(true);
 
+      node.querySelector(".card").dataset.appId = app.id;
       node.querySelector(".assignment-badge").textContent = app.assignment;
       node.querySelector(".card-nickname").textContent = app.nickname;
       node.querySelector(".card-desc").textContent = app.description;
@@ -311,12 +312,26 @@
         submitBtn.disabled = true;
         try {
           await insertFeedback(app.id, nickname, content);
-          // insertFeedback()이 이미 app.feedback에 반영하므로 여기서 다시 push하지 않는다.
-          fbCountEl.textContent = `(${app.feedback.length})`;
-          renderFeedbackList(fbListEl, app.feedback);
           nickInput.value = "";
           contentInput.value = "";
-          showFbMsg(fbMsg, "피드백을 남겼어요. 고마워요!", "ok");
+          // 댓글 등록 후 서버에서 최신 데이터를 받아 전체를 새로고침한다.
+          // (다른 사람이 남긴 댓글·좋아요도 이때 함께 반영된다)
+          try {
+            await loadApps();
+            renderGallery();
+            const card = gridEl.querySelector(`.card[data-app-id="${app.id}"]`);
+            if (card) {
+              const det = card.querySelector("details.feedback-block");
+              if (det) det.open = true;
+              const msg = card.querySelector(".fb-msg");
+              if (msg) showFbMsg(msg, "피드백을 남겼어요. 고마워요!", "ok");
+            }
+          } catch (reloadErr) {
+            // 새로고침에 실패해도 방금 단 댓글은 로컬 캐시에 있으니 그 자리에서만 갱신
+            fbCountEl.textContent = `(${app.feedback.length})`;
+            renderFeedbackList(fbListEl, app.feedback);
+            showFbMsg(fbMsg, "피드백을 남겼어요. 고마워요!", "ok");
+          }
         } catch (err) {
           console.error(err);
           showFbMsg(fbMsg, "등록 중 오류가 발생했어요. 잠시 후 다시 시도해주세요.", "error");
