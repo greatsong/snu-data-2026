@@ -16,7 +16,7 @@ window.RELEASE_SCHEDULE = [
 //     항상 열어 둡니다. 일정보다 먼저 열고 싶을 때 이 숫자를 올리세요.
 //     실제 공개 일차 = max(수동 하한, 오늘 날짜까지 열린 자동 일차).
 //     '준비(0교시)'는 항상 열려 있습니다.
-window.RELEASED_DAY = 1;
+window.RELEASED_DAY = 5;
 
 // 선택 숙제가 열리는 일차 (기본 1 — 1~3일차 밤 숙제표라 첫날부터 공개)
 window.HOMEWORK_DAY = 1;
